@@ -1,0 +1,43 @@
+{
+  "base": "datos/derivados_modelos/oficiales/microdatos_causal_ml_2021_2025.parquet",
+  "sha256_base": "fe54d6c1c4ae6e4afbcc06ad3263a7194acc78c794d956148ffff3687931b838",
+  "procedimiento": "regresiones/modelos/05_DML_CausalForest/estimar_cate_armonizado.py",
+  "sha256_procedimiento": "5102bbf62661398305a61080cad76b50dffc8cfa20725621b4c0ddd7e2aaa1c5",
+  "metodo": "R-learner de pendiente exploratoria, nested5/3 por ocupación; BLP sin intercepto agrupadoocupación",
+  "parametros": {
+    "n_splits": 5,
+    "inner_splits": 3,
+    "seed": 42,
+    "max_iter_tau": 40,
+    "min_samples_leaf_tau": 40
+  },
+  "salida_sha256": "7745602e0f1f1c3627b7ea4721c25804fb76e1931fcc6e44499997238c0ee3c1",
+  "muestras": {
+    "salario": {
+      "nobs": 478074,
+      "clusters": 414
+    },
+    "informalidad": {
+      "nobs": 508300,
+      "clusters": 415
+    },
+    "desempleo": {
+      "nobs": 555450,
+      "clusters": 416
+    }
+  },
+  "funciones_equivalentes_modulo_limpio": true,
+  "sha256_estimador": "3f78ea8f2800ccb655706aebefc64c49d7531435a575ea136799461e6977a83d",
+  "controles": [
+    "edad",
+    "edad2",
+    "mujer",
+    "rural",
+    "jefe",
+    "edu_cat",
+    "H_tic",
+    "dpto",
+    "oficio_2d"
+  ],
+  "sin_imputacion_faltantes": true
+}

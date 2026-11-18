@@ -1,0 +1,54 @@
+{
+  "fuente": "ciuo08_exposicion_ia_scores.csv",
+  "sha256": "aec19ae5f57c5a6b6cdcb2ec00fe5190af82776172e49203a3297ffb84ca4dd0",
+  "universo_referencia": "catálogo CIUO-08 A.C. fijo; una fila por ocupación, sin pesos de empleo",
+  "filas": 455,
+  "percentil": "(rank_average(S)-1)/(N_no_faltantes-1)",
+  "minmax": "(S-min(S))/(max(S)-min(S))",
+  "empates": "rango promedio; extremos empatados pueden no alcanzar exactamente0 y1",
+  "envolvente": "max(AIOE,WebbIA,LLM), solo con los tres valores observados",
+  "indicadores": {
+    "aioe": {
+      "columna_original": "AIOE",
+      "n_referencia": 426,
+      "min_original": -2.1227635,
+      "max_original": 1.446232
+    },
+    "webb_ia": {
+      "columna_original": "ai_score",
+      "n_referencia": 426,
+      "min_original": 0.011797509,
+      "max_original": 1.420359
+    },
+    "llm": {
+      "columna_original": "dv_rating_beta",
+      "n_referencia": 396,
+      "min_original": 0.0,
+      "max_original": 0.975
+    },
+    "software": {
+      "columna_original": "software_score",
+      "n_referencia": 426,
+      "min_original": 0.07121662,
+      "max_original": 2.4117322
+    },
+    "robots": {
+      "columna_original": "robot_score",
+      "n_referencia": 426,
+      "min_original": 0.01094083,
+      "max_original": 3.0944636
+    }
+  },
+  "llm": "dv_rating_beta: calificación GPT-4, E1+0.5 E2; no probabilidad de desempleo",
+  "faltantes": "Se preservan NaN; no se imputan cero ni ocupación promedio.",
+  "metodo_correspondencia": {
+    "identidad_4d": 436,
+    "sin_match": 15,
+    "fallback_3d": 4
+  },
+  "fuentes_primarias": {
+    "llm": "https://github.com/openai/GPTs-are-GPTs/blob/main/README.md",
+    "geih_no_ocupados2022": "https://microdatos.dane.gov.co/index.php/catalog/771/data-dictionary/F58"
+  },
+  "reconstruccion_origen": "Catálogo recibido conservado; archivos originales de crosswalk y puntuaciones no presentes en este checkout. Se verifica asignación/normalización, no se afirma réplica independiente del crosswalk original."
+}

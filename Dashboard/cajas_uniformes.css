@@ -1,0 +1,31 @@
+/* Las cuatro cajas comparten ancho y se estiran hasta la altura de su fila. */
+#ia-impacto .exposure-grid {
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  align-items: stretch !important;
+  justify-content: stretch !important;
+  gap: 9px !important;
+  width: 100%;
+  min-width: 0;
+}
+#ia-impacto .exposure-grid > .exposure-card {
+  box-sizing: border-box;
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  height: auto !important;
+  align-self: stretch !important;
+  margin: 0 !important;
+  overflow-wrap: anywhere;
+}
+#ia-impacto .exposure-grid > .exposure-card > summary {
+  min-height: 2.8em;
+}
+@media (max-width: 1199px) {
+  #ia-impacto .exposure-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+@media (max-width: 600px) {
+  #ia-impacto .exposure-grid { grid-template-columns: minmax(0, 1fr) !important; }
+}

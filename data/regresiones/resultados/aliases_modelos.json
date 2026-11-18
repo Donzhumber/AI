@@ -1,0 +1,97 @@
+[
+  {
+    "ruta_compatibilidad": "DiD_estimaciones/resultados_indices_comparables.csv",
+    "fuente_oficial": "datos/armonizados_2018_2025/estimaciones/clasicos/resultados_indices_comparables.csv",
+    "sha256": "88f8349364c942ec73d5eb95bebf9add62ee85933d26507cb144551aa5ccb234"
+  },
+  {
+    "ruta_compatibilidad": "DiD_estimaciones/resultados_indices_comparables.json",
+    "fuente_oficial": "datos/armonizados_2018_2025/estimaciones/clasicos/resultados_indices_comparables.json",
+    "sha256": "22de4ddc58609c9023081807c2b2dda6b70e3ac4ff868d09ae95e80f48acb7e4"
+  },
+  {
+    "ruta_compatibilidad": "DiD_estimaciones/contrastes_indices_comparables.csv",
+    "fuente_oficial": "datos/armonizados_2018_2025/estimaciones/clasicos/contrastes_indices_comparables.csv",
+    "sha256": "1988b75bee06ba4c45168cb2f0767c596cf09b81ffa52c6c02da1413a2511808"
+  },
+  {
+    "ruta_compatibilidad": "DiD_estimaciones/cobertura_muestras_comparables.csv",
+    "fuente_oficial": "datos/armonizados_2018_2025/estimaciones/clasicos/cobertura_muestras_comparables.csv",
+    "sha256": "d668ed67e1de42d2039c5de1eb3d0eabe817ff58b8657ca4fe94cd5baf9085b9"
+  },
+  {
+    "ruta_compatibilidad": "DiD_estimaciones/exposicion_departamental_indices_2022.csv",
+    "fuente_oficial": "datos/armonizados_2018_2025/estimaciones/clasicos/exposicion_departamental_indices_2022.csv",
+    "sha256": "b47539ddb245ab6c14f6d45b2d86c120124fb3692248b568ae7c3c3f23207ad4"
+  },
+  {
+    "ruta_compatibilidad": "DiD_estimaciones/exposicion_cohortes_indices_2022.csv",
+    "fuente_oficial": "datos/armonizados_2018_2025/estimaciones/clasicos/exposicion_cohortes_indices_2022.csv",
+    "sha256": "99d4b379882b0cee2060dab09a5952b5b86a0b90a901a79549e4d88d7d7e8e6e"
+  },
+  {
+    "ruta_compatibilidad": "DiD_estimaciones/indices_comparables_micro.dta",
+    "fuente_oficial": "datos/armonizados_2018_2025/estimaciones/clasicos/indices_comparables_micro.dta",
+    "sha256": "4bba808b199e3ad6ed030dc7250ccee7b3a1d19f0957bdbaf9ff8471d2143839"
+  },
+  {
+    "ruta_compatibilidad": "DiD_estimaciones/indices_comparables_panel.dta",
+    "fuente_oficial": "datos/armonizados_2018_2025/estimaciones/clasicos/indices_comparables_panel.dta",
+    "sha256": "c96ced33f7ef0a0fc248b2fc458d68c9e0b5a956c673f5129d458b12ad4487fd"
+  },
+  {
+    "ruta_compatibilidad": "DiD_estimaciones/replica_indices_aioe_stata.csv",
+    "fuente_oficial": "datos/armonizados_2018_2025/estimaciones/clasicos/replica_indices_aioe_stata.csv",
+    "sha256": "e3c1b79242a386634652de2a50921ea19aef27b962622f7f964d52613d22bf28"
+  },
+  {
+    "ruta_compatibilidad": "DiD_estimaciones/validacion_indices_aioe_stata.csv",
+    "fuente_oficial": "datos/armonizados_2018_2025/estimaciones/clasicos/validacion_indices_aioe_stata.csv",
+    "sha256": "506ff898c1fe5e5d096d237ef766d2b487bbc435bb9b40a0ea878341edbe44ab"
+  },
+  {
+    "ruta_compatibilidad": "DiD_estimaciones/verificacion_indices_comparables.json",
+    "fuente_oficial": "datos/armonizados_2018_2025/estimaciones/clasicos/verificacion_indices_comparables.json",
+    "sha256": "668531b088edf5d1e3578b333d8cea81d8b71e82a854330e0256703ed41fc2c9"
+  },
+  {
+    "ruta_compatibilidad": "DiD_estimaciones/panel_tic_principales_reconstruido.csv",
+    "fuente_oficial": "datos/armonizados_2018_2025/estimaciones/panel_tic/panel_tic_principales_reconstruido.csv",
+    "sha256": "5fee21021ceea878a417985cf231055fdbdbc9d84f2fef1187928de4a029e119"
+  },
+  {
+    "ruta_compatibilidad": "DiD_estimaciones/panel_tic_inferencia_departamento.csv",
+    "fuente_oficial": "datos/armonizados_2018_2025/estimaciones/panel_tic/panel_tic_inferencia_departamento.csv",
+    "sha256": "9ab554596c0d03bdf0d2483e8e21df487bf7548199d44e7e314021b0564fa8be"
+  },
+  {
+    "ruta_compatibilidad": "DiD_estimaciones/diagnosticos_residuos_panel_tic.csv",
+    "fuente_oficial": "datos/armonizados_2018_2025/estimaciones/panel_tic/diagnosticos_residuos_panel_tic.csv",
+    "sha256": "f9720fad97d4851068f563f20c64f0cfefd6ccf642430d34b0a6f6d42b2afb2c"
+  },
+  {
+    "ruta_compatibilidad": "DiD_estimaciones/diagnosticos_residuos_panel_tic.json",
+    "fuente_oficial": "datos/armonizados_2018_2025/estimaciones/panel_tic/diagnosticos_residuos_panel_tic.json",
+    "sha256": "ae03b796e34c953dcfe8f4b105b49a17fa7198ee5ebc0a14b67c1f0dd47131db"
+  },
+  {
+    "ruta_compatibilidad": "DiD_estimaciones/05_DML_CausalForest/resultados_dml_did_continuo.csv",
+    "fuente_oficial": "datos/armonizados_2018_2025/estimaciones/dml_did/resultados_dml_did_continuo.csv",
+    "sha256": "5d5128e9eee0de56fd659a45eb0985008c12890f74a65abf9880efb7f0f4110d"
+  },
+  {
+    "ruta_compatibilidad": "DiD_estimaciones/05_DML_CausalForest/diagnostico_dml_did_continuo.json",
+    "fuente_oficial": "datos/armonizados_2018_2025/estimaciones/dml_did/diagnostico_dml_did_continuo.json",
+    "sha256": "4e928da45dd49974d227a094c1ab6bf4b9f6c0b380bfd30a88ef2e050ab18b07"
+  },
+  {
+    "ruta_compatibilidad": "DiD_estimaciones/05_DML_CausalForest/resultados_cate.json",
+    "fuente_oficial": "datos/armonizados_2018_2025/estimaciones/cate/resultados_cate.json",
+    "sha256": "7745602e0f1f1c3627b7ea4721c25804fb76e1931fcc6e44499997238c0ee3c1"
+  },
+  {
+    "ruta_compatibilidad": "DiD_estimaciones/05_DML_CausalForest/manifest_cate_armonizado.json",
+    "fuente_oficial": "datos/armonizados_2018_2025/estimaciones/cate/manifest_cate_armonizado.json",
+    "sha256": "25f7ae63c81de819382243ce996fb544364e2f8218ef81da699e268cfd426c6a"
+  }
+]

@@ -1,0 +1,41 @@
+{
+  "python": "3.9.6 (default, Aug 17 2026, 12:07:42) \n[Clang 21.0.0 (clang-2100.3.34.1)]",
+  "platform": "macOS-26.6.2-arm64-arm-64bit",
+  "numpy": "2.0.2",
+  "pandas": "2.3.3",
+  "scipy": "1.13.1",
+  "sklearn": "1.6.1",
+  "entradas": {
+    "datos/imputados/ecv_geih_imputada_2025.parquet": "173849d0f1f5aefcc70cf973cf12e0baf8b92245a46a11a5283b922fe5deebe0",
+    "datos/exposicion_ia/indices_comunes.py": "b6afb308bd66fd3cbd33dd2fcace66cc4c5803d9da04dad466693fee684c08bb",
+    "datos/exposicion_ia/ciuo08_exposicion_ia_scores.csv": "aec19ae5f57c5a6b6cdcb2ec00fe5190af82776172e49203a3297ffb84ca4dd0",
+    "DiD_estimaciones/05_DML_CausalForest/revision_53_20261030/ejecutar_revision.py": "792b2eb3752af1fdd4a5748c059421123cad93fcbad2a8a1be58828fa6b812f7",
+    "DiD_estimaciones/05_DML_CausalForest/revision_53_20261030/tratamiento_ia.py": "90c715ebffddb9bb2bb4b9529dd546c062dfd6c287d22d2ac05b6cef115b1e11",
+    "DiD_estimaciones/05_DML_CausalForest/revision_53_20261030/estimador_dml_iv.py": "0667764cacd27997059ed9b3a4fea89631bce9ac428fa117585ef16f1c2a230a",
+    "DiD_estimaciones/05_DML_CausalForest/revision_53_20261030/preparacion_dml_iv.py": "d665591ed88e918765955a3e24805a19da7b37a28b2c6ba5549190d955733ea6"
+  },
+  "controles": [
+    "edad",
+    "edad2",
+    "mujer",
+    "rural",
+    "jefe",
+    "H_tic",
+    "asiste",
+    "edu_cat",
+    "dpto",
+    "oficio_2d"
+  ],
+  "categoricas": [
+    "edu_cat",
+    "dpto",
+    "oficio_2d"
+  ],
+  "semillas": [
+    20261030,
+    20261031,
+    20261101
+  ],
+  "referencia": "Chernozhukov et al. (2018), sección 4.2, ecuación 4.8",
+  "limites": "Diagnóstico por inversión del momento ortogonal, con residuos estimados y conglomerados ocupacionales. No certifica exclusión, validez causal ni cobertura uniforme bajo cualquier aprendizaje."
+}

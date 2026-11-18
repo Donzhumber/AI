@@ -1,0 +1,355 @@
+<style>.ia-profile-wrap:has(> .ia-profile-controls) { font-size: 13px; overflow-x: hidden !important; max-width: 100%; } .card:has(.ia-profile-controls) .card-body { overflow-x: hidden !important; padding-bottom: 14px !important; } .ia-profile-head h4 { font-size: 1.12rem !important; font-weight: 700 !important; color: #0f172a; margin: 0 0 4px !important; letter-spacing: -.005em; } .ia-profile-head p { font-size: .85rem !important; color: #64748b; margin: 0 0 14px !important; line-height: 1.5; max-width: 900px; } .ia-profile-controls { display: flex !important; flex-direction: column; gap: 12px !important; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 14px 16px; overflow-x: hidden !important; } .ia-profile-controls > form { display: flex !important; flex-direction: row !important; align-items: center; gap: 12px; margin: 0 !important; width: auto !important; padding: 0; background: none; border: 0; } .ia-profile-controls > form label { font-size: 10.5px !important; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: #64748b; margin: 0 !important; width: auto !important; flex: 0 0 auto; } .ia-profile-controls > form select { width: 280px !important; max-width: 100% !important; min-width: 0 !important; font-size: 13px; font-weight: 600; color: #0f172a; padding: 6px 10px; border: 1px solid #cbd5e1; border-radius: 8px; background-color: #fff; } .ia-drag-builder { background: #fff !important; border: 1px solid #e2e8f0 !important; border-radius: 10px !important; padding: 12px 14px !important; margin: 0 !important; box-shadow: 0 1px 2px rgba(15,23,42,.04); } .ia-drag-title { font-size: 13px !important; font-weight: 700 !important; color: #0f172a; margin: 0 0 10px !important; } .ia-drag-layout { display: grid !important; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr) !important; gap: 12px !important; align-items: stretch; } .ia-field-bank { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px 12px; } .ia-field-section { display: block; font-size: 10.5px !important; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: #64748b; margin-bottom: 8px; } .ia-field-list { display: flex; flex-wrap: wrap; gap: 6px; } .ia-field-pill:not(.clear-sub) { display: inline-flex !important; align-items: center; gap: 6px; font-size: 12.5px !important; font-weight: 600; color: #1f3b63 !important; background: #fff !important; border: 1px solid #c3d2e8 !important; border-radius: 999px !important; padding: 4px 12px 4px 8px !important; cursor: grab; box-shadow: 0 1px 1px rgba(15,23,42,.05) !important; transition: background .15s, transform .1s, border-color .15s; } .ia-field-pill:not(.clear-sub)::before { content: "⋮⋮"; font-size: 10px; letter-spacing: -2px; color: #8aa0bf; } .ia-field-pill:not(.clear-sub):hover { background: #eef3fa !important; border-color: #4E79A7 !important; transform: translateY(-1px); } .ia-field-pill:not(.clear-sub):active { cursor: grabbing; } .ia-shelves { display: grid !important; grid-template-columns: 1fr 1fr; gap: 8px; align-content: start; } .ia-shelf { display: flex !important; flex-direction: column; align-items: flex-start; justify-content: space-between; gap: 6px; border: 1px dashed #b6c4d8 !important; border-radius: 8px !important; padding: 8px 10px !important; background: #fbfcfe !important; min-height: 64px; transition: border-color .15s, background .15s; } .ia-shelf:hover, .ia-shelf.over, .ia-shelf.dragover { border-color: #4E79A7 !important; background: #eef3fa !important; } .ia-shelf-label { font-size: 10.5px !important; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: #64748b; line-height: 1.25; } .ia-shelf-value { max-width: 100%; overflow: hidden; text-overflow: ellipsis; font-size: 12.5px !important; font-weight: 700; color: #fff !important; background: #4E79A7; border-radius: 999px; padding: 4px 12px; white-space: nowrap; } .ia-shelf-value:empty, .ia-shelf-value.vacio { background: none !important; color: #94a3b8 !important; font-weight: 500 !important; font-style: italic; padding: 4px 0; } .ia-field-pill.clear-sub { grid-column: 1 / -1; justify-self: end; white-space: nowrap; font-size: 12px !important; font-weight: 600; color: #4E79A7 !important; background: none !important; border: 1px solid #c3d2e8 !important; border-radius: 6px !important; padding: 4px 10px !important; } .ia-field-pill.clear-sub::before { content: "✕ "; font-size: 10px; } .ia-field-pill.clear-sub:hover:not(:disabled) { background: #eef3fa !important; border-color: #4E79A7 !important; } .ia-drag-help { font-size: 11.5px !important; color: #94a3b8 !important; margin: 10px 0 0 !important; } .ia-profile-groups .ia-profile-summary { display: none !important; } #tb-plus .tb-wrap { border: 0 !important; padding: 2px 4px 0 !important; } #tb-plus .tb-title { font-size: 1.02rem !important; } @media (max-width: 900px) { .ia-drag-layout, .ia-shelves { grid-template-columns: 1fr !important; } .ia-profile-controls > form { flex-wrap: wrap; } } .ia-profile-wrap:has(> .ia-profile-chart) { display: none !important; } #tb-plus .tb-wrap { background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px 16px 10px; } #tb-plus .tb-title { font-weight: 700; font-size: 1rem; color: #0f172a; margin-bottom: 6px; } #tb-plus .tb-note { font-size: 12px; color: #64748b; margin: -2px 0 8px; line-height: 1.4; } #tb-plus .tb-legend { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; font-size: 12px; color: #334155; margin: 0 0 6px; } #tb-plus .tb-legend-title { font-weight: 700; color: #475569; margin-right: 2px; } #tb-plus .tb-key { display: inline-flex; align-items: center; gap: 6px; } #tb-plus .tb-key i { width: 12px; height: 12px; border-radius: 2px; display: inline-block; } #tb-plus .tb-axis-note { text-align: center; font-size: 11.5px; color: #64748b; margin-top: 2px; } #tb-plus svg { overflow: visible; } #tb-plus { position: relative; } #tb-orden { position: absolute; top: 10px; right: 12px; z-index: 2; } #tb-orden button { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: #4E79A7; background: #fff; border: 1px solid #c3d2e8; border-radius: 6px; padding: 4px 10px; cursor: pointer; transition: background .15s, border-color .15s; } #tb-orden button:hover { background: #eef3fa; border-color: #4E79A7; } #tb-orden button.activo { background: #4E79A7; color: #fff; border-color: #4E79A7; } #tb-orden .tb-flecha { font-size: 14px; line-height: 1; } #tb-plus .tb-title { padding-right: 160px; } .ia-drag-builder.modo-total .ia-shelf-value { background: none !important; color: #94a3b8 !important; font-weight: 500 !important; } .ia-drag-builder .clear-sub:disabled { opacity: .5; cursor: default; } body.perfil-modo-total .ia-profile-groups { display: none !important; } #tb-plus rect { cursor: pointer; } #tb-plus rect.tb-hover { stroke: #0f172a; stroke-width: 1.5; } #tb-globo { position: fixed; display: none; z-index: 9999; pointer-events: none; max-width: 330px; background: #fff; color: #334155; border: 1px solid #e2e8f0; border-radius: 10px; box-shadow: 0 10px 28px rgba(15,23,42,.18); padding: 11px 13px; font-size: 12.5px; line-height: 1.45; } #tb-globo .g-h { font-weight: 700; color: #0f172a; font-size: 13px; padding-bottom: 6px; margin-bottom: 6px; border-bottom: 1px solid #eef2f7; } #tb-globo .g-v { display: flex; align-items: baseline; gap: 8px; } #tb-globo .g-v b { font-size: 20px; color: #4E79A7; } #tb-globo .g-v span { color: #475569; } #tb-globo .g-s { margin: 4px 0 8px; color: #475569; } #tb-globo .g-grid { display: grid; grid-template-columns: 1fr auto; gap: 3px 12px; background: #f8fafc; border-radius: 6px; padding: 6px 8px; } #tb-globo .g-grid span { color: #64748b; } #tb-globo .g-grid b { color: #0f172a; text-align: right; font-variant-numeric: tabular-nums; } #tb-globo .g-a { margin-top: 8px; padding-left: 8px; border-left: 3px solid #F28E2B; color: #475569; } #tb-globo .g-f { margin-top: 8px; font-size: 11px; color: #94a3b8; }</style>
+<script>
+(function () {
+const NOMBRES_CORTOS = {
+"Agentes de gobierno y profesionales del nivel medio para la aplicación de regulaciones no clasificados en otros grupos primarios": "Agentes de gobierno (regulación, otros)",
+"Agentes de operaciones comerciales y consignatarios": "Agentes comerciales y consignatarios",
+"Agentes de servicios comerciales no clasificados en otros grupos primarios": "Agentes de servicios comerciales (otros)",
+"Agricultores y trabajadores calificados de cultivos extensivos": "Agricultores de cultivos extensivos",
+"Agricultores y trabajadores calificados de cultivos mixtos": "Agricultores de cultivos mixtos",
+"Agricultores y trabajadores calificados de huertas, invernaderos, viveros y jardines": "Agricultores de huertas y viveros",
+"Agricultores y trabajadores calificados de plantaciones de árboles y arbustos": "Agricultores de plantaciones",
+"Agrónomos, silvicultores, zootecnistas y afines": "Agrónomos, zootecnistas y afines",
+"Ajustadores y operadores de máquinas herramientas": "Operadores de máquinas herramientas",
+"Alfareros y ceramistas (barro y arcilla)": "Alfareros y ceramistas",
+"Artesanos de otros materiales no clasificados en otros grupos primarios": "Artesanos de otros materiales",
+"Aseadores de oficinas, hoteles y otros establecimientos": "Aseadores de oficinas y hoteles",
+"Auxiliares de contabilidad y cálculo de costos": "Auxiliares de contabilidad",
+"Avicultores y trabajadores calificados de la avicultura": "Avicultores",
+"Cajeros de comercio, taquilleros y expendedores de boletas": "Cajeros y taquilleros",
+"Clasificadores y probadores de productos (excluyendo alimentos y bebidas)": "Clasificadores y probadores de productos",
+"Conductores de buses, microbuses y tranvías": "Conductores de buses",
+"Conductores de camiones y vehículos pesados": "Conductores de camiones",
+"Conductores de camionetas y vehículos livianos": "Conductores de vehículos livianos",
+"Conductores de vehículos accionados a pedal o a brazo": "Conductores de vehículos a pedal",
+"Criadores de ganado y trabajadores de la cría de animales domésticos (excepto aves de corral)": "Criadores de ganado",
+"Criadores y trabajadores calificados de la apicultura y la sericicultura": "Apicultores y sericicultores",
+"Criadores y trabajadores pecuarios calificados, avicultores y criadores de insectos no clasificados en otros grupos primarios": "Otros criadores pecuarios",
+"Decoradores de piezas artesanales en madera": "Decoradores de artesanías en madera",
+"Demostradores de tiendas, almacenes y afines": "Demostradores de tiendas",
+"Directores de servicios de bienestar social": "Directores de bienestar social",
+"Directores de administración y servicios no clasificados en otros grupos primarios": "Directores de administración (otros)",
+"Directores de empresas de abastecimiento, distribución y afines": "Directores de abastecimiento y distribución",
+"Directores de producción agropecuaria y silvicultura": "Directores de producción agropecuaria",
+"Directores formuladores de políticas y normas": "Directores de políticas y normas",
+"Diseñadores y administradores de bases de datos": "Administradores de bases de datos",
+"Ebanistas y carpinteros (excluye carpinteros de armar y de obra blanca)": "Ebanistas y carpinteros",
+"Empleados de control de abastecimientos e inventario": "Empleados de control de inventarios",
+"Enchapadores, parqueteros y colocadores de suelos": "Enchapadores y colocadores de pisos",
+"Entrenadores, instructores y árbitros de actividades deportivas": "Entrenadores y árbitros deportivos",
+"Entrevistadores de encuestas y de investigaciones de mercados": "Encuestadores y entrevistadores",
+"Escultores, pintores artísticos y afines": "Escultores y pintores artísticos",
+"Especialistas en tratamientos de belleza y afines": "Especialistas en belleza",
+"Expendedores de combustibles para vehículos": "Expendedores de combustible",
+"Fumigadores y otros controladores de plagas y malas hierbas": "Fumigadores y control de plagas",
+"Gerentes de centros deportivos, de esparcimiento y culturales": "Gerentes de centros deportivos y culturales",
+"Gerentes de comercios al por mayor y al por menor": "Gerentes de comercio",
+"Inspectores de seguridad, salud ocupacional, medioambiental y afines": "Inspectores de seguridad y salud ocupacional",
+"Instaladores y reparadores en tecnología de la información y las comunicaciones": "Instaladores y reparadores TIC",
+"Instructores de educación física y actividades recreativas": "Instructores de educación física",
+"Mecánicos montadores de aire acondicionado y refrigeración": "Mecánicos de aire acondicionado",
+"Mecánicos y reparadores de máquinas agrícolas e industriales": "Mecánicos de maquinaria agrícola e industrial",
+"Mecánicos y reparadores de vehículos de motor": "Mecánicos de vehículos",
+"Mensajeros, mandaderos, maleteros y repartidores": "Mensajeros y repartidores",
+"Mineros y operadores de instalaciones mineras": "Mineros",
+"Obreros y peones de explotaciones agropecuarias": "Peones agropecuarios",
+"Obreros y peones de explotaciones agrícolas": "Peones agrícolas",
+"Obreros y peones de explotaciones ganaderas": "Peones ganaderos",
+"Obreros y peones de jardinería y horticultura": "Peones de jardinería",
+"Obreros y peones de la construcción de edificios": "Peones de construcción",
+"Obreros y peones de la industria manufacturera no clasificados en otros grupos primarios": "Peones de manufactura",
+"Obreros y peones de obras públicas y mantenimiento": "Peones de obras públicas",
+"Oficiales y operarios de la construcción de obra gruesa y afines no clasificados en otros grupos primarios": "Oficiales de obra gruesa (otros)",
+"Operadores de grúas, aparatos elevadores y afines": "Operadores de grúas",
+"Operadores de incineradores, instalaciones de tratamiento de agua y afines": "Operadores de tratamiento de agua",
+"Operadores de instalaciones de procesamiento de la madera": "Operadores de procesamiento de madera",
+"Operadores de instalaciones de procesamiento de metales": "Operadores de procesamiento de metales",
+"Operadores de instalaciones de procesamiento de minerales y rocas": "Operadores de procesamiento de minerales",
+"Operadores de maquinaria agrícola y forestal móvil": "Operadores de maquinaria agrícola",
+"Operadores de máquinas de embalaje, embotellamiento y etiquetado": "Operadores de máquinas de embalaje",
+"Operadores de máquinas de movimiento de tierras, construcción de vías y afines": "Operadores de maquinaria de vías",
+"Operadores de máquinas para elaborar alimentos y productos afines": "Operadores de máquinas de alimentos",
+"Operadores de máquinas para fabricar cemento y otros productos minerales": "Operadores de máquinas de cemento",
+"Operadores de máquinas para fabricar productos de material plástico": "Operadores de máquinas de plásticos",
+"Operadores de máquinas y de instalaciones para elaborar productos de vidrio y cerámica": "Operadores de máquinas de vidrio y cerámica",
+"Operadores de plantas y máquinas de productos químicos": "Operadores de plantas químicas",
+"Operarios de la conservación de frutas, legumbres, verduras y afines": "Operarios de conservas vegetales",
+"Operarios de la elaboración de productos lácteos": "Operarios de productos lácteos",
+"Otras ocupaciones elementales no clasificadas en otros grupos primarios": "Otras ocupaciones elementales",
+"Otro personal de limpieza no clasificados en otros grupos primarios": "Otro personal de limpieza",
+"Otros empleados de servicios de información al cliente no clasificados en otros grupos primarios": "Otros empleados de atención al cliente",
+"Otros gerentes de servicios no clasificados en otros grupos primarios": "Otros gerentes de servicios",
+"Otros profesionales de la educación no clasificados en otros grupos primarios": "Otros profesionales de la educación",
+"Otros profesionales de la salud no clasificados en otros grupos primarios": "Otros profesionales de la salud",
+"Otros trabajadores de servicios personales no clasificados en otros grupos primarios": "Otros servicios personales",
+"Otros técnicos y profesionales del nivel medio en actividades culturales y artísticas": "Otros técnicos culturales y artísticos",
+"Otros vendedores no clasificados en otros grupos primarios": "Otros vendedores",
+"Paramédicos e instrumentadores quirúrgicos": "Paramédicos e instrumentadores",
+"Patronistas y cortadores de tela, cuero y afines": "Patronistas y cortadores",
+"Personal de los servicios de protección no clasificados en otros grupos primarios": "Otro personal de protección",
+"Personal de servicios funerarios y embalsamadores": "Personal de servicios funerarios",
+"Pescadores de agua dulce y en aguas costeras": "Pescadores",
+"Productores y trabajadores calificados de explotaciones agropecuarias mixtas cuya producción se destina al mercado": "Productores agropecuarios mixtos",
+"Profesionales de gestión de talento humano": "Profesionales de talento humano",
+"Profesionales de la protección medioambiental": "Profesionales ambientales",
+"Profesionales de la publicidad y la comercialización": "Profesionales de publicidad y mercadeo",
+"Profesionales de la salud y la higiene laboral y ambiental": "Profesionales de salud ocupacional",
+"Profesionales de ventas técnicas y médicas (excluyendo las TIC)": "Profesionales de ventas técnicas y médicas",
+"Profesionales del trabajo social y consejeros": "Trabajadores sociales y consejeros",
+"Profesores de instituciones de educación superior": "Profesores universitarios",
+"Recolectores de basura y material reciclable": "Recolectores de basura y reciclaje",
+"Revisores y cobradores de los transportes públicos": "Cobradores de transporte público",
+"Sastres, modistos, peleteros y sombrereros": "Sastres y modistos",
+"Supervisores de mantenimiento y limpieza en oficinas, hoteles y otros establecimientos": "Supervisores de limpieza",
+"Supervisores de industrias manufactureras": "Supervisores de manufactura",
+"Trabajadores ambulantes de servicios y afines": "Trabajadores ambulantes de servicios",
+"Trabajadores de explotaciones de acuicultura": "Trabajadores de acuicultura",
+"Trabajadores de los cuidados personales a domicilio": "Cuidadores a domicilio",
+"Trabajadores de los cuidados personales en instituciones": "Cuidadores en instituciones",
+"Trabajadores de los cuidados personales en servicios de salud no clasificados en otros grupos primarios": "Otros cuidadores en salud",
+"Trabajadores forestales calificados y afines": "Trabajadores forestales",
+"Técnicos de radiodifusión y grabación audio visual": "Técnicos audiovisuales y de radiodifusión",
+"Técnicos en aparatos de diagnóstico y tratamiento médico": "Técnicos en equipos médicos",
+"Técnicos en asistencia y soporte al usuario de tecnología de la información y las comunicaciones": "Técnicos de soporte TIC",
+"Técnicos en operaciones de tecnología de la información y las comunicaciones": "Técnicos en operaciones TIC",
+"Técnicos en redes y sistemas de computación": "Técnicos en redes y sistemas",
+"Técnicos y profesionales del nivel medio del derecho, de servicios legales y afines": "Técnicos en servicios legales",
+"Técnicos y profesionales del nivel medio en enfermería": "Técnicos en enfermería",
+"Vendedores a través de medios tecnológicos": "Vendedores en línea",
+"Vendedores ambulantes (excluyendo comidas de preparación inmediata)": "Vendedores ambulantes (no comida)",
+"Vendedores ambulantes de alimentos preparados para consumo inmediato": "Vendedores ambulantes de comida",
+"Vendedores en quioscos y puestos de mercado": "Vendedores en quioscos y mercados",
+"Vendedores y auxiliares de venta en tiendas, almacenes y afines": "Vendedores de tiendas y almacenes"
+};
+const corto = nombre => {
+  const n = String(nombre).replace(/\s+/g, " ").trim();
+  if (NOMBRES_CORTOS[n]) return NOMBRES_CORTOS[n];
+  if (n.length <= 44) return n;
+  let c = n.replace(/\s+no clasificad[oa]s en otros? grupos? primarios?/i, " (otros)")
+    .replace(/ y trabajadores (pecuarios )?calificados/g, "")
+    .replace(/[Tt]écnicos y profesionales del nivel medio/, "Técnicos")
+    .replace(/tecnología de la información y las comunicaciones/g, "TIC")
+    .replace(/\s*\((excluye|excluyendo|excepto)[^)]*\)/g, "");
+  if (c.length > 44) { c = c.slice(0, 42); c = c.slice(0, c.lastIndexOf(" ")).replace(/[,;]?\s*(y|de|del|la|las|los|en|e|o)?$/, "") + "…"; }
+  return c;
+};
+
+window.dashboardNombreOcupacionCorto = corto;
+let pendienteOpc = false;
+const acortarOpciones = () => { pendienteOpc = false; document.querySelectorAll('.ia-profile-groups select[multiple] option').forEach(o => { if (!o.dataset.completo) { o.dataset.completo = o.textContent; o.title = o.textContent; o.textContent = corto(o.textContent); } }); };
+const vigilarOpc = () => { new MutationObserver(() => { if (!pendienteOpc) { pendienteOpc = true; requestAnimationFrame(acortarOpciones); } }).observe(document.body, { subtree: true, childList: true }); acortarOpciones(); };
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', vigilarOpc); else vigilarOpc();
+
+function grafico(datosPerfilIA, dimensionPerfilIA, subdimensionPerfilIA, perfilesUsoIA2025, universoPerfilIA, Plot, html, tbAncho, tbModoTotal, tbOrden) {
+const rows = datosPerfilIA;
+const fmtPct = x => (100 * x).toLocaleString("es-CO", { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + " %";
+const fmtN = x => Math.round(x).toLocaleString("es-CO");
+const esc = t => String(t).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const globoHtml = d => {
+const u = d.uso_ia, de100 = Math.round(100 * u);
+const cabeza = d.nivel === "universo" ? "Total · " + d.categoria : d.nivel === "principal" ? (subdimensionPerfilIA ? d.categoria + " · total" : d.categoria) : d.categoria + " › " + d.subcategoria;
+const quien = d.nivel === "universo" ? "toda la población elegida"
+: d.nivel === "principal" ? dimensionPerfilIA.toLowerCase() + ": " + d.categoria
+: dimensionPerfilIA.toLowerCase() + ": " + d.categoria + " y " + subdimensionPerfilIA.toLowerCase() + ": " + d.subcategoria;
+const filas = [
+Number.isFinite(d.poblacion) ? ["Población del grupo", fmtN(d.poblacion) + " personas"] : null,
+Number.isFinite(d.poblacion) ? ["Usuarios estimados de IA", fmtN(d.poblacion * u) + " personas"] : null,
+Number.isFinite(d.n) && d.n > 0 ? ["Encuestados en la muestra", fmtN(d.n)] : null
+].filter(Boolean);
+return JSON.stringify({ html:
+`<div class="g-h">${esc(cabeza)}</div>` +
+`<div class="g-v"><b>${fmtPct(u)}</b><span>reporta usar herramientas de IA</span></div>` +
+`<div class="g-s">De cada 100 personas de este grupo (${esc(quien)}), ${de100 < 1 ? "menos de 1" : "unas " + de100} reporta${de100 === 1 ? "" : "n"} usar IA.</div>` +
+`<div class="g-grid">${filas.map(f => `<span>${f[0]}</span><b>${f[1]}</b>`).join("")}</div>` +
+(Number.isFinite(d.aporte) ? `<div class="g-a">Aporta <b>${d.aporte.toLocaleString("es-CO", { maximumFractionDigits: 1 })} %</b> de los usuarios de IA de ${esc(d.categoria)}: de cada 100 usuarios de IA de ${esc(d.categoria)}, unos ${Math.round(d.aporte)} pertenecen a este subgrupo.</div>` : "") +
+(d.nivel === "principal" && subdimensionPerfilIA ? `<div class="g-a">Barra gris: total de ${esc(d.categoria)}, promedio ponderado de sus subgrupos.</div>` : "") +
+`<div class="g-f">Universo: ${esc(universoPerfilIA)} · ECV 2025. Los porcentajes de distintas barras no se suman.</div>` });
+};
+const activarGlobo = svg => {
+let tip = document.getElementById("tb-globo");
+if (!tip) { tip = document.createElement("div"); tip.id = "tb-globo"; document.body.append(tip); }
+const mover = e => {
+const r = tip.getBoundingClientRect(); let x = e.clientX + 16, y = e.clientY + 14;
+if (x + r.width > window.innerWidth - 8) x = e.clientX - r.width - 16;
+if (y + r.height > window.innerHeight - 8) y = window.innerHeight - r.height - 8;
+tip.style.left = x + "px"; tip.style.top = Math.max(8, y) + "px";
+};
+svg.querySelectorAll("title").forEach(t => {
+let info; try { info = JSON.parse(t.textContent); } catch (err) { return; }
+const el = t.parentElement; t.remove();
+el.addEventListener("mouseenter", e => { tip.innerHTML = info.html; tip.style.display = "block"; el.classList.add("tb-hover"); mover(e); });
+el.addEventListener("mousemove", mover);
+el.addEventListener("mouseleave", () => { tip.style.display = "none"; el.classList.remove("tb-hover"); });
+});
+};
+if (tbModoTotal) {
+const base = perfilesUsoIA2025.filas.filter(d => d.universo === universoPerfilIA && d.dimension === "Sexo" && Number.isFinite(d.uso_ia) && Number.isFinite(d.poblacion));
+const pob = base.reduce((s, d) => s + d.poblacion, 0);
+const uso = pob ? base.reduce((s, d) => s + d.poblacion * d.uso_ia, 0) / pob : NaN;
+const fila = [{ etiqueta: universoPerfilIA, uso_ia: uso, poblacion: pob, n: base.reduce((s, d) => s + (d.n || 0), 0) }];
+const W = Math.max(520, tbAncho - 34);
+const g = Plot.plot({
+width: W, height: 110, marginLeft: Math.min(260, 14 + universoPerfilIA.length * 7), marginRight: 90, marginTop: 30, marginBottom: 26,
+style: { fontSize: "12.5px", fontFamily: "inherit", background: "none" },
+x: { domain: [0, Math.max(.15, uso * 1.3)], axis: "both", grid: true, tickFormat: d => Math.round(100 * d) + " %", label: null, ticks: 6 },
+y: { label: null, tickSize: 0, padding: .25 },
+marks: [
+Plot.barX(fila, { x: "uso_ia", y: "etiqueta", fill: "#4E79A7", title: d => globoHtml({ ...d, nivel: "universo", categoria: universoPerfilIA }) }),
+Plot.text(fila, { x: "uso_ia", y: "etiqueta", text: d => fmtPct(d.uso_ia), dx: 5, textAnchor: "start", fontSize: 12, fontWeight: 700, fill: "#334155" }),
+Plot.ruleX([0], { stroke: "#94a3b8" })
+]
+});
+activarGlobo(g);
+return html`<div class="tb-wrap tb-total"><div class="tb-title">Uso reportado de IA · total</div><div class="tb-note">Vista sin categorías: porcentaje de ${universoPerfilIA.toLowerCase()} que reporta usar herramientas de IA. Arrastre una variable a "Categoría principal" para desagregar.</div>${g}<div class="tb-axis-note">Porcentaje que reporta usar herramientas de IA</div></div>`;
+}
+const ordenEdad = ["5 a 14 años", "15 a 24 años", "25 a 34 años", "35 a 44 años", "45 a 54 años", "55 a 64 años", "65 a 74 años", "75 a 84 años", "85 años o más"];
+const ordenSexo = ["Hombres", "Mujeres"];
+const ordenHijos = dimensionPerfilIA === "Rango de edad"
+? [...rows].sort((a, b) => (ordenEdad.indexOf(a.categoria) - ordenEdad.indexOf(b.categoria)) || (b.poblacion - a.poblacion))
+: [...rows].sort((a, b) => a.categoria.localeCompare(b.categoria, "es") || (b.poblacion - a.poblacion));
+const plotRows = subdimensionPerfilIA ? (() => {
+const padres = perfilesUsoIA2025.filas.filter(d => d.universo === universoPerfilIA && d.dimension === dimensionPerfilIA && Number.isFinite(d.uso_ia));
+const salida = [];
+const cats = [...new Set(ordenHijos.map(d => d.categoria))];
+if (dimensionPerfilIA === "Rango de edad") cats.sort((a, b) => ordenEdad.indexOf(a) - ordenEdad.indexOf(b)); else cats.sort((a, b) => a.localeCompare(b, "es"));
+for (const cat of cats) {
+const p = padres.find(d => d.categoria === cat);
+const hijos = ordenHijos.filter(d => d.categoria === cat).sort((a, b) => {
+if (subdimensionPerfilIA === "Sexo") return ordenSexo.indexOf(a.subcategoria) - ordenSexo.indexOf(b.subcategoria);
+if (subdimensionPerfilIA === "Rango de edad") return ordenEdad.indexOf(a.subcategoria) - ordenEdad.indexOf(b.subcategoria);
+return b.poblacion - a.poblacion;
+});
+const masaIA = hijos.reduce((s, d) => s + d.poblacion * d.uso_ia, 0);
+if (p) salida.push({ ...p, nivel: "principal", subcategoria: null, clave: cat, aporte: null });
+for (const h of hijos) salida.push({ ...h, nivel: "subcategoria", clave: cat + "||" + h.subcategoria, aporte: masaIA ? 100 * h.poblacion * h.uso_ia / masaIA : null });
+}
+return salida;
+})() : ordenHijos.map(d => ({ ...d, nivel: "principal", clave: d.categoria, aporte: null }));
+const T10 = ["#4E79A7", "#F28E2B", "#59A14F", "#E15759", "#76B7B2", "#EDC948", "#B07AA1", "#FF9DA7", "#9C755F", "#BAB0AC"];
+const conSub = !!subdimensionPerfilIA;
+const datos = plotRows.map(d => ({ ...d, etiqueta: conSub ? (d.nivel === "principal" ? "Total" : corto(d.subcategoria)) : corto(d.categoria), grupo: corto(d.categoria) }));
+const ordenEduc = ["Sin escolaridad o preescolar", "Primaria", "Secundaria y media", "Técnica o tecnológica", "Universitaria o posgrado", "Sin información"];
+const rango = s => { const i = ordenEduc.indexOf(s); return i < 0 ? 99 : i; };
+let subs = conSub ? [...new Set(datos.filter(d => d.nivel !== "principal").map(d => d.subcategoria))] : [];
+if (subdimensionPerfilIA === "Educación") subs = subs.sort((a, b) => rango(a) - rango(b));
+if (subdimensionPerfilIA === "Rango de edad") subs = subs.sort((a, b) => ordenEdad.indexOf(a) - ordenEdad.indexOf(b));
+const colorSub = new Map(subs.map((s, k) => [s, T10[k % 10]]));
+const colorDe = d => d.etiqueta === "Total" ? "#9aa3ad" : conSub ? colorSub.get(d.subcategoria) : "#4E79A7";
+const xmax = Math.max(.15, Math.min(1, Math.max(...datos.map(d => d.uso_ia)) * 1.22));
+const W = Math.max(520, tbAncho - 34);
+const largoGrupo = Math.max(...datos.map(d => String(d.grupo).length));
+const largoEtq = Math.max(...datos.map(d => String(d.etiqueta).length));
+const mL = Math.min(300, 12 + largoEtq * 6.6);
+const mG = conSub ? Math.min(300, 16 + largoGrupo * 7) : 0;
+const leyenda = conSub ? html`<div class="tb-legend"><span class="tb-legend-title">${subdimensionPerfilIA}</span>${subs.map((s, k) => html`<span class="tb-key"><i style="background:${T10[k % 10]}"></i>${corto(s)}</span>`)}<span class="tb-key"><i style="background:#9aa3ad"></i>Total</span></div>` : "";
+const plotOpts = {
+width: W, marginLeft: mL + mG, marginRight: 110, marginTop: 30, marginBottom: 30,
+style: { fontSize: "12.5px", fontFamily: "inherit", background: "none" },
+x: { domain: [0, xmax], axis: "both", grid: true, tickFormat: d => Math.round(100 * d) + " %", label: null, ticks: 6 },
+y: { label: null, tickSize: 0, padding: .18 },
+marks: [
+Plot.barX(datos, { x: "uso_ia", y: "etiqueta", fy: conSub ? "grupo" : undefined, fill: colorDe,
+title: d => globoHtml(d) }),
+Plot.text(datos, { x: "uso_ia", y: "etiqueta", fy: conSub ? "grupo" : undefined, text: d => fmtPct(d.uso_ia), dx: 5, textAnchor: "start", fontSize: 11, fontWeight: d => d.etiqueta === "Total" ? 700 : 500, fill: "#334155" }),
+conSub ? Plot.text(datos.filter(d => Number.isFinite(d.aporte)), { x: "uso_ia", y: "etiqueta", fy: "grupo", text: d => "aporta " + d.aporte.toLocaleString("es-CO", { maximumFractionDigits: 1 }) + " %", dx: 52, textAnchor: "start", fontSize: 10, fill: "#94a3b8" }) : null,
+Plot.ruleX([0], { stroke: "#94a3b8" })
+]
+};
+const dir = tbOrden === "desc" ? -1 : tbOrden === "asc" ? 1 : 0;
+const prom = s => { const v = datos.filter(d => d.subcategoria === s && d.nivel !== "principal"); return v.reduce((a, d) => a + d.uso_ia, 0) / (v.length || 1); };
+if (dir && conSub) subs = [...subs].sort((a, b) => dir * (prom(a) - prom(b)));
+if (conSub) {
+let grupos = [...new Set(datos.map(d => d.grupo))];
+if (dir) { const tot = g => { const t = datos.find(d => d.grupo === g && d.etiqueta === "Total"); return t ? t.uso_ia : 0; }; grupos = grupos.sort((a, b) => dir * (tot(a) - tot(b))); }
+plotOpts.fy = { domain: grupos, label: null, axis: null, padding: .08 };
+plotOpts.marks.push(Plot.axisFy({ anchor: "left", dx: -(mL - 4), textAnchor: "end", fontWeight: 700, fontSize: 12.5, fill: "#0f172a", tickSize: 0, label: null, lineWidth: Math.max(8, Math.floor(mG / 7.5)) }));
+plotOpts.facet = { label: null };
+plotOpts.marks.unshift(Plot.frame({ fill: "#f8fafc", stroke: "#e2e8f0" }));
+const filasPorGrupo = Math.max(...grupos.map(g => datos.filter(d => d.grupo === g).length));
+plotOpts.y.domain = ["Total", ...subs.map(corto)];
+plotOpts.height = 60 + grupos.length * filasPorGrupo * 24;
+} else {
+plotOpts.y.domain = (dir ? [...datos].sort((a, b) => dir * (a.uso_ia - b.uso_ia)) : datos).map(d => d.etiqueta);
+plotOpts.height = 60 + datos.length * 24;
+}
+const graph = Plot.plot(plotOpts);
+activarGlobo(graph);
+const titulo = html`<div class="tb-title">Uso reportado de IA por ${dimensionPerfilIA.toLowerCase()}${conSub ? " y " + subdimensionPerfilIA.toLowerCase() : ""}</div>`;
+const nota = conSub ? html`<div class="tb-note">Cada bloque es una categoría de ${dimensionPerfilIA.toLowerCase()}: la barra gris es su total y las de color, sus subgrupos. “Aporta” indica qué parte de los usuarios de IA de la categoría pertenece a cada subgrupo.</div>` : "";
+return html`<div class="tb-wrap">${titulo}${nota}${leyenda}${graph}<div class="tb-axis-note">Porcentaje que reporta usar herramientas de IA</div></div>`;
+}
+let listo = false;
+const montar = () => {
+if (listo) return true;
+const mm = window._ojs && window._ojs.ojsConnector && window._ojs.ojsConnector.mainModule;
+const chart = document.querySelector('.ia-profile-wrap > .ia-profile-chart');
+if (!mm || !chart) return false;
+const celda = chart.closest('[id^="ojs-cell"]') || chart.parentElement.parentElement;
+const box = document.createElement('div'); box.id = 'tb-plus';
+const barra = document.createElement('div'); barra.id = 'tb-orden';
+barra.innerHTML = '<button type="button" title="Cambiar el orden de las barras"><span class="tb-flecha">⇅</span><span class="tb-orden-txt">Orden original</span></button>';
+const contenido = document.createElement('div');
+box.append(barra, contenido);
+celda.after(box);
+mm.variable().define('tbOrden', ['Generators'], G => G.observe(n => {
+const ciclo = [['orig', '⇅', 'Orden original'], ['desc', '↓', 'Mayor a menor'], ['asc', '↑', 'Menor a mayor']];
+let k = 0;
+const btn = barra.querySelector('button');
+const pintar = () => { btn.querySelector('.tb-flecha').textContent = ciclo[k][1]; btn.querySelector('.tb-orden-txt').textContent = ciclo[k][2]; btn.classList.toggle('activo', k > 0); };
+const onClick = () => { k = (k + 1) % ciclo.length; pintar(); n(ciclo[k][0]); };
+btn.addEventListener('click', onClick); pintar(); n('orig');
+return () => btn.removeEventListener('click', onClick);
+}));
+listo = true;
+mm.variable().define('tbAncho', ['Generators'], G => G.observe(n => {
+let last = 0;
+const send = () => { const w = box.clientWidth; if (w > 0 && Math.abs(w - last) > 8) { last = w; n(w); } };
+const ro = new ResizeObserver(send); ro.observe(box); send();
+return () => ro.disconnect();
+}));
+mm.variable().define('tbModoTotal', ['Generators'], G => G.observe(n => {
+let total = false;
+const builder = () => document.querySelector('.ia-drag-builder');
+const etiquetar = () => {
+const b = builder(); if (!b) return;
+const btn = b.querySelector('.clear-sub');
+const dimEl = b.querySelector('.ia-shelf-value.dimension');
+const sub = b.value && b.value.subdimension;
+b.classList.toggle('modo-total', total);
+document.body.classList.toggle('perfil-modo-total', total);
+if (btn) {
+btn.textContent = total ? 'Sin categorías' : (sub ? 'Quitar subdivisión' : 'Quitar categoría principal');
+btn.disabled = total;
+}
+if (dimEl) dimEl.textContent = total ? 'Ninguna' : ((b.value && b.value.dimension) || '');
+b.querySelectorAll('.ia-shelf-value').forEach(v => v.classList.toggle('vacio', /^(Sin |Ninguna|$)/.test(v.textContent.trim())));
+};
+const set = v => { total = v; n(total); setTimeout(etiquetar, 0); };
+const onClick = e => {
+const btn = e.target.closest && e.target.closest('.ia-drag-builder .clear-sub');
+if (!btn) return;
+const b = builder();
+if (!total && b && b.value && !b.value.subdimension) { e.stopImmediatePropagation(); e.preventDefault(); set(true); }
+else setTimeout(etiquetar, 0);
+};
+const onInput = e => { if (e.target.closest && e.target.closest('.ia-drag-builder')) { if (total) set(false); else setTimeout(etiquetar, 0); } };
+document.addEventListener('click', onClick, true);
+document.addEventListener('input', onInput, true);
+document.addEventListener('drop', () => setTimeout(() => { if (total) set(false); else etiquetar(); }, 0), true);
+n(false); setTimeout(etiquetar, 0);
+return () => { document.removeEventListener('click', onClick, true); document.removeEventListener('input', onInput, true); };
+}));
+mm.variable({ fulfilled(v) { contenido.replaceChildren(v); barra.style.display = v.querySelector && v.querySelector('.tb-total') ? 'none' : ''; }, rejected(e) { console.error(e); } })
+.define(['datosPerfilIA', 'dimensionPerfilIA', 'subdimensionPerfilIA', 'perfilesUsoIA2025', 'universoPerfilIA', 'Plot', 'html', 'tbAncho', 'tbModoTotal', 'tbOrden'], grafico);
+return true;
+};
+const start = () => {
+if (montar()) return;
+const obs = new MutationObserver(() => { if (montar()) obs.disconnect(); });
+obs.observe(document.body, { subtree: true, childList: true });
+};
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
+})();
+</script>
+<style> .navbar { min-height: 0 !important; } .navbar .navbar-brand-container, .navbar .navbar-brand { flex: 0 0 auto !important; width: auto !important; max-width: none !important; margin-right: 1.5rem !important; } .navbar .navbar-title, .navbar .navbar-title * { white-space: nowrap !important; max-width: none !important; } .navbar .navbar-title { font-size: 1.12rem !important; font-weight: 700; letter-spacing: -.01em; } .navbar .navbar-nav { flex-wrap: nowrap !important; gap: 2px; } .navbar .nav-link { white-space: nowrap !important; padding: .55rem .9rem !important; border-radius: 6px 6px 0 0; } .navbar .nav-link-text, .navbar .nav-link .menu-text { white-space: nowrap !important; max-width: none !important; font-size: .9rem !important; } .navbar .nav-link.active { font-weight: 700; } @media (max-width: 1100px) { .navbar .navbar-title { font-size: 1rem !important; } .navbar .nav-link { padding: .5rem .6rem !important; } .navbar .nav-link-text { font-size: .82rem !important; } }  .ia-profile-groups > form { display: grid !important; grid-template-columns: 200px minmax(0, 1fr); align-items: start; gap: 12px; width: 100% !important; max-width: none !important; margin-top: 12px !important; } .ia-profile-groups > form > label { font-size: 10.5px !important; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: #64748b; width: auto !important; line-height: 1.4; } .ia-profile-groups > form select[multiple] { width: 100% !important; max-width: 460px !important; height: 210px !important; font-size: 13px; border: 1px solid #cbd5e1; border-radius: 8px; padding: 4px; background: #fff; } .ia-profile-groups > form select[multiple] option { padding: 2px 6px; border-radius: 4px; } .ia-profile-groups > form select[multiple] option:checked { background: #dbe6f5 linear-gradient(0deg, #dbe6f5, #dbe6f5); color: #1f3b63; }</style>
+

@@ -1,0 +1,17 @@
+corte,universo,cuadrante,porcentaje,cambio_clasificacion_pct
+0.4,Desocupados,AIOE bajo · robots bajo,0.6221339792925907,19.964058066926818
+0.4,Desocupados,AIOE alto · robots bajo,23.971862700720504,19.964058066926818
+0.4,Desocupados,AIOE bajo · robots alto,51.23301594157423,19.964058066926818
+0.4,Desocupados,AIOE alto · robots alto,24.17298737841267,19.964058066926818
+0.4,Ocupados,AIOE bajo · robots bajo,0.6781097289459348,21.158219644141624
+0.4,Ocupados,AIOE alto · robots bajo,25.555496888439624,21.158219644141624
+0.4,Ocupados,AIOE bajo · robots alto,48.61062249498166,21.158219644141624
+0.4,Ocupados,AIOE alto · robots alto,25.155770887632777,21.158219644141624
+0.6,Desocupados,AIOE bajo · robots bajo,27.041664173733885,19.025223666251414
+0.6,Desocupados,AIOE alto · robots bajo,22.3817650411804,19.025223666251414
+0.6,Desocupados,AIOE bajo · robots alto,50.19955603166139,19.025223666251414
+0.6,Desocupados,AIOE alto · robots alto,0.37701475342433516,19.025223666251414
+0.6,Ocupados,AIOE bajo · robots bajo,20.91597570793199,14.660816595254031
+0.6,Ocupados,AIOE alto · robots bajo,26.52294543216512,14.660816595254031
+0.6,Ocupados,AIOE bajo · robots alto,52.2566973274988,14.660816595254031
+0.6,Ocupados,AIOE alto · robots alto,0.30438153240408894,14.660816595254031

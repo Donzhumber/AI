@@ -1,0 +1,748 @@
+[
+  {
+    "resultado": "salario",
+    "variante": "principal",
+    "theta": 3.4609464782912593,
+    "se": 23.909049509795867,
+    "t": 0.14475466608880716,
+    "p": 0.8849803231720613,
+    "ci_lower": -43.54770724320569,
+    "ci_upper": 50.46960019978822,
+    "nobs": 101071,
+    "n_excluded": 0,
+    "clusters": 386,
+    "folds": 5,
+    "seed": 20261030,
+    "df_cluster": 385,
+    "first_stage_pi": -0.007454152665335741,
+    "first_stage_se": 0.012666542441631883,
+    "first_stage_t": -0.5884915082142488,
+    "first_stage_F": 0.34632225524028126,
+    "first_stage_p": 0.5565475083097327,
+    "jacobian": -0.00018479585997196955,
+    "oof_metrics": {
+      "Y": {
+        "oof_mse": 0.5486315774979896,
+        "oof_r2": 0.35621428568199454,
+        "raw_variance": 0.8521959485838896,
+        "residual_second_moment": 0.5486315774979896
+      },
+      "D": {
+        "oof_mse": 0.06685984668775369,
+        "oof_r2": 0.1641657265198634,
+        "raw_variance": 0.07999175052893137,
+        "residual_second_moment": 0.06685984668775369
+      },
+      "Z": {
+        "oof_mse": 0.024790994800969263,
+        "oof_r2": 0.7155831854897712,
+        "raw_variance": 0.08716430793186343,
+        "residual_second_moment": 0.024790994800969263
+      }
+    },
+    "fold_observations": [
+      19454,
+      20058,
+      21878,
+      20197,
+      19484
+    ],
+    "fold_clusters": [
+      67,
+      60,
+      93,
+      93,
+      73
+    ],
+    "weak_iv_set": {
+      "kind": "all_real",
+      "intervals": [
+        [
+          null,
+          null
+        ]
+      ],
+      "alpha": 0.05,
+      "critical_t": 1.9661448148424663,
+      "polynomial": [
+        -3485.0311852138616,
+        -528.0396453712169,
+        -727319.7020968106
+      ],
+      "method": "inversion of cross-fitted orthogonal score; raw occupation cluster sums"
+    }
+  },
+  {
+    "resultado": "informalidad",
+    "variante": "principal",
+    "theta": -67.20414860795665,
+    "se": 973.6200048181147,
+    "t": -0.06902502852795356,
+    "p": 0.9450055326407141,
+    "ci_lower": -1981.48207270799,
+    "ci_upper": 1847.0737754920765,
+    "nobs": 103834,
+    "n_excluded": 0,
+    "clusters": 386,
+    "folds": 5,
+    "seed": 20261030,
+    "df_cluster": 385,
+    "first_stage_pi": -0.0009046715505785345,
+    "first_stage_se": 0.013089967922039031,
+    "first_stage_t": -0.06911182334185685,
+    "first_stage_F": 0.00477644412563603,
+    "first_stage_p": 0.9449364906579762,
+    "jacobian": -2.2412630895517396e-05,
+    "oof_metrics": {
+      "Y": {
+        "oof_mse": 0.18669923170758038,
+        "oof_r2": 0.24775188458499586,
+        "raw_variance": 0.24818836748375392,
+        "residual_second_moment": 0.18669923170758038
+      },
+      "D": {
+        "oof_mse": 0.06694032292115903,
+        "oof_r2": 0.1638304263629442,
+        "raw_variance": 0.08005591811956418,
+        "residual_second_moment": 0.06694032292115903
+      },
+      "Z": {
+        "oof_mse": 0.02477432929242065,
+        "oof_r2": 0.7128501381133243,
+        "raw_variance": 0.0862766540427517,
+        "residual_second_moment": 0.02477432929242065
+      }
+    },
+    "fold_observations": [
+      20070,
+      20686,
+      20449,
+      22579,
+      20050
+    ],
+    "fold_clusters": [
+      54,
+      85,
+      53,
+      101,
+      93
+    ],
+    "weak_iv_set": {
+      "kind": "all_real",
+      "intervals": [
+        [
+          null,
+          null
+        ]
+      ],
+      "alpha": 0.05,
+      "critical_t": 1.9661448148424663,
+      "polynomial": [
+        -4357.658561551883,
+        -3042.104818997662,
+        -369607.6234873109
+      ],
+      "method": "inversion of cross-fitted orthogonal score; raw occupation cluster sums"
+    }
+  },
+  {
+    "resultado": "desempleo",
+    "variante": "principal",
+    "theta": -123.2051257346031,
+    "se": 2480.2006720328854,
+    "t": -0.04967546663618092,
+    "p": 0.9604066345076134,
+    "ci_lower": -4999.559349615052,
+    "ci_upper": 4753.149098145846,
+    "nobs": 111837,
+    "n_excluded": 0,
+    "clusters": 388,
+    "folds": 5,
+    "seed": 20261030,
+    "df_cluster": 387,
+    "first_stage_pi": 0.0006715361219187166,
+    "first_stage_se": 0.013510363261966349,
+    "first_stage_t": 0.04970526024338584,
+    "first_stage_F": 0.002470612895862713,
+    "first_stage_p": 0.9603829073864175,
+    "jacobian": 1.7555357130389762e-05,
+    "oof_metrics": {
+      "Y": {
+        "oof_mse": 0.05761791413263273,
+        "oof_r2": 0.03216469344999251,
+        "raw_variance": 0.05953276734449824,
+        "residual_second_moment": 0.05761791413263273
+      },
+      "D": {
+        "oof_mse": 0.06612734852962487,
+        "oof_r2": 0.16100821448542546,
+        "raw_variance": 0.07881763525141945,
+        "residual_second_moment": 0.06612734852962487
+      },
+      "Z": {
+        "oof_mse": 0.026142089096012445,
+        "oof_r2": 0.6979338817471339,
+        "raw_variance": 0.08654426139289258,
+        "residual_second_moment": 0.026142089096012445
+      }
+    },
+    "fold_observations": [
+      23329,
+      20724,
+      21049,
+      25911,
+      20824
+    ],
+    "fold_clusters": [
+      81,
+      58,
+      89,
+      78,
+      82
+    ],
+    "weak_iv_set": {
+      "kind": "disjoint",
+      "intervals": [
+        [
+          null,
+          -2.6166566233588906
+        ],
+        [
+          2.3990462311044647,
+          null
+        ]
+      ],
+      "alpha": 0.05,
+      "critical_t": 1.9661127742069224,
+      "polynomial": [
+        -6051.610948119267,
+        -1316.893432191416,
+        37988.867967638886
+      ],
+      "method": "inversion of cross-fitted orthogonal score; raw occupation cluster sums"
+    }
+  },
+  {
+    "resultado": "salario",
+    "variante": "particion_alternativa",
+    "theta": -123.87425258486587,
+    "se": 1635.356185401468,
+    "t": -0.07574756722154424,
+    "p": 0.9396592760709797,
+    "ci_lower": -3339.2213369325173,
+    "ci_upper": 3091.472831762786,
+    "nobs": 101071,
+    "n_excluded": 0,
+    "clusters": 386,
+    "folds": 5,
+    "seed": 20261031,
+    "df_cluster": 385,
+    "first_stage_pi": -0.0010842602105894878,
+    "first_stage_se": 0.014073548040396767,
+    "first_stage_t": -0.07704242082218521,
+    "first_stage_F": 0.005935534606142677,
+    "first_stage_p": 0.9386298193455871,
+    "jacobian": -2.592899316426718e-05,
+    "oof_metrics": {
+      "Y": {
+        "oof_mse": 0.5567918244947945,
+        "oof_r2": 0.3466387332396661,
+        "raw_variance": 0.8521959485838896,
+        "residual_second_moment": 0.5567918244947945
+      },
+      "D": {
+        "oof_mse": 0.0669585017699926,
+        "oof_r2": 0.16293241081434906,
+        "raw_variance": 0.07999175052893137,
+        "residual_second_moment": 0.0669585017699926
+      },
+      "Z": {
+        "oof_mse": 0.023913994916561744,
+        "oof_r2": 0.7256446418956785,
+        "raw_variance": 0.08716430793186343,
+        "residual_second_moment": 0.023913994916561744
+      }
+    },
+    "fold_observations": [
+      21128,
+      20984,
+      16892,
+      16706,
+      25361
+    ],
+    "fold_clusters": [
+      109,
+      74,
+      86,
+      68,
+      49
+    ],
+    "weak_iv_set": {
+      "kind": "all_real",
+      "intervals": [
+        [
+          null,
+          null
+        ]
+      ],
+      "alpha": 0.05,
+      "critical_t": 1.9661448148424663,
+      "polynomial": [
+        -4440.094147495187,
+        17867.303985341394,
+        -657773.7761049296
+      ],
+      "method": "inversion of cross-fitted orthogonal score; raw occupation cluster sums"
+    }
+  },
+  {
+    "resultado": "informalidad",
+    "variante": "particion_alternativa",
+    "theta": 12.036269374692745,
+    "se": 32.47077094902887,
+    "t": 0.37068012316636184,
+    "p": 0.7110796597565797,
+    "ci_lower": -51.805968560677755,
+    "ci_upper": 75.87850731006324,
+    "nobs": 103834,
+    "n_excluded": 0,
+    "clusters": 386,
+    "folds": 5,
+    "seed": 20261031,
+    "df_cluster": 385,
+    "first_stage_pi": -0.006590375264656475,
+    "first_stage_se": 0.013007737400194851,
+    "first_stage_t": -0.506650392908282,
+    "first_stage_F": 0.25669462063411647,
+    "first_stage_p": 0.6126901719894415,
+    "jacobian": -0.0001739885327148303,
+    "oof_metrics": {
+      "Y": {
+        "oof_mse": 0.17725928855713458,
+        "oof_r2": 0.2857872818364957,
+        "raw_variance": 0.24818836748375392,
+        "residual_second_moment": 0.17725928855713458
+      },
+      "D": {
+        "oof_mse": 0.06706613043625405,
+        "oof_r2": 0.1622589308626725,
+        "raw_variance": 0.08005591811956418,
+        "residual_second_moment": 0.06706613043625405
+      },
+      "Z": {
+        "oof_mse": 0.026400398418571617,
+        "oof_r2": 0.6940029871175843,
+        "raw_variance": 0.0862766540427517,
+        "residual_second_moment": 0.026400398418571617
+      }
+    },
+    "fold_observations": [
+      18817,
+      23687,
+      19203,
+      23267,
+      18860
+    ],
+    "fold_clusters": [
+      63,
+      61,
+      63,
+      83,
+      116
+    ],
+    "weak_iv_set": {
+      "kind": "all_real",
+      "intervals": [
+        [
+          null,
+          null
+        ]
+      ],
+      "alpha": 0.05,
+      "critical_t": 1.9661448148424663,
+      "polynomial": [
+        -4382.34115611313,
+        -28010.361865370887,
+        -358242.4586595155
+      ],
+      "method": "inversion of cross-fitted orthogonal score; raw occupation cluster sums"
+    }
+  },
+  {
+    "resultado": "desempleo",
+    "variante": "particion_alternativa",
+    "theta": 10.71435162779856,
+    "se": 20.253255598248103,
+    "t": 0.5290187335968518,
+    "p": 0.5970957409510123,
+    "ci_lower": -29.1058329231949,
+    "ci_upper": 50.534536178792024,
+    "nobs": 111837,
+    "n_excluded": 0,
+    "clusters": 388,
+    "folds": 5,
+    "seed": 20261031,
+    "df_cluster": 387,
+    "first_stage_pi": -0.0076146345154333335,
+    "first_stage_se": 0.014153567833567192,
+    "first_stage_t": -0.5380010612853494,
+    "first_stage_F": 0.2894451419441623,
+    "first_stage_p": 0.5908855750869371,
+    "jacobian": -0.0001697699082079388,
+    "oof_metrics": {
+      "Y": {
+        "oof_mse": 0.05717745932666676,
+        "oof_r2": 0.03956322077557761,
+        "raw_variance": 0.05953276734449824,
+        "residual_second_moment": 0.05717745932666676
+      },
+      "D": {
+        "oof_mse": 0.06584889526415875,
+        "oof_r2": 0.1645410947168342,
+        "raw_variance": 0.07881763525141945,
+        "residual_second_moment": 0.06584889526415875
+      },
+      "Z": {
+        "oof_mse": 0.022295214282950723,
+        "oof_r2": 0.742383678315363,
+        "raw_variance": 0.08654426139289258,
+        "residual_second_moment": 0.022295214282950723
+      }
+    },
+    "fold_observations": [
+      25417,
+      21512,
+      21638,
+      21512,
+      21758
+    ],
+    "fold_clusters": [
+      109,
+      89,
+      72,
+      83,
+      35
+    ],
+    "weak_iv_set": {
+      "kind": "disjoint",
+      "intervals": [
+        [
+          null,
+          -3.933774992041037
+        ],
+        [
+          1.4237432797137815,
+          null
+        ]
+      ],
+      "alpha": 0.05,
+      "critical_t": 1.9661127742069224,
+      "polynomial": [
+        -4200.226824434048,
+        -10542.70252829706,
+        23524.15034942934
+      ],
+      "method": "inversion of cross-fitted orthogonal score; raw occupation cluster sums"
+    }
+  },
+  {
+    "resultado": "salario",
+    "variante": "particion_alternativa",
+    "theta": -17.08178063656609,
+    "se": 65.119685726424,
+    "t": -0.26231362215611426,
+    "p": 0.7932199580568751,
+    "ci_lower": -145.1165130717456,
+    "ci_upper": 110.95295179861341,
+    "nobs": 101071,
+    "n_excluded": 0,
+    "clusters": 386,
+    "folds": 5,
+    "seed": 20261101,
+    "df_cluster": 385,
+    "first_stage_pi": -0.0041937727814566885,
+    "first_stage_se": 0.012525983148845544,
+    "first_stage_t": -0.3348058776402878,
+    "first_stage_F": 0.11209497570248336,
+    "first_stage_p": 0.7379538566887611,
+    "jacobian": -0.00010212629856068311,
+    "oof_metrics": {
+      "Y": {
+        "oof_mse": 0.5435562249366919,
+        "oof_r2": 0.3621699025442098,
+        "raw_variance": 0.8521959485838896,
+        "residual_second_moment": 0.5435562249366919
+      },
+      "D": {
+        "oof_mse": 0.06681257841388606,
+        "oof_r2": 0.16475664087734487,
+        "raw_variance": 0.07999175052893137,
+        "residual_second_moment": 0.06681257841388606
+      },
+      "Z": {
+        "oof_mse": 0.024351891216483595,
+        "oof_r2": 0.7206208390305866,
+        "raw_variance": 0.08716430793186343,
+        "residual_second_moment": 0.024351891216483595
+      }
+    },
+    "fold_observations": [
+      19018,
+      24479,
+      19499,
+      19372,
+      18703
+    ],
+    "fold_clusters": [
+      73,
+      81,
+      97,
+      53,
+      82
+    ],
+    "weak_iv_set": {
+      "kind": "all_real",
+      "intervals": [
+        [
+          null,
+          null
+        ]
+      ],
+      "alpha": 0.05,
+      "critical_t": 1.9661448148424663,
+      "polynomial": [
+        -3510.3891465634692,
+        6155.723486102369,
+        -617124.1482972712
+      ],
+      "method": "inversion of cross-fitted orthogonal score; raw occupation cluster sums"
+    }
+  },
+  {
+    "resultado": "informalidad",
+    "variante": "particion_alternativa",
+    "theta": 248.69168498194162,
+    "se": 4731.765498157364,
+    "t": 0.052557905728588344,
+    "p": 0.9581114161932479,
+    "ci_lower": -9054.64451427064,
+    "ci_upper": 9552.027884234521,
+    "nobs": 103834,
+    "n_excluded": 0,
+    "clusters": 386,
+    "folds": 5,
+    "seed": 20261101,
+    "df_cluster": 385,
+    "first_stage_pi": -0.0007196412862079154,
+    "first_stage_se": 0.013577757780549607,
+    "first_stage_t": -0.05300148211796907,
+    "first_stage_F": 0.0028091571067013947,
+    "first_stage_p": 0.9577582167623345,
+    "jacobian": -1.763489013091297e-05,
+    "oof_metrics": {
+      "Y": {
+        "oof_mse": 0.18466865798268658,
+        "oof_r2": 0.25593346757166313,
+        "raw_variance": 0.24818836748375392,
+        "residual_second_moment": 0.18466865798268658
+      },
+      "D": {
+        "oof_mse": 0.06671602579020101,
+        "oof_r2": 0.16663218213848885,
+        "raw_variance": 0.08005591811956418,
+        "residual_second_moment": 0.06671602579020101
+      },
+      "Z": {
+        "oof_mse": 0.02450511173954239,
+        "oof_r2": 0.7159705367410325,
+        "raw_variance": 0.0862766540427517,
+        "residual_second_moment": 0.02450511173954239
+      }
+    },
+    "fold_observations": [
+      20896,
+      21261,
+      20196,
+      21116,
+      20365
+    ],
+    "fold_clusters": [
+      93,
+      112,
+      76,
+      44,
+      61
+    ],
+    "weak_iv_set": {
+      "kind": "all_real",
+      "intervals": [
+        [
+          null,
+          null
+        ]
+      ],
+      "alpha": 0.05,
+      "critical_t": 1.9661448148424663,
+      "polynomial": [
+        -4583.814373069895,
+        -26055.821785472595,
+        -225572.53444562934
+      ],
+      "method": "inversion of cross-fitted orthogonal score; raw occupation cluster sums"
+    }
+  },
+  {
+    "resultado": "desempleo",
+    "variante": "particion_alternativa",
+    "theta": 9.113793039691934,
+    "se": 19.35054620041037,
+    "t": 0.47098376166243083,
+    "p": 0.6379176973393694,
+    "ci_lower": -28.931563032816122,
+    "ci_upper": 47.15914911219999,
+    "nobs": 111837,
+    "n_excluded": 0,
+    "clusters": 388,
+    "folds": 5,
+    "seed": 20261101,
+    "df_cluster": 387,
+    "first_stage_pi": -0.006807912274033257,
+    "first_stage_se": 0.013730030833934412,
+    "first_stage_t": -0.4958410040279869,
+    "first_stage_F": 0.24585830127548214,
+    "first_stage_p": 0.6202880543017975,
+    "jacobian": -0.0001514142538021428,
+    "oof_metrics": {
+      "Y": {
+        "oof_mse": 0.057337398063856446,
+        "oof_r2": 0.03687665429590825,
+        "raw_variance": 0.05953276734449824,
+        "residual_second_moment": 0.057337398063856446
+      },
+      "D": {
+        "oof_mse": 0.06577993459384833,
+        "oof_r2": 0.1654160343174762,
+        "raw_variance": 0.07881763525141945,
+        "residual_second_moment": 0.06577993459384833
+      },
+      "Z": {
+        "oof_mse": 0.02224092316519223,
+        "oof_r2": 0.7430110002993363,
+        "raw_variance": 0.08654426139289258,
+        "residual_second_moment": 0.02224092316519223
+      }
+    },
+    "fold_observations": [
+      22217,
+      22515,
+      21914,
+      21863,
+      23328
+    ],
+    "fold_clusters": [
+      67,
+      65,
+      57,
+      111,
+      88
+    ],
+    "weak_iv_set": {
+      "kind": "disjoint",
+      "intervals": [
+        [
+          null,
+          -2.6800470854249663
+        ],
+        [
+          0.6491673477123595,
+          null
+        ]
+      ],
+      "alpha": 0.05,
+      "critical_t": 1.9661127742069224,
+      "polynomial": [
+        -4157.620548785109,
+        -8443.627329625248,
+        7233.424315085915
+      ],
+      "method": "inversion of cross-fitted orthogonal score; raw occupation cluster sums"
+    }
+  },
+  {
+    "resultado": "desempleo",
+    "variante": "ocupacion_buscada",
+    "theta": 19.7322084461118,
+    "se": 61.869180418208934,
+    "t": 0.31893437593209734,
+    "p": 0.749948344604142,
+    "ci_lower": -101.90957750384158,
+    "ci_upper": 141.37399439606517,
+    "nobs": 113032,
+    "n_excluded": 0,
+    "clusters": 388,
+    "folds": 5,
+    "seed": 20261030,
+    "df_cluster": 387,
+    "first_stage_pi": -0.004697943165430259,
+    "first_stage_se": 0.014271383267525556,
+    "first_stage_t": -0.3291862517714313,
+    "first_stage_F": 0.10836358835532416,
+    "first_stage_p": 0.7421929913668575,
+    "jacobian": -0.00010086053193235832,
+    "oof_metrics": {
+      "Y": {
+        "oof_mse": 0.06494353141704845,
+        "oof_r2": 0.04372382233973171,
+        "raw_variance": 0.06791294495691247,
+        "residual_second_moment": 0.06494353141704845
+      },
+      "D": {
+        "oof_mse": 0.06601800037992502,
+        "oof_r2": 0.16566818318553012,
+        "raw_variance": 0.07912679230187553,
+        "residual_second_moment": 0.06601800037992502
+      },
+      "Z": {
+        "oof_mse": 0.021469083039262576,
+        "oof_r2": 0.7524466668714372,
+        "raw_variance": 0.08672508169426651,
+        "residual_second_moment": 0.021469083039262576
+      }
+    },
+    "fold_observations": [
+      21214,
+      21399,
+      21821,
+      21733,
+      26865
+    ],
+    "fold_clusters": [
+      84,
+      100,
+      82,
+      54,
+      68
+    ],
+    "weak_iv_set": {
+      "kind": "disjoint",
+      "intervals": [
+        [
+          null,
+          -2.3863895340909336
+        ],
+        [
+          0.012664472644302018,
+          null
+        ]
+      ],
+      "alpha": 0.05,
+      "critical_t": 1.9661127742069224,
+      "polynomial": [
+        -4409.1659609904245,
+        -10466.147741680392,
+        133.25542290021258
+      ],
+      "method": "inversion of cross-fitted orthogonal score; raw occupation cluster sums"
+    }
+  }
+]

@@ -1,0 +1,379 @@
+---
+title: 'Integración GEIH–ECV, exposición tecnológica y mercado laboral en Colombia'
+subtitle: 'Emparejamiento transversal, pseudo-panel y estimaciones del mercado laboral'
+author: 'Investigación: IA y Crecimiento Económico'
+date: today
+lang: es
+bibliography: ../data/references.bib
+csl: ../data/apa.csl
+format:
+  html:
+    toc: false
+    toc-depth: 3
+    number-sections: true
+    theme: cosmo
+    embed-resources: true
+    format-links: false
+    include-in-header:
+      text: |
+        <style>
+        main.content p { text-align: justify; hyphens: auto; line-height: 1.6; }
+        #title-block-header, #title-block-header p { text-align: left; }
+        @media print {
+          @page { margin: 18mm; }
+          #guardar-pdf-principal, #quarto-margin-sidebar,
+          .code-copy-button, .quarto-alternate-formats { display: none !important; }
+          main.content { width: 100% !important; max-width: none !important; }
+          .cell-output-display { overflow: visible !important; }
+          figure, table { break-inside: avoid; }
+          img { max-width: 100% !important; }
+        }
+        </style>
+        <script>
+        document.addEventListener('DOMContentLoaded', function () {
+          const header = document.querySelector('#title-block-header');
+          if (!header) return;
+          const button = document.createElement('button');
+          button.id = 'guardar-pdf-principal';
+          button.type = 'button';
+          button.className = 'btn btn-outline-secondary btn-sm';
+          button.textContent = 'Guardar como PDF';
+          button.title = 'Guardar como PDF la versión visible de este documento';
+          button.addEventListener('click', async function () {
+            if (document.fonts) await document.fonts.ready;
+            if (window.MathJax && window.MathJax.startup && window.MathJax.startup.promise) {
+              await window.MathJax.startup.promise;
+            }
+            window.print();
+          });
+          header.appendChild(button);
+        });
+        </script>
+  pdf:
+    documentclass: article
+    geometry: margin=2.5cm
+    number-sections: true
+    colorlinks: true
+    toc: false
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+```{python}
+#| label: configuracion-publicacion
+#| include: false
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path('../data').resolve()))
+from regresiones.validacion.auditoria_qmd_20260926 import publicacion_anexo as pub
+import pandas as pd
+import numpy as np
+from IPython.display import display, Markdown
+```
+
+# Introducción {#sec-introduccion}
+
+La inteligencia artificial puede sustituir tareas o complementar las capacidades de los trabajadores. El enfoque basado en tareas permite medir la exposición de las ocupaciones a estas tecnologías sin equipararla con pérdidas de empleo observadas. La evidencia internacional, latinoamericana y colombiana ha estudiado tanto esa exposición potencial como sus relaciones con el empleo, los ingresos y la desigualdad. Este documento contribuye a esa discusión mediante la integración de la Gran Encuesta Integrada de Hogares y la Encuesta Nacional de Calidad de Vida, GEIH y ECV, para analizar conjuntamente la exposición ocupacional, el acceso digital y el uso reportado de inteligencia artificial en Colombia.
+
+Entre las medidas internacionales, el índice AIOE desarrollado por @felten2021occupational relaciona las capacidades de distintas aplicaciones de IA con las habilidades requeridas por cada ocupación. No es un índice específico de grandes modelos de lenguaje. Dos mediciones alternativas, construidas con metodologías distintas, se utilizan como contraste. Son la exposición basada en patentes de IA de @webb2020impact y la exposición de tareas a modelos tipo GPT de @eloundou2023gpts. Los tres miden susceptibilidad de tareas, no adopción efectiva ni pérdida de empleo ya observada. Estas mediciones se inscriben en la literatura sobre cambio técnico y empleo. @autordorn2013 documentan la polarización del mercado laboral estadounidense entre ocupaciones de alta y baja cualificación, y @acemoglurestrepo2018 muestran, para la robótica industrial, que la automatización puede reducir tanto el empleo como la participación salarial en zonas expuestas, un mecanismo que @acemoglurestrepo2022 extienden explícitamente a la IA.
+
+La evidencia internacional distingue exposición potencial de resultados observados. @frankahnmoro2025 analizan datos ocupacionales de desempleo en Estados Unidos entre 2010 y 2020 y encuentran que los índices individuales tienen capacidad predictiva limitada, mientras su combinación mejora la predicción. Este hallazgo no implica que el coeficiente de AIOE sea necesariamente cero en cualquier especificación. @humlumvestergaard2025 vinculan encuestas de adopción de IA con registros administrativos daneses y estiman efectos medios pequeños sobre ingresos y horas en el corto plazo, junto con reorganización de tareas. Su resultado corresponde a otro contexto y no valida las restricciones de identificación de este documento.
+
+Las mediciones agregadas también requieren distinguir susceptibilidad de desplazamiento. @cazzaniga2024genai estiman que cerca del 40 % del empleo mundial está expuesto a la IA, con diferencias importantes entre grupos de países. En un modelo basado en tareas, @acemoglu2024simplemacro obtiene una ganancia de productividad total de los factores no superior al 0,66 % en diez años bajo su calibración de referencia. Esa cifra no es un pronóstico para Colombia. @jones2026aieconomicfuture destaca que las tareas difíciles de automatizar pueden limitar los aumentos agregados de productividad, mientras @demirer2026emergingmarket documentan la expansión y la caída de precios del mercado de servicios de modelos de lenguaje. Estos trabajos ofrecen mecanismos para interpretar la difusión tecnológica y no tamaños de efecto directamente trasladables a las estimaciones del anexo.
+
+En América Latina y el Caribe, @ilowb2024 encuentran que entre 26 % y 38 % del empleo en América Latina y el Caribe está expuesto a la IA generativa, con diferencias de exposición por composición del empleo y barreras de acceso digital que pueden limitar sus beneficios. Esa relación descriptiva no demuestra que la informalidad cause una menor exposición. @azuararipanitorres2024 aplican la metodología de @eloundou2023gpts a Chile, México y Perú y encuentran que, con un umbral bajo de exposición de tareas del 10 %, entre 74 % y 76 % de los empleos quedan expuestos, pero esa proporción cae a entre 6 % y 20 % con un umbral más exigente del 40 %; la exposición se concentra en mujeres, trabajadores con educación universitaria, empleo formal e ingresos más altos, lo que podría ampliar la desigualdad laboral regional en vez de reducirla. @ciaschietal2025, combinando cuatro índices de exposición sobre encuestas de hogares de catorce países latinoamericanos, documentan la misma heterogeneidad, y proyectan que, sin políticas mitigadoras, el desplazamiento asociado produciría aumentos moderados, no abruptos, en pobreza y desigualdad.
+
+En Colombia, las estimaciones de riesgo de automatización difieren por metodología y año de referencia. @moralespantoja2023 aplican probabilidades de automatización a la GEIH de 2019 y sitúan cerca del 37 % de los empleos en la categoría de alto riesgo. @fernandezsuescun2023 obtienen una proporción cercana al 57 % y muestran que la comparación entre empleo formal e informal depende de la medida utilizada. @mejiapabon2023 estiman un riesgo cercano al 58 % para Colombia en su comparación andina. Estas cifras describen susceptibilidad técnica bajo determinados supuestos, no pérdidas de empleo observadas, y no son directamente equivalentes a los índices de exposición a IA empleados en este documento.
+
+La literatura también estudia ajustes laborales efectivamente observados. @bonilla2022automation encuentran que durante la pandemia el empleo asalariado y las vacantes cayeron más y se recuperaron más lentamente en ocupaciones con mayor potencial de automatización. @medinaposso2018 documentan cambios en la composición ocupacional compatibles con polarización y cambio técnico. En el plano de política pública, @dnp2019conpes3975 y @dnp2025conpes4144 plantean la necesidad de fortalecer capacidades digitales y preparar el mercado laboral para la transformación tecnológica. Estos antecedentes motivan distinguir exposición potencial, acceso digital y uso reportado de IA al analizar sus relaciones con los resultados laborales.
+
+La GEIH aporta información laboral detallada y la ECV reúne condiciones de vida y acceso tecnológico. Como estas encuestas no siguen a las mismas personas ni contienen por separado todos los atributos requeridos, se integran mediante imputación estadística entre personas con características comparables, sin enlazar identidades. @dorazio2006statistical y @ridder2007econometrics fundamentan esta combinación de fuentes bajo restricciones identificadoras, entre ellas la independencia condicional adoptada en este estudio. Los diagnósticos de soporte, coherencia y validación reservada evalúan la integración, pero no demuestran ese supuesto. Los registros integrados se agrupan por departamento, sexo y generación de nacimiento para construir un panel sintético, siguiendo a @deaton1985panel y @verbeek2008pseudopanels. Cada observación resume una cohorte en un año y no corresponde al seguimiento de una persona. La base armonizada comprende 2018–2025, con estimaciones de exposición ocupacional para 2021–2025 y de acceso digital para los ocho años. La Sección 2 desarrolla estas decisiones y sus consecuencias para la interpretación y la incertidumbre de los resultados.
+
+La estrategia conserva AIOE como índice de referencia para los tres resultados laborales, desempleo, no cotización pensional e ingreso, mientras Webb-IA y LLM se estiman en regresiones separadas sobre muestras comparables. Esta estrategia permite contrastar sus asociaciones con los resultados laborales sin ocultar diferencias dentro de un indicador compuesto. Software y robots se incorporan como extensiones del mismo ejercicio, y la envolvente máxima que resume los tres índices principales en un solo valor se calcula únicamente como ejercicio de sensibilidad, no como sustituto de los indicadores específicos. AIOE se mantiene como referencia común para facilitar la comparación entre especificaciones.
+
+La reproducibilidad numérica, la validez descriptiva de la integración y la identificación econométrica son dimensiones distintas. La coincidencia de cálculos no prueba independencia condicional ni causalidad. Por ello, las regresiones se interpretan como asociaciones condicionadas a su diseño según los supuestos y las limitaciones de cada ejercicio. Los códigos de procesamiento, emparejamiento, construcción de índices y estimación se documentan en las carpetas de reproducción del proyecto.
+
+Este documento analiza la relación entre tecnología y resultados laborales en Colombia y contribuye a la literatura al contrastar la exposición ocupacional a la inteligencia artificial, su uso reportado y el acceso conjunto a computador e internet. La pregunta que orienta el análisis es cómo se relacionan estas dimensiones con el ingreso laboral, el desempleo y la no cotización pensional. Su aporte consiste en reunir información laboral y de condiciones de vida para examinar estas relaciones desde perspectivas individuales, territoriales y de cohortes, distinguiendo exposición potencial de acceso y uso observados.
+
+La integración de GEIH y ECV utiliza imputación por vecino más cercano y asigna índices internacionales a las ocupaciones colombianas. A partir del panel sintético se estiman diferencias en diferencias, triples diferencias, exposición territorial, efectos fijos y diferencias largas para 2021–2025, junto con un modelo de panel de acceso digital para 2018–2025. La estrategia se complementa con DML-DiD, un ejercicio instrumental sobre uso reportado de IA en 2025 y un análisis exploratorio de heterogeneidad, diferenciando asociaciones estadísticas de efectos causales identificados.
+
+Los resultados no muestran una asociación persistente de AIOE con ingreso y no cotización. En desempleo aparecen asociaciones negativas en algunos modelos de cohorte, pero el placebo significativo del DML-DiD limita su interpretación causal. El ejercicio instrumental presenta una primera etapa débil. La calibración de heterogeneidad detecta señal predictiva en desempleo, pero no en ingreso o no cotización, sin identificar efectos causales diferenciados. En contraste, el panel de TIC encuentra que un aumento de 10 puntos porcentuales en el acceso conjunto a computador e internet se asocia con 4,66 % más ingreso real y 3,39 puntos porcentuales menos de no cotización, con respaldo del bootstrap departamental. La asociación con desempleo no es significativa al 5 %. Estos hallazgos distinguen la relevancia del acceso digital de los efectos aún no identificados de la IA.
+
+El documento se organiza en siete secciones. Después de esta introducción, la Sección 2 presenta la integración de las encuestas, la construcción de los índices y el panel sintético. La Sección 3 describe la distribución de la exposición tecnológica y las condiciones laborales en 2025. La Sección 4 desarrolla las estimaciones clásicas y el panel de TIC, mientras la Sección 5 incorpora aprendizaje automático para examinar exposición, uso reportado de IA y heterogeneidad. La Sección 6 integra los resultados y sus implicaciones económicas. Finalmente, la Sección 7 sintetiza las limitaciones y documenta la reproducción de los análisis, seguida de un apéndice territorial y las referencias.
+
+# Datos y construcción de la base analítica {#sec-datos}
+
+## Integración de GEIH y ECV {#sec-integracion-encuestas}
+
+El análisis utiliza una base sintética que integra anualmente la GEIH y la ECV entre 2018 y 2025. La GEIH actúa como fuente donante de la condición laboral, la ocupación, la cotización pensional y el ingreso laboral, mientras la ECV constituye la población receptora y conserva sus características individuales, condiciones de vida y acceso digital. La integración busca reunir atributos que no se observan conjuntamente con el detalle requerido en una sola encuesta. No enlaza identidades ni permite seguir a las mismas personas. Se utiliza la GEIH del trimestre septiembre–noviembre para aproximar su periodo de observación al de recolección de la ECV, aunque el solapamiento es parcial y pueden persistir diferencias estacionales. Los indicadores se ponderan con los factores de expansión de la encuesta receptora y los ingresos se expresan en pesos de octubre de 2025.
+
+El fundamento del emparejamiento sigue a @rassler2002statistical, @dorazio2006statistical y @ridder2007econometrics. Sean $L$ los atributos laborales transferidos, $B$ los atributos de bienestar conservados y $C$ las características comunes. Las encuestas permiten aproximar las distribuciones condicionales de cada conjunto de atributos, pero no identifican por separado su distribución conjunta completa. Para identificarla se adopta el supuesto de independencia condicional
+
+$$
+(L\perp B)\mid C,
+\qquad
+f(L,B\mid C)=f(L\mid C)f(B\mid C).
+$$ {#eq-matching-identificacion}
+
+Este supuesto establece que, entre personas con las mismas características $C$, los atributos de una fuente no aportan información adicional sobre los exclusivos de la otra. No exige independencia en toda la población, pues ambos pueden relacionarse mediante $C$. Su aplicación requiere además mediciones comparables, soporte suficiente y transportabilidad de las condiciones laborales entre donantes y receptores comparables. El supuesto no es verificable para atributos que no se observan conjuntamente, y los diagnósticos de integración no lo demuestran. Por ello, las relaciones entre información transferida y conservada deben interpretarse bajo esta restricción.
+
+La imputación utiliza un procedimiento hot deck por vecino más cercano, descrito por @dorazio2006statistical y revisado por @andridge2010hotdeck. Las características comunes incluyen departamento, zona, sexo, edad, educación, jefatura, tamaño del hogar, pertenencia a la población de 15 años o más y trabajar como actividad principal. Departamento, zona y sexo delimitan la búsqueda inicial. Dentro de cada bloque se calcula una distancia euclidiana con seis coordenadas. La edad se divide entre 100 y la educación, armonizada en cinco niveles de cero a cuatro, entre cuatro. El tamaño del hogar se acota entre uno y quince integrantes y se divide entre diez. Los indicadores de jefatura, población en edad de trabajar y trabajo como actividad principal se multiplican por dos, cinco y tres, respectivamente. Estas escalas son decisiones de diseño que priorizan determinadas coincidencias, no parámetros estimados. Para cada receptor $i$, el donante y la transferencia se definen mediante
+
+$$
+j^*(i)=\underset{j\in\mathcal D(i)}{\arg\min}
+\left[\sum_{k\in K_i}(z_{ik}-z_{jk})^2\right]^{1/2},
+\qquad \widehat L_i=L_{j^*(i)},
+$$ {#eq-matching-donante}
+
+donde $z$ reúne las seis características reescaladas, $\mathcal D(i)$ es el conjunto de donantes admisibles y $K_i$ contiene las dimensiones utilizables. Si falta educación en el receptor se omite esa dimensión. Cuando está observada, se priorizan donantes con educación disponible y solo se omite si ninguno dispone de ella. Las demás características deben ser válidas. Si el bloque inicial no tiene donantes, se amplía la búsqueda a otros departamentos conservando zona y sexo. Un mismo donante puede atender a varios receptores y sus atributos laborales se transfieren conjuntamente, preservando una combinación efectivamente observada. La pobreza y el ingreso per cápita transferidos, cuando están disponibles, proceden del donante asignado al jefe receptor y se comparten entre los integrantes de su hogar. Los campos sin información comparable permanecen ausentes.
+
+La integración produce entre 227.998 y 289.558 receptores por año. La proporción ponderada que requiere donantes de otro departamento oscila entre 1,24 % y 3,05 %, y cada donante utilizado atiende, en promedio, entre 3,12 y 4,05 receptores. Esta reutilización genera dependencia entre los atributos imputados. La cobertura territorial también exige cautela. En 2018 y 2019, GEIH aporta donantes de 24 dominios territoriales frente a los 33 de ECV, de modo que algunos territorios dependen de donantes externos. Las tasas de desempleo imputadas superan las del conjunto donante en 2,39 y 1,20 puntos porcentuales en esos dos años. Desde 2020, las diferencias absolutas no exceden 0,56 puntos. La conservación de los agregados, por tanto, no es uniforme durante todo el periodo.
+
+La evaluación combina restricciones lógicas, contrastes distributivos y comparaciones laborales con información de ECV. En los ocho años no se asigna ocupación o ingreso laboral positivo a menores de 15 años, ni ingreso laboral positivo a personas clasificadas como desocupadas. Las validaciones detalladas, disponibles para 2022–2025, muestran acuerdos ponderados de ocupación entre 90,28 % y 90,47 %. Sin embargo, al excluir la actividad principal de la distancia, el acuerdo disminuye a 68,16 %–69,86 %, lo que revela su importancia y el carácter parcialmente interno de la evaluación. En hogares seleccionados, las variables no incluidas en la distancia presentan acuerdos pensionales de 64,66 %–65,43 % y de posición ocupacional de 47,79 %–49,66 %, con errores absolutos medios de 12,41–13,00 horas semanales. Estas comparaciones se restringen a personas identificadas como ocupadas en ambas fuentes y con respuestas comparables, y no representan a todos los ocupados. Tampoco deben extrapolarse a 2018–2021, para los que no se dispone de la misma validación detallada.
+
+En conjunto, la integración permite estudiar determinados agregados y combinar dimensiones laborales y de acceso digital, pero no recupera la condición laboral verdadera de cada receptor ni valida automáticamente las relaciones entre atributos de ambas encuestas. La coherencia contable y la semejanza de algunos agregados coexisten con discrepancias individuales y con dependencia por reutilización de donantes. La inferencia de los modelos posteriores debe interpretarse reconociendo que la agrupación de errores no incorpora por sí sola toda la incertidumbre de imputación. El Anexo A, sección 2.1, presenta las reglas completas de armonización, los diagnósticos anuales y las comprobaciones de sensibilidad.
+
+## Medición de la exposición tecnológica {#sec-medicion-exposicion}
+
+Se utilizan cinco indicadores ocupacionales que capturan dimensiones distintas de exposición tecnológica. AIOE, desarrollado por @felten2021occupational, relaciona las habilidades de cada ocupación con capacidades de inteligencia artificial. Las medidas de @webb2020impact aproximan la exposición a IA, software y robots mediante la coincidencia entre tareas ocupacionales y descripciones de patentes. El indicador de @eloundou2023gpts evalúa la exposición de tareas a modelos de lenguaje. Se emplea su variante GPT-4 beta, que combina la exposición directa con la asociada al uso de software adicional, ponderando esta última a la mitad. Ninguna de estas medidas identifica adopción efectiva ni representa una probabilidad de sustitución del trabajador.
+
+Las puntuaciones se trasladan a un catálogo fijo de 455 ocupaciones de la CIUO-08 A.C. mediante correspondencias entre las clasificaciones internacionales e ISCO-08 y los códigos colombianos. De ellas, 436 tienen correspondencia exacta por código, cuatro se aproximan mediante promedios del grupo de tres dígitos y 15 carecen de correspondencia. Cuando varios códigos internacionales convergen en una ocupación se utiliza su promedio simple. La disponibilidad de puntuaciones es menor que la de correspondencias. AIOE, IA de Webb, software y robots cubren 426 ocupaciones, frente a 396 de LLM. Los valores ausentes se conservan, sin sustituirlos por cero o por la media.
+
+Para cada indicador $k$, la puntuación de la ocupación $o$ se transforma mediante su rango promedio $r_o^k$ entre las $N_k$ ocupaciones con información
+
+$$
+I_o^{k,P}=\frac{r_o^k-1}{N_k-1}.
+$$ {#eq-indice-percentil-principal}
+
+La transformación expresa una posición relativa entre cero y uno, con igual peso para cada ocupación, sin ponderación por empleo. Los empates reciben rango promedio y pueden impedir que se alcancen los extremos. El catálogo y la normalización permanecen fijos entre años y submuestras. Como sensibilidad se utiliza la escala de mínimo y máximo y una envolvente que toma el mayor valor de AIOE, IA de Webb y LLM cuando los tres están observados. La escala común no hace equivalentes los indicadores. Entre las 395 ocupaciones con cobertura común, las correlaciones de AIOE con LLM, IA de Webb y robots son 0,88, −0,02 y −0,78, respectivamente.
+
+A los ocupados se asigna la puntuación de su ocupación actual y a los desocupados, la de su última ocupación, según la información transferida desde GEIH. La ocupación buscada se utiliza únicamente como alternativa de sensibilidad. Esta regla deja sin exposición a personas sin historia ocupacional identificable o sin puntuación disponible. Los modelos de exposición abarcan 2021–2025, pues las bases armonizadas de 2018–2020 no contienen códigos ocupacionales comparables. Para contrastar indicadores se exige cobertura en los cinco y controles válidos dentro de cada resultado. En las estimaciones clásicas de desempleo se retienen 541.805 de 573.501 observaciones, el 94,47 %. La muestra resultante no representa automáticamente a toda la fuerza laboral.
+
+AIOE percentil es el indicador principal. Su exposición agregada para un departamento o cohorte $g$ se calcula con la composición del empleo de 2022
+
+$$
+I_{g,2022}^{AIOE}=\sum_o s_{go,2022}I_o^{AIOE,P},
+\qquad
+s_{go,2022}=\frac{\sum_{i\in(g,o),2022}w_i\,1(i\in\mathcal V)}
+{\sum_{i\in g,2022}w_i\,1(i\in\mathcal V)}.
+$$ {#eq-exposicion-basal-principal}
+
+Aquí $\mathcal V$ reúne a los ocupados con los cinco indicadores observados y factores de expansión positivos. La exclusión de ocupaciones sin cobertura se aplica al numerador y al denominador. Esta exposición basal permanece fija, lo que permite comparar la evolución de grupos inicialmente más o menos expuestos sin incorporar los cambios posteriores de composición ocupacional. Por ejemplo, Bogotá registra un AIOE agregado de 0,5444 en 2022. El Anexo A, sección 2.2, documenta las correspondencias, las escalas alternativas y la sensibilidad de la asignación.
+
+## Construcción y evaluación del panel sintético {#sec-panel-principal}
+
+Las encuestas sucesivas se organizan como un pseudo-panel de cohortes siguiendo a @deaton1985panel y @verbeek2008pseudopanels. Cada cohorte combina departamento de residencia, sexo y generación de nacimiento. Esta última se aproxima restando la edad al año de encuesta y se clasifica en cinco grupos, hasta 1964, 1965–1974, 1975–1984, 1985–1994 y desde 1995. Se incluyen personas de 15 años o más. La combinación de 33 dominios territoriales, dos sexos y cinco generaciones produce 330 cohortes y 2.640 observaciones entre 2018 y 2025. Los grupos se enlazan por estas características, sin volver a emparejar personas entre años.
+
+Para una variable individual $Y_i$, el promedio de la cohorte $c$ en el año $t$ utiliza únicamente su universo válido $\mathcal U_Y$
+
+$$
+\bar Y_{ct}=\frac{\sum_{i\in(c,t)}w_iY_i\,1(i\in\mathcal U_Y)}
+{\sum_{i\in(c,t)}w_i\,1(i\in\mathcal U_Y)}.
+$$ {#eq-media-cohorte-principal}
+
+En desempleo, $Y_i$ indica desocupación y el universo es la fuerza laboral. En no cotización, identifica a los ocupados que declaran no cotizar entre quienes responden afirmativa o negativamente sobre su cotización pensional. Este indicador no equivale a la informalidad oficial. Para ingreso se calcula la media ponderada del ingreso laboral real positivo entre ocupados y después su logaritmo natural. Se utiliza, por tanto, el logaritmo de la media y no la media de los logaritmos. Los indicadores digitales conservan sus denominadores de respuesta válida. El acceso combinado exige uso personal de computador de escritorio o portátil e internet en el hogar, sin medir por sí solo uso de IA.
+
+El panel contiene los tres resultados laborales en las 2.640 celdas. El número de personas encuestadas por celda varía entre 130 y 1.345, con mediana de 565. Sin embargo, el soporte de cada resultado es menor que el tamaño total de la cohorte. Los mínimos de receptores son 31 para desempleo y no cotización y 21 para ingreso, mientras los mínimos de donantes distintos son 20, 20 y 17. La cobertura ponderada mínima alcanza el 100 % de la fuerza laboral para desempleo, el 69,54 % de los ocupados para cotización válida y el 38,36 % para ingreso positivo. Son mínimos entre celdas, no porcentajes nacionales. Una comprobación independiente reproduce los tres resultados, sus receptores, donantes y coberturas en los ocho años, con diferencias exclusivamente de precisión numérica.
+
+La disponibilidad de resultados no garantiza igual precisión ni composición estable. La reutilización de donantes reduce el soporte independiente y la residencia puede cambiar por migración. También pueden variar la selección muestral, la mortalidad y la entrada de jóvenes a la población elegible. Como sensibilidad para 2022–2025 se utiliza una variante con nacimiento estimado hasta 2007, que reduce esta última entrada y conserva 330 cohortes. Ese umbral no define un panel cerrado desde 2018. Los modelos ocupacionales utilizan 2021–2025 y el modelo de acceso digital emplea los ocho años. La exposición basal de 2022 se mantiene fija en los modelos que la requieren, mientras los resultados y controles se actualizan anualmente. Los diagnósticos completos se presentan en el Anexo A, sección 2.3.
+
+# Hechos estilizados de exposición tecnológica en 2025 {#sec-hechos-principal}
+
+Esta sección caracteriza la distribución de la exposición tecnológica y sus diferencias laborales en 2025. Los resultados son descriptivos y se refieren a las personas que pueden clasificarse con los indicadores seleccionados.
+
+## Indicadores y población clasificada {#sec-hechos-poblacion-principal}
+
+Se cruzan AIOE y la exposición a robots de Webb, ambos en percentiles fijos del catálogo ocupacional. El eje vertical representa AIOE y el horizontal, robots. Los cortes de 0,50 corresponden a las medianas del catálogo con ambas puntuaciones observadas y los valores iguales al corte se clasifican como altos. Se definen cuatro cuadrantes. El I combina AIOE alto y robots bajo, el II exposición alta en ambos, el III exposición baja en ambos y el IV AIOE bajo y robots alto. Estas categorías no identifican automáticamente complementariedad o sustitución.
+
+Los ocupados se clasifican por su ocupación actual y los desocupados por la anterior. La cobertura ponderada es de 98,70 % y 85,76 %, respectivamente. La menor cobertura de los desocupados refleja la necesidad de identificar una ocupación previa puntuable y limita la generalización a quienes buscan empleo. Las participaciones se calculan por separado para cada población con los factores de expansión de ECV. A diferencia de la muestra econométrica común, este ejercicio exige únicamente AIOE y robots observados y no incorpora los filtros adicionales de las regresiones.
+
+## Distribución y condiciones laborales {#sec-hechos-distribucion-principal}
+
+La @fig-cuadrantes-principal muestra una concentración en el cuadrante IV, que reúne el 53,43 % de los ocupados, el 52,55 % de los desocupados y el 66,69 % de los ocupados no cotizantes clasificables. La exposición alta a robots, cuadrantes II y IV, comprende el 63,54 % de los ocupados y el 64,69 % de los desocupados. En cambio, AIOE alto, cuadrantes I y II, abarca el 37,51 % y el 37,20 %. Por tanto, la mayoría presenta exposición elevada a robots, pero no a ambos indicadores simultáneamente. El área de cada burbuja representa la participación de una ocupación dentro de su población, de modo que los tamaños entre paneles no comparan cantidades absolutas. Los porcentajes rojos distribuyen a los no cotizantes entre cuadrantes y no representan tasas internas de no cotización.
+
+![Distribución ocupacional según AIOE y robots de Webb, 2025. Los paneles corresponden a ocupados y desocupados clasificables. En negro se distribuye cada población y en rojo los ocupados no cotizantes. Cada distribución suma 100 % y utiliza factores de expansión de ECV.](../data/regresiones/resultados/hechos_2025/exposicion_cuadrantes_2025.png){#fig-cuadrantes-principal width=100%}
+
+La @tbl-cuadrantes-principal resume las condiciones laborales dentro de cada cuadrante. La no cotización es de 26,57 % en el I y 67,51 % en el IV, mientras el ingreso mediano positivo alcanza 2,30 y 1,40 millones de pesos, respectivamente. Las tasas de desempleo varían entre 5,85 % y 7,54 %. Estas tasas dividen los desocupados entre la suma de ocupados y desocupados del cuadrante y combinan ocupaciones actuales y anteriores. No estiman el riesgo de perder el empleo. Las diferencias de ingreso y protección pensional tampoco están ajustadas por composición ni constituyen pruebas de significancia.
+
+```{python}
+#| label: tbl-cuadrantes-principal
+#| tbl-cap: "Distribución y condiciones laborales por cuadrante, 2025. Ingreso en pesos de octubre de 2025."
+from pathlib import Path
+import csv
+from IPython.display import Markdown, display
+fuente = Path('../data/regresiones/resultados/hechos_2025/cuadrantes_2025.csv')
+with fuente.open(encoding='utf-8') as archivo:
+    filas = {r['cuadrante']: r for r in csv.DictReader(archivo)}
+orden = [('I', 'AIOE alto · robots bajo'), ('II', 'AIOE alto · robots alto'),
+         ('III', 'AIOE bajo · robots bajo'), ('IV', 'AIOE bajo · robots alto')]
+def numero_es(valor, decimales=2):
+    return f'{float(valor):,.{decimales}f}'.replace(',', '@').replace('.', ',').replace('@', '.')
+lineas = ['| Cuadrante | Ocupados % | Desocupados % | Desempleo % | No cotización % | Ingreso mediano |',
+          '|:---|---:|---:|---:|---:|---:|']
+for romano, nombre in orden:
+    r = filas[nombre]
+    campos = [numero_es(r[c]) for c in ['porcentaje_ocupados', 'porcentaje_desocupados',
+                                       'tasa_desempleo_pct', 'no_cotizacion_pct']]
+    lineas.append('| ' + ' | '.join([romano] + campos + [numero_es(r['ingreso_mediano_positivo'], 0)]) + ' |')
+display(Markdown('\n'.join(lineas)))
+```
+
+La concentración de los no cotizantes en ocupaciones expuestas a robots describe una vulnerabilidad potencial ante la automatización, pero no demuestra que la tecnología origine esa falta de protección. La no cotización se calcula entre ocupados con respuesta pensional válida y se presenta como aproximación a una dimensión de la informalidad, no como su medición oficial. Los índices próximos a uno indican posiciones altas de exposición relativa, no probabilidades cercanas al 100 % de sustitución.
+
+## Composición ocupacional y alcance {#sec-hechos-composicion-principal}
+
+La composición ocupacional ayuda a interpretar los contrastes entre cuadrantes. En el I destacan gerentes de comercios, oficinistas y contadores. En el II, vendedores y auxiliares de venta concentran el 61,77 % del empleo del cuadrante. En el III sobresalen empleados de inventario, especialistas en belleza y peluqueros. En el IV, las principales ocupaciones son obreros agrícolas, personal doméstico, obreros de construcción y guardias de seguridad. Estas participaciones describen el empleo dentro de cada cuadrante, no su peso en el empleo nacional. El detalle de las cinco ocupaciones principales y el resto se conserva en el Anexo A, sección 3.3.
+
+La clasificación es sensible a los umbrales. Al aplicar la escala de mínimo y máximo con sus respectivas medianas se obtiene la misma asignación para las 426 ocupaciones con ambas puntuaciones. Sin embargo, desplazar los cortes percentiles a 0,40 cambia de cuadrante al 21,16 % de los ocupados clasificables y llevarlos a 0,60 modifica al 14,66 %. Los cuadrantes no son categorías naturales de riesgo. La cobertura incompleta de los desocupados, la imputación de la ocupación y las diferencias de composición limitan su interpretación. Las encuestas tampoco permiten observar transiciones individuales entre cuadrantes. Estos hechos contextualizan las estimaciones posteriores sin identificar efectos causales de la exposición tecnológica.
+
+# Estimaciones econométricas clásicas y acceso a TIC {#sec-modelos-clasicos}
+
+Esta sección evalúa empíricamente la relación de la tecnología con el desempleo, la no cotización pensional y el ingreso laboral en Colombia a través de dos bloques complementarios. El primer bloque examina la exposición ocupacional a la inteligencia artificial durante el periodo 2021–2025 mediante diferencias en diferencias continuas, triples diferencias y modelos de pseudo-panel de cohortes con efectos fijos y primeras diferencias. AIOE en escala percentil se adopta como la medida principal de referencia, contrastada con los índices de patentes de Webb y exposición a LLM. El segundo bloque analiza el acceso conjunto a computador e internet en el hogar mediante un panel balanceado de efectos fijos de cohorte para el periodo 2018–2025.
+
+## Diseño empírico y bases de datos {#sec-diseno-comun}
+
+Las estimaciones se apoyan en dos estructuras de datos generadas a partir de la integración estadística:
+
+1. **Microdatos individuales integrados GEIH–ECV (2021–2025)**: reúne los registros individuales donde la condición y trayectoria laboral de la GEIH se vinculan con los atributos de bienestar y tenencia tecnológica de la ECV mediante emparejamiento por vecino más cercano. Es la base utilizada para los modelos de diferencia en diferencias (DiD) continua y triple diferencia (DDD), controlando por edad, sexo, zona, educación, jefatura de hogar, efectos fijos de año, departamento y ocupación a dos dígitos, con errores estándar agrupados por ocupación a cuatro dígitos [@bertrand2004how].
+2. **Pseudo-panel de cohortes departamento-sexo-generación (2021–2025 y 2018–2025)**: conformado por 330 cohortes agregadas seguidas anualmente (1.650 observaciones para 2021–2025 y 2.640 observaciones para 2018–2025). Permite estimar modelos de efectos fijos *Within* y primeras diferencias, eliminando heterogeneidad invariante no observada a nivel de cohorte, con inferencia agrupada por los 33 departamentos y corrección mediante bootstrap silvestre.
+
+Los resultados binarios (desempleo y no cotización) se expresan como cambios en puntos porcentuales ante una variación de 0,1 unidades en el índice percentil ($100 \times 0,1 \beta = 10\beta$), mientras que para el logaritmo del ingreso real se reporta el cambio multiplicativo porcentual correspondiente, $100[\exp(0,1\beta)-1]\%$.
+
+## Diferencias en diferencias con exposición continua {#sec-did}
+
+Para evaluar si la mayor exposición a la IA generó cambios sistemáticos tras el choque de difusión masiva de finales de 2022, se adopta el marco de diferencias en diferencias continuas formalizado por @callaway2024difference:
+
+$$Y_{iotd}=\alpha+\lambda_t+\eta_d+\gamma_{g(o)}+\rho I_o^k+\beta_k I_o^k Post_t+X_{it}'\theta+\varepsilon_{iotd},$$ {#eq-did-estatico}
+
+donde $Post_t = \mathbf{1}(t \geq 2023)$, $I_o^k$ representa la intensidad de exposición ocupacional fija en el año base 2022, $\rho I_o^k$ absorbe el nivel permanente de la asociación entre exposición y resultado, y $\beta_k$ es el coeficiente de interacción de interés.
+
+```{python}
+#| label: tbl-did-indices
+#| tbl-cap: "Diferencias en diferencias estático: AIOE y contraste de índices ocupacionales (2021–2025)."
+pub.mostrar(pub.regresiones('did','estatico',indices='principal'))
+```
+
+Como se aprecia en la @tbl-did-indices, en la especificación estática principal de AIOE, un aumento de 0,1 unidades en el índice se asocia con un cambio puntual de $-0,0081$ puntos porcentuales en desempleo ($p = 0,451$), $0,0200$ puntos porcentuales en no cotización ($p = 0,180$) y $0,0170\%$ en ingreso laboral ($p = 0,480$). Ninguno de los coeficientes es estadísticamente significativo al 5 %, y los intervalos de confianza conservan magnitudes próximas a cero en ambas direcciones.
+
+Para contrastar la validez de tendencias pre-tratamiento y examinar la dinámica temporal anual, se estima la versión flexibilizada:
+
+$$Y_{iotd}=\alpha+\lambda_t+\eta_d+\gamma_{g(o)}+\rho I_o^k+\sum_{\substack{s=2021\\s\neq2022}}^{2025}\beta_{ks}I_o^k\mathbf{1}(t=s)+X_{it}'\theta+\varepsilon_{iotd}.$$ {#eq-did-dinamico}
+
+```{python}
+#| label: tbl-did-dinamica
+#| tbl-cap: "DiD dinámico principal AIOE: contrastes anuales respecto a 2022."
+pub.mostrar(pub.dinamica())
+```
+
+En la @tbl-did-dinamica, el coeficiente previo de 2021 frente a 2022 funciona como contraste de tendencias paralelas y resulta no significativo en los tres resultados laborales. En el periodo posterior, el único coeficiente individual significativo al 5 % corresponde al ingreso laboral en 2023 ($+0,81\%$, $p = 0,028$), pero este retorno no sostiene una trayectoria acumulativa en 2024 ($+0,10\%$, $p = 0,779$) ni en 2025 ($+0,11\%$, $p = 0,774$). Pruebas conjuntas de tipo $F$ sobre los coeficientes posteriores confirman la ausencia de disrupción agregada persistente atribuible a la IA.
+
+## Triples diferencias y canales de habilitación tecnológica {#sec-ddd}
+
+Para indagar si el impacto de la IA depende de habilitadores complementarios como el acceso a TIC o la formación universitaria, se especifica un modelo de triples diferencias (DDD):
+
+$$\begin{aligned}
+Y_{iotd}={}&\alpha+\lambda_t+\eta_d+\gamma_{g(o)}+X_{it}'\theta+\rho I_o^k+\delta H_{it} \\
+&+\beta_k I_o^k Post_t+\zeta_k I_o^k H_{it}+\xi Post_t H_{it}+\tau_k I_o^k Post_t H_{it}+\varepsilon_{iotd},
+\end{aligned}$$ {#eq-ddd}
+
+donde $\tau_k$ captura el diferencial del choque posterior entre trabajadores con el habilitador ($H_{it}=1$) y sin él ($H_{it}=0$).
+
+```{python}
+#| label: tbl-ddd-tic
+#| tbl-cap: "Triple diferencia (DDD): interacción de AIOE con habilitador TIC."
+pub.mostrar(pub.triples('H_tic'))
+```
+
+La @tbl-ddd-tic revela que ni el contraste basal para no habilitados ni el término de interacción triple $\tau_k$ alcanzan significancia estadística al 5 % para desempleo, no cotización o salarios. Idéntico resultado de no significancia se verifica al evaluar la interacción con educación universitaria, sugiriendo que las brechas de ajuste frente a la IA no se han polarizado de forma detectable a nivel individual durante esta ventana de adopción temprana.
+
+## Modelos de cohortes y el panel de TIC (2018–2025) {#sec-panel-tic}
+
+El análisis a nivel de pseudo-panel de cohortes aporta dos elementos distintivos. Primero, en las estimaciones de efectos fijos de cohorte (*Within*) y primeras diferencias, la exposición basal propia de la cohorte muestra una asociación negativa con el desempleo ($-1,035$ y $-0,849$ puntos porcentuales por 0,1 unidades de AIOE, $p < 0,05$), si bien este patrón no se replica en los microdatos individuales y puede reflejar recomposiciones estructurales agregadas de las cohortes.
+
+Segundo, y como contraste central del estudio, se analiza el acceso efectivo a la infraestructura digital básica mediante un panel balanceado de 330 cohortes observadas a lo largo de ocho años consecutivos (2018–2025). El modelo de efectos fijos controla por la heterogeneidad invariable de cada grupo y por choques macroeconómicos temporales:
+
+$$Y_{c,t}=\alpha_c+\beta\,TIC_{c,t}+X_{c,t}'\theta+\lambda_t+u_{c,t},$$ {#eq-panel-tic}
+
+donde $TIC_{c,t}$ mide la proporción de la cohorte con acceso conjunto a computador e internet en el hogar.
+
+```{python}
+#| label: tbl-panel-tic-hausman
+#| tbl-cap: "Efectos fijos en panel de cohortes TIC (2018–2025) e inferencia con bootstrap silvestre."
+pub.mostrar(pub.panel_tic_resumen_fe())
+```
+
+La @tbl-panel-tic-hausman documenta el hallazgo empírico más robusto del estudio: un incremento de 10 puntos porcentuales en la proporción de la cohorte con TIC combinado se asocia con un incremento del 4,66 % en el ingreso laboral real medio ($p = 0,0004$ bajo bootstrap silvestre con 9.999 repeticiones) y una reducción de 3,39 puntos porcentuales en la tasa de no cotización pensional ($p = 0,0002$). La asociación con la reducción del desempleo ($-0,76$ puntos porcentuales) es de signo favorable pero imprecisa ($p = 0,140$).
+
+# Aprendizaje automático causal aplicado a exposición y adopción de IA {#sec-aprendizaje}
+
+Para superar las restricciones de linealidad paramétrica y evitar el sobreajuste al controlar por un conjunto amplio de covariables, se incorporan métodos semiparamétricos de aprendizaje automático causal basados en la literatura de Double/Debiased Machine Learning [@chernozhukov2018double].
+
+## DML-DiD con exposición continua {#sec-dml}
+
+Se implementa una regresión parcialmente lineal en cambios adaptada a la exposición continua en el pseudo-panel de cohortes, comparando el promedio posterior (2023–2025) frente al previo (2021–2022):
+
+$$\Delta Y_c=\theta I_{c,2022}^{AIOE}+g(X_c)+\varepsilon_c, \qquad I_{c,2022}^{AIOE}=m(X_c)+v_c,$$ {#eq-dml-did-continuo}
+
+donde las funciones auxiliares de valor esperado $\ell(X_c)=\mathbb{E}[\Delta Y_c\mid X_c]$ y $m(X_c)=\mathbb{E}[I_{c,2022}^{AIOE}\mid X_c]$ se estiman mediante potenciación del gradiente (*gradient boosting*) con partición cruzada (*cross-fitting*) en 5 bloques departamentales. El estimador ortogonal de Neyman se define como:
+
+$$\widehat\theta_{DML-DiD}=\frac{\sum_c q_c\widetilde I_c\widetilde{\Delta Y}_c}{\sum_c q_c\widetilde I_c^2}, \qquad \widetilde{\Delta Y}_c=\Delta Y_c-\widehat\ell^{(-k(c))}(X_c), \qquad \widetilde I_c=I_{c,2022}^{AIOE}-\widehat m^{(-k(c))}(X_c).$$ {#eq-dml-did-ortogonal}
+
+```{python}
+#| label: tbl-dml-did-continuo
+#| tbl-cap: "Estimación DML-DiD continuo entre 2021–2022 y 2023–2025."
+pub.mostrar(pub.tabla_dml_did_continuo(principal=True))
+```
+
+Los resultados de la @tbl-dml-did-continuo confirman que ni el ingreso laboral real ($\theta = -0,2631$, $p = 0,0856$) ni la no cotización ($\theta = 0,0202$, $p = 0,7667$) exhiben respuestas significativas al 5 %. Aunque el coeficiente para desempleo resulta negativo y significativo ($\theta = -0,1615$, $p = 0,0027$), la estimación del modelo placebo previo sobre la variación entre 2021 y 2022 arroja igualmente un coeficiente negativo y significativo ($\theta = -0,1428$, $p = 0,0089$). Este diagnóstico crítico indica que las diferencias en la trayectoria del desempleo precedían a la difusión masiva de la IA, lo cual impide atribuir causalmente dicha disminución al choque tecnológico de 2023.
+
+## Adopción reportada y variables instrumentales (DML-IV) {#sec-dml-iv}
+
+Aprovechando el módulo tecnológico de la ECV 2025, se investiga la relación entre el uso individual efectivo de herramientas de IA generativa y las condiciones laborales, utilizando la exposición ocupacional AIOE como instrumento excluido bajo un esquema DML-IV.
+
+```{python}
+#| label: tbl-dml-iv
+#| tbl-cap: "DML-IV para uso reportado de IA en corte transversal 2025."
+pub.mostrar(pub.tabla_dml_iv())
+```
+
+La @tbl-dml-iv evidencia que este ejercicio no logra identificar efectos causales: el estadístico $F$ de la primera etapa residualizada es menor a 0,35 en los tres resultados analizados, situándose muy por debajo de los umbrales de relevancia para instrumentos fuertes. En consecuencia, los coeficientes de segunda etapa resultan sumamente imprecisos y sensibles a las particiones de muestra, demostrando que la exposición ocupacional agregada no constituye un instrumento válido ni potente para la adopción efectiva observada a nivel micro.
+
+## Heterogeneidad de efectos condicionales (R-learner) {#sec-cate}
+
+Finalmente, se implementa un estimador R-learner [@nie2021quasi] para evaluar si subyacen efectos de tratamiento condicionales heterogéneos (CATE) según el perfil sociodemográfico de los trabajadores.
+
+```{python}
+#| label: tbl-cate
+#| tbl-cap: "Señal de heterogeneidad CATE estimada mediante R-learner."
+pub.mostrar(pub.tabla_cate())
+```
+
+La evaluación formal mediante la prueba de mejor predictor lineal (*Best Linear Predictor*, BLP) reportada en la @tbl-cate detecta señal de heterogeneidad estadísticamente significativa en la respuesta del desempleo ($p = 0,0063$), indicando que la reorganización de tareas se asocia de forma diferenciada según edad y cualificación. Por el contrario, en los ingresos laborales ($p = 0,851$) y la cobertura pensional ($p = 0,565$) no se identifica variabilidad heterogénea predecible.
+
+# Evaluación integrada de resultados y discusión {#sec-evaluacion-resultados}
+
+La integración de los enfoques econométricos clásicos y de aprendizaje automático ofrece un panorama consistente sobre la interacción entre tecnología y empleo en una economía emergente como Colombia:
+
+1. **Ausencia de disrupción laboral generalizada por IA (2021–2025)**: Tanto en los microdatos individuales como en los paneles de cohortes, la exposición teórica de las tareas a la inteligencia artificial no se traduce en pérdidas sistemáticas de empleo, caídas salariales ni precarización previsional durante la ventana inicial de difusión masiva. Los pocos coeficientes aislados significativos pierden sustento causal ante las pruebas de tendencias paralelas y diagnósticos de placebo.
+2. **La brecha entre susceptibilidad teórica y adopción real**: Las mediciones de exposición ocupacional (AIOE, Webb, LLM) capturan el potencial técnico de automatización o complementariedad de las tareas, pero no reflejan la penetración efectiva de estas herramientas en el tejido empresarial colombiano, donde los costos de implementación, la informalidad y la estructura productiva amortiguan o retrasan la adopción.
+3. **La primacía del acceso digital básico (TIC)**: En agudo contraste con la ausencia de impactos discernibles de la IA, el acceso conjunto a computador e internet en el hogar exhibe retornos económicos sustantivos, altamente significativos y robustos ante métodos semiparamétricos y remuestreo bootstrap: un aumento de 10 puntos porcentuales en la cobertura digital de una cohorte incrementa los ingresos reales en 4,66 % y reduce la no cotización a pensiones en 3,39 puntos porcentuales.
+
+Este contraste empírico sugiere que, en el contexto actual del mercado laboral colombiano, el cuello de botella decisivo para el desarrollo humano y la productividad no radica en los riesgos hipotéticos de sustitución por IA avanzada, sino en la persistencia de brechas profundas de conectividad digital básica y alfabetización tecnológica.
+
+# Conclusiones y limitaciones {#sec-conclusiones}
+
+Este trabajo aporta la primera caracterización sistemática de la exposición ocupacional a la inteligencia artificial, el acceso a TIC y las condiciones laborales en Colombia, articulando microdatos integrados de la GEIH y la ECV con paneles sintéticos de cohortes para el periodo 2018–2025.
+
+Las estimaciones econométricas indican que la inteligencia artificial generativa no ha generado, hasta 2025, desplazamientos laborales masivos ni presiones salariales a la baja en el país. Al mismo tiempo, se documenta que la infraestructura tecnológica básica (acceso conjunto a computador e internet) continúa siendo un determinante de primer orden para la generación de ingresos y la formalización laboral.
+
+No obstante, las conclusiones deben interpretarse a la luz de importantes limitaciones metodológicas:
+
+* **Supuesto de independencia condicional**: la base integrada transfiere atributos laborales desde la GEIH hacia la ECV bajo el supuesto $(L \perp B) \mid C$, el cual, aunque validado mediante pruebas distributivas y balance de soporte común, no puede demostrarse directamente para covariaciones no observadas dentro de los estratos.
+* **Naturaleza del pseudo-panel**: las unidades temporales son promedios de cohortes y no trayectorias individuales continuas, lo que puede introducir sesgos residuales por cambios en la composición de los hogares o flujos migratorios interdepartamentales.
+* **Ventana de adopción**: los efectos de largo plazo derivados del aprendizaje tecnológico, la reorganización profunda de procesos empresariales y la destrucción creativa schumpeteriana pueden requerir periodos de maduración más prolongados para manifestarse plenamente en las estadísticas oficiales.
+
+En términos de política pública, los hallazgos aconsejan focalizar los esfuerzos estatales en el cierre acelerado de las brechas de infraestructura y conectividad digital, antes que en medidas regulatorias restrictivas orientadas a mitigar riesgos de desplazamiento tecnológico que aún no encuentran confirmación empírica en el mercado laboral colombiano.
+
+# Referencias {.unnumbered}

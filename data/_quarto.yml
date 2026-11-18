@@ -1,0 +1,8 @@
+project:
+  type: default
+  render:
+    - ../Principal/principal.qmd
+    - ../Anexo_a/anexo_a.qmd
+    - ../Dashboard/dashboard.qmd
+execute:
+  cache: false

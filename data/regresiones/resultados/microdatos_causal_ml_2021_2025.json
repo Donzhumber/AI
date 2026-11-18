@@ -1,0 +1,38 @@
+{
+  "fuentes_sha256": {
+    "/Users/zhumber/Library/CloudStorage/OneDrive-Personal/Documents/Investigación/IA and Economic Growth/Document/datos/armonizados_2018_2025/microdatos/ecv_geih_imputada_2021.parquet": "511d34f1bbe30212a42f56c3986c30fb7eed41e78691a269d71cfa4bd5c9eecd",
+    "/Users/zhumber/Library/CloudStorage/OneDrive-Personal/Documents/Investigación/IA and Economic Growth/Document/datos/armonizados_2018_2025/microdatos/ecv_geih_imputada_2022.parquet": "fa45d1c3c2f5487b8ac9bc68117115fb3933c9b3bac035b1d53675a12de3afb3",
+    "/Users/zhumber/Library/CloudStorage/OneDrive-Personal/Documents/Investigación/IA and Economic Growth/Document/datos/armonizados_2018_2025/microdatos/ecv_geih_imputada_2023.parquet": "6f1c201a4015ea34ec6f1ba92e1b55e982ad5369141b11969f4e2af05ba14ff5",
+    "/Users/zhumber/Library/CloudStorage/OneDrive-Personal/Documents/Investigación/IA and Economic Growth/Document/datos/armonizados_2018_2025/microdatos/ecv_geih_imputada_2024.parquet": "d8ccfa3a46f5dfdb06e6debc04d805be79bd7c21a776541698405c6e93c1b8cc",
+    "/Users/zhumber/Library/CloudStorage/OneDrive-Personal/Documents/Investigación/IA and Economic Growth/Document/datos/armonizados_2018_2025/microdatos/ecv_geih_imputada_2025.parquet": "173849d0f1f5aefcc70cf973cf12e0baf8b92245a46a11a5283b922fe5deebe0"
+  },
+  "indices_sha256": "da127af99c8dd357af95f1b75cbd0967dc3031c8a1e407bb0605419285ddd51e",
+  "salida": "/Users/zhumber/Library/CloudStorage/OneDrive-Personal/Documents/Investigación/IA and Economic Growth/Document/datos/derivados_modelos/oficiales/microdatos_causal_ml_2021_2025.parquet",
+  "sha256_salida": "fe54d6c1c4ae6e4afbcc06ad3263a7194acc78c794d956148ffff3687931b838",
+  "filas": 931496,
+  "por_anio": [
+    {
+      "anio": 2021,
+      "personas_pet": 195694
+    },
+    {
+      "anio": 2022,
+      "personas_pet": 190790
+    },
+    {
+      "anio": 2023,
+      "personas_pet": 183936
+    },
+    {
+      "anio": 2024,
+      "personas_pet": 178018
+    },
+    {
+      "anio": 2025,
+      "personas_pet": 183058
+    }
+  ],
+  "ocupacion": "actual ocupados; última desocupados; sin completar buscada",
+  "percentil": "(rango promedio-1)/(N observado-1), catálogo fijo",
+  "faltantes": "educación, TIC, ocupación y resultados inválidos permanecen ausentes"
+}

@@ -1,0 +1,8 @@
+{
+  "base_canonica": "neurona/quarto/datos/armonizados_2018_2025/microdatos/ecv_geih_imputada_2025.parquet",
+  "sha256_base": "173849d0f1f5aefcc70cf973cf12e0baf8b92245a46a11a5283b922fe5deebe0",
+  "coincide_con_entrada_corrida_publicada": true,
+  "accion": "Se conserva la estimación vigente porque insumos, índices, controles y estimador son idénticos. Solo se actualiza la ruta de reproducción.",
+  "estimador_sha256_actual": "0667764cacd27997059ed9b3a4fea89631bce9ac428fa117585ef16f1c2a230a",
+  "estimador_sha256_corrida": "0667764cacd27997059ed9b3a4fea89631bce9ac428fa117585ef16f1c2a230a"
+}

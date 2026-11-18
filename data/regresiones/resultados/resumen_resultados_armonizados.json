@@ -1,0 +1,163 @@
+{
+  "clasicos": {
+    "reestimados": 982,
+    "cambio_max_coef": 3.0503377601576176e-14,
+    "replicas_stata": 54
+  },
+  "dml_did": {
+    "reestimados": 15,
+    "cambio_max_coef": 4.996003610813204e-16
+  },
+  "panel_tic": [
+    {
+      "resultado": "salario",
+      "coef": 0.4558035353242817,
+      "se_departamento": 0.0873965411912357,
+      "t_departamento": 5.215349819473065,
+      "p_departamento": 1.0620623981147376e-05,
+      "p_wild_cluster": 0.0004,
+      "clusters": 33,
+      "repeticiones": 9999,
+      "semilla": 20261024
+    },
+    {
+      "resultado": "desempleo",
+      "coef": -0.0760404635827399,
+      "se_departamento": 0.0463656308296844,
+      "t_departamento": -1.6400178800987435,
+      "p_departamento": 0.1107966430887834,
+      "p_wild_cluster": 0.1403,
+      "clusters": 33,
+      "repeticiones": 9999,
+      "semilla": 20261024
+    },
+    {
+      "resultado": "informalidad",
+      "coef": -0.3393790851587726,
+      "se_departamento": 0.1107696870364454,
+      "t_departamento": -3.063826343096104,
+      "p_departamento": 0.004410507114147,
+      "p_wild_cluster": 0.0002,
+      "clusters": 33,
+      "repeticiones": 9999,
+      "semilla": 20261024
+    }
+  ],
+  "seleccion_panel_tic": [
+    {
+      "resultado": "salario",
+      "coef": 0.4558035353243048,
+      "se": 0.0875295649230025,
+      "p": 1.0868537565502334e-05,
+      "N": 2640.0,
+      "cohortes": 330.0,
+      "clusters_departamento": 33,
+      "f_efectos_cohorte": 10.12019334191196,
+      "p_f_efectos_cohorte": 5.1574781959260234e-272,
+      "hausman_chi2": 74.60091397773927,
+      "hausman_p": 1.1295518124649909e-10
+    },
+    {
+      "resultado": "desempleo",
+      "coef": -0.0760404635827432,
+      "se": 0.0464362026069491,
+      "p": 0.1113186654791317,
+      "N": 2640.0,
+      "cohortes": 330.0,
+      "clusters_departamento": 33,
+      "f_efectos_cohorte": 11.036717562796644,
+      "p_f_efectos_cohorte": 1.3132361056316397e-295,
+      "hausman_chi2": 153.4179827768132,
+      "hausman_p": 4.216941759290043e-26
+    },
+    {
+      "resultado": "no_cotizacion",
+      "coef": -0.3393790851587751,
+      "se": 0.1109382863532529,
+      "p": 0.0044636900001269,
+      "N": 2640.0,
+      "cohortes": 330.0,
+      "clusters_departamento": 33,
+      "f_efectos_cohorte": 16.68840444575683,
+      "p_f_efectos_cohorte": 0.0,
+      "hausman_chi2": 22.067137360907807,
+      "hausman_p": 0.0543302222109902
+    }
+  ],
+  "cambios_por_10pp_tic": {
+    "salario": 4.6635102062754035,
+    "desempleo": -0.760404635827399,
+    "informalidad": -3.3937908515877258
+  },
+  "cate": [
+    {
+      "tau_mean": 0.27119034770282635,
+      "blp_beta_hetero": 0.03174579973939296,
+      "blp_se": 0.16864712521704192,
+      "blp_p": 0.8506900750578451,
+      "rechaza_homogeneidad": false,
+      "clan_subgrupos": {
+        "con_tic": 0.1483789499383035,
+        "sin_tic": 0.3310532274494967,
+        "universitarios": 0.13981350577047194,
+        "no_universitarios": 0.30333026891008363,
+        "mujeres": 0.2940796331756251,
+        "hombres": 0.2556646312942948,
+        "jovenes_le29": 0.26698614416700694,
+        "adultos_30_49": 0.22331349156328603,
+        "mayores_ge50": 0.3610299726614544,
+        "urbano": 0.23366115928855108,
+        "rural": 0.41000705082559974
+      },
+      "resultado": "salario",
+      "indice": "aioe_pct"
+    },
+    {
+      "tau_mean": -0.09744996588696303,
+      "blp_beta_hetero": -0.04345282988106105,
+      "blp_se": 0.07544788835340964,
+      "blp_p": 0.5646613543407195,
+      "rechaza_homogeneidad": false,
+      "clan_subgrupos": {
+        "con_tic": -0.06765447887878792,
+        "sin_tic": -0.11197635757017774,
+        "universitarios": -0.07734331576314041,
+        "no_universitarios": -0.10242374029797634,
+        "mujeres": -0.03625927233807784,
+        "hombres": -0.13950834163724266,
+        "jovenes_le29": -0.09446986531744543,
+        "adultos_30_49": -0.08876175008652672,
+        "mayores_ge50": -0.11624069416901187,
+        "urbano": -0.07327756835831406,
+        "rural": -0.1842433281315885
+      },
+      "resultado": "informalidad",
+      "indice": "aioe_pct"
+    },
+    {
+      "tau_mean": -0.08272849864080539,
+      "blp_beta_hetero": 0.20560551599494928,
+      "blp_se": 0.0752112750117522,
+      "blp_p": 0.006262592945413824,
+      "rechaza_homogeneidad": true,
+      "clan_subgrupos": {
+        "con_tic": -0.0516166423545017,
+        "sin_tic": -0.09763013158838385,
+        "universitarios": -0.02542700689654066,
+        "no_universitarios": -0.09684537991667447,
+        "mujeres": -0.11799312351846303,
+        "hombres": -0.05718724925443502,
+        "jovenes_le29": -0.10296808159249747,
+        "adultos_30_49": -0.07848631626869597,
+        "mayores_ge50": -0.07036549342713572,
+        "urbano": -0.08546405658945058,
+        "rural": -0.07243855949266743
+      },
+      "resultado": "desempleo",
+      "indice": "aioe_pct"
+    }
+  ],
+  "iv": {
+    "accion": "Estimación conservada por identidad exacta de hash del input2025 y del estimador; reproducción apunta colección oficial."
+  }
+}

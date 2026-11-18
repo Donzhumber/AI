@@ -1,0 +1,47 @@
+{
+  "datos": {
+    "filas": 234804,
+    "ocupados": 106915,
+    "pea": 114737,
+    "desocupados": 7822,
+    "desocupados_sin_ocupacion_previa": 1149,
+    "edad_menor15": 51746,
+    "faltantes_controles": {
+      "edad": 51746,
+      "edad2": 51746,
+      "mujer": 0,
+      "rural": 0,
+      "jefe": 0,
+      "H_tic": 14259,
+      "asiste": 14259,
+      "edu_cat": 14259,
+      "dpto": 0,
+      "oficio_2d": 121216
+    },
+    "donantes_unicos": 73901,
+    "hogares_unicos": 86848,
+    "clase": {
+      "2.0": 118581,
+      "1.0": 116223
+    },
+    "outcomes_validos": {
+      "ln_salario_real": 102644,
+      "no_cotiza": 105520,
+      "desempleo": 114737
+    },
+    "muestras_base": {
+      "ln_salario_real": 101071,
+      "no_cotiza": 103834,
+      "desempleo": 111837
+    }
+  },
+  "tratamiento": {
+    "n": 234804,
+    "tratados": 8095,
+    "controles": 212450,
+    "sin_clasificar": 14259,
+    "usuarios_sin_actividad": 0,
+    "ruta_inconsistente": 0,
+    "sin_ruta_valida": 14259
+  }
+}

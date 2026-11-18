@@ -1,0 +1,1746 @@
+---
+title: "Tablero Interactivo GEIH - ECV (2021-2025)"
+format:
+  dashboard:
+    echo: false
+    embed-resources: false
+    nav-buttons: []
+    theme: cosmo
+    include-after-body:
+      - ajustes_version_web.html
+      - text: |
+          <script src="ocupaciones_cortas.js"></script>
+          <link rel="stylesheet" href="cajas_uniformes.css">
+echo: false
+execute:
+  echo: false
+  warning: false
+  message: false
+lang: es
+---
+
+```{=html}
+<script>
+(function() {
+  function activateTabFromHash() {
+    const hash = window.location.hash;
+    if (hash) {
+      const triggerEl = document.querySelector(`a[data-bs-target="${hash}"], a[href="${hash}"]`);
+      if (triggerEl && window.bootstrap && window.bootstrap.Tab) {
+        const tab = window.bootstrap.Tab.getOrCreateInstance(triggerEl);
+        tab.show();
+      }
+    }
+  }
+  window.addEventListener("DOMContentLoaded", activateTabFromHash);
+  window.addEventListener("hashchange", activateTabFromHash);
+  setTimeout(activateTabFromHash, 300);
+  setTimeout(activateTabFromHash, 1000);
+})();
+</script>
+<style>
+/* Ocultar estrictamente cualquier bloque de código y botón de copiar en todo el tablero */
+.code-copy-button, .code-copy-outer-scaffold, .sourceCode, .cell-code, button[title*="Copiar"], button[title*="copy"] {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  width: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  position: absolute !important;
+  pointer-events: none !important;
+}
+
+/* Estilo ejecutivo para las pestañas nativas del Dashboard */
+.card.tabset .nav-tabs {
+  border-bottom: 2px solid #e2e8f0;
+  gap: 6px;
+  padding: 8px 12px 0 12px;
+  background: #f8fafc;
+}
+
+.card.tabset .nav-tabs .nav-link {
+  border: 1px solid transparent;
+  border-radius: 8px 8px 0 0;
+  color: #475569;
+  font-weight: 600;
+  font-size: 0.92rem;
+  padding: 10px 16px;
+  transition: all 0.2s ease;
+}
+
+.card.tabset .nav-tabs .nav-link:hover {
+  color: #1d4ed8;
+  background-color: #ffffff;
+  border-color: #e2e8f0 #e2e8f0 transparent;
+}
+
+.card.tabset .nav-tabs .nav-link.active {
+  color: #1d4ed8 !important;
+  background-color: #ffffff !important;
+  border-color: #3b82f6 #3b82f6 transparent !important;
+  border-top: 3px solid #3b82f6 !important;
+  font-weight: 700;
+  box-shadow: 0 -2px 6px rgba(59, 130, 246, 0.08);
+}
+
+/* Asegurar que el contenido de las pestañas en el dashboard fluya naturalmente sin colapso ni superposición */
+.card.tabset .tab-content .tab-pane .card-body {
+  display: flex !important;
+  flex-direction: column !important;
+  overflow-y: auto !important;
+  height: auto !important;
+  min-height: 100% !important;
+  padding: 16px !important;
+}
+
+.card.tabset .tab-content .tab-pane .card-body .bslib-grid {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 16px !important;
+  height: auto !important;
+  min-height: 100% !important;
+  grid-template-rows: none !important;
+}
+
+.card.tabset .tab-pane .card.cell {
+  border: none !important;
+  box-shadow: none !important;
+  margin-bottom: 0 !important;
+  flex: 0 0 auto !important;
+  height: auto !important;
+  min-height: 0 !important;
+  background: transparent !important;
+}
+
+.card.tabset .tab-pane .card.cell .card-body {
+  padding: 0 !important;
+  overflow: visible !important;
+}
+
+/* Ocultar botones innecesarios en celdas internas de la pestaña */
+.card.tabset .tab-pane .card.cell bslib-tooltip,
+.card.tabset .tab-pane .card.cell .bslib-full-screen-enter {
+  display: none !important;
+}
+
+/* Mismo bug que .card.tabset .tab-pane .card.cell (arriba), pero para la
+   pestaña "Glosario Académico": sus 5 tarjetas nacen de bloques markdown
+   bajo encabezados #### (no de celdas ```{ojs}```), así que NO tienen clase
+   .cell y la regla .card.cell no las alcanza. bslib las trata como
+   "fill" dentro de un grid de fila 1fr y las estira mucho más que su
+   contenido real. Scoped a data-title=" Glosario Académico" (con espacio
+   inicial: lo deja el ícono <i> del heading al despojarse del texto) para
+   no afectar "Matriz Webb vs GPT-4", que sí necesita llenar el espacio.
+
+   Causa raíz real (confirmada con getBoundingClientRect): la regla de arriba
+   ".card.tabset .tab-content .tab-pane .card-body .bslib-grid" pone
+   min-height:100% !important en TODO .bslib-grid anidado bajo cualquier
+   .card-body. En Glosario hay 5 wrappers .bslib-grid (uno por tarjeta),
+   cada uno anidado dentro del .bslib-grid de 5 filas — cada wrapper hereda
+   min-height:100% del 100% de SU padre (el grid de 5 filas), no 100%/5, así
+   que los 5 terminan pidiendo el alto completo cada uno y se apilan
+   desbordando (de ahí el scroll gigante). Se anula aquí con especificidad
+   mayor (7 clases/atributos vs. 6 de la regla original). */
+.card.tabset .tab-content .tab-pane .card-body[data-title=" Glosario Académico"] .bslib-grid {
+  min-height: 0 !important;
+  height: auto !important;
+  flex: 0 0 auto !important;
+}
+
+.card.tabset .tab-pane .card-body[data-title=" Glosario Académico"] .card {
+  border: none !important;
+  box-shadow: none !important;
+  margin-bottom: 12px !important;
+  flex: 0 0 auto !important;
+  height: auto !important;
+  min-height: 0 !important;
+  background: transparent !important;
+}
+
+.card.tabset .tab-pane .card-body[data-title=" Glosario Académico"] .card .card-body {
+  height: auto !important;
+  min-height: 0 !important;
+  overflow: visible !important;
+  padding: 16px !important;
+}
+
+.card.tabset .tab-pane .card-body[data-title=" Glosario Académico"] .card bslib-tooltip,
+.card.tabset .tab-pane .card-body[data-title=" Glosario Académico"] .card .bslib-full-screen-enter {
+  display: none !important;
+}
+
+/* Popover de mini-pirámide poblacional al pasar el mouse sobre una tarjeta
+   de cuadrante (Q1-Q4) en "IA y su impacto laboral". Solo estilo visual: la
+   posición y visibilidad las controla JS (adjuntado a document.body con
+   position:fixed) para evitar pelear con los contextos de apilamiento de
+   bslib/Quarto dashboard — un position:absolute anidado quedaba pintado
+   debajo del SVG del gráfico principal pese a z-index alto, verificado
+   empíricamente tras varios intentos de arreglo por CSS puro. */
+.cuadrante-card-wrap { position: relative; }
+.mini-piramide-pop-fixed {
+  position: fixed;
+  z-index: 99999;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+  padding: 8px;
+  width: 236px;
+  pointer-events: none;
+}
+
+/* Popover de texto (población/%/salario) al pasar el mouse sobre una
+   tarjeta 1-8 de la leyenda de burbujas (Matriz Webb vs GPT-4 / Ejes
+   Personalizados). Mismo patrón que .mini-piramide-pop-fixed: div
+   position:fixed adjuntado a document.body (no anidado) para evitar los
+   contextos de apilamiento de bslib/Quarto. Clase DISTINTA porque ambos
+   popovers pueden coexistir en la misma página (Q1-Q4 arriba usan
+   .mini-piramide-pop-fixed; las tarjetas 1-8 aquí usan esta). */
+.leyenda-burbuja-pop-fixed {
+  position: fixed;
+  z-index: 99999;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+  padding: 8px 10px;
+  width: 220px;
+  pointer-events: none;
+}
+
+/* Selector de tarjetas: Enfoque analítico de la matriz (Webb vs GPT-4).
+   Ojo: Inputs.radio de Observable envuelve todo el grupo en un <label> de
+   texto plano ADEMÁS de un <label> por cada opción (con <input> adentro) —
+   por eso todas las reglas de tarjeta usan :has(input), para no aplicarle
+   el estilo de tarjeta también a ese label general del grupo. */
+.modo-matriz-selector {
+  display: block !important;
+  width: 100% !important;
+  max-width: none !important;
+}
+.modo-matriz-selector > div {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 10px !important;
+  width: 100% !important;
+  max-width: none !important;
+}
+.modo-matriz-selector > label:not(:has(input)) {
+  display: block !important; width: 100% !important; font-weight: 600; font-size: 0.85rem; color: #0f172a; margin-bottom: 8px;
+}
+.modo-matriz-selector label:has(input) {
+  flex: 1 1 220px !important; min-width: 200px; max-width: none !important; position: relative; display: block !important; cursor: pointer;
+  background-color: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 10px 12px;
+  transition: border-color .15s ease, background-color .15s ease, box-shadow .15s ease;
+}
+.modo-matriz-selector label:has(input):hover { border-color: #93c5fd; background-color: #eff6ff; }
+.modo-matriz-selector label:has(input:checked) { border-color: #2563eb; background-color: #eff6ff; box-shadow: 0 0 0 1px #2563eb inset; }
+.modo-matriz-selector input[type="radio"] { position: absolute; width: 1px; height: 1px; opacity: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.modo-matriz-selector .mmc-title { font-weight: 700; font-size: 0.80rem; color: #0f172a; margin-bottom: 4px; }
+.modo-matriz-selector label:has(input:checked) .mmc-title { color: #1d4ed8; }
+.modo-matriz-selector .mmc-desc { font-size: 0.74rem; line-height: 1.35; color: #64748b; }
+@media (max-width: 640px) { .modo-matriz-selector label:has(input) { flex: 1 1 calc(50% - 10px) !important; } }
+
+/* ============================================================
+   Corrección de recorte (overflow:hidden) en las cajas .valuebox
+   (bslib value box) del tablero — confirmado con Playwright
+   inspeccionando dashboard.html en las pestañas que las usan
+   (Pirámide poblacional, Mapa de Colombia).
+
+   Causa raíz medida en el DOM: a los anchos de viewport típicos
+   (1000-1400px) cada valuebox mide ~85-170px de ancho (el sidebar
+   fijo reduce el área útil), muy por debajo del breakpoint de
+   300px que usa bslib para decidir entre su layout ícono-izquierda
+   e ícono-arriba — en este tablero siempre está en el layout
+   apilado. El alto real de esa fila no es el "20%"/etc. tal cual:
+   Quarto lo traduce a un track <flex> con piso FIJO (3em) que
+   ignora el min-height del ítem hijo, así que el contenido
+   apilado (ícono + título + valor + a veces subtítulo) se recorta
+   de forma invisible en vez de hacer crecer la fila. */
+.bslib-grid:has(> .bslib-grid > .bslib-value-box) {
+  grid-template-rows: auto !important;
+  grid-auto-rows: minmax(3em, 1fr) !important;
+}
+.bslib-grid:has(> .bslib-value-box) {
+  min-height: 200px !important;
+}
+.bslib-value-box.card.valuebox {
+  min-height: 200px !important;
+  height: auto !important;
+}
+.bslib-value-box .value-box-grid {
+  overflow: visible !important;
+}
+.bslib-value-box .value-box-showcase .bi {
+  font-size: clamp(.1em, max(14cqw, 4cqh), 2.5rem) !important;
+}
+.bslib-value-box .value-box-value {
+  font-size: clamp(.1em, 11cqw, 2.25rem) !important;
+}
+.bslib-value-box .value-box-showcase {
+  padding: 0.5rem !important;
+}
+.bslib-value-box .value-box-area {
+  padding: 0.75rem !important;
+}
+
+/* ============================================================
+   Pulido visual de "Pirámide poblacional": selects/labels del
+   sidebar sin estilo propio (100% de fábrica del navegador),
+   contraste de la nota al pie por debajo de AA, y espacio vacío
+   en las tarjetas de pobreza cruzada — reutilizando exactamente
+   los mismos colores/patrones ya establecidos en el resto del
+   tablero (.modo-matriz-selector), no un estilo nuevo. */
+#piramide .sidebar-content select,
+#piramide .sidebar-content input[type="text"] {
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 0.85rem;
+  color: #0f172a;
+  background-color: #f8fafc;
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
+#piramide .sidebar-content select:hover,
+#piramide .sidebar-content input[type="text"]:hover { border-color: #93c5fd; }
+#piramide .sidebar-content select:focus,
+#piramide .sidebar-content input[type="text"]:focus {
+  border-color: #2563eb; outline: none; box-shadow: 0 0 0 1px #2563eb inset;
+}
+#piramide .sidebar-content label {
+  font-size: 0.72rem; font-weight: 600; color: #475569;
+  text-transform: uppercase; letter-spacing: 0.03em;
+  margin-bottom: 4px; display: block;
+}
+#piramide .card.cell[data-title^="Pobreza monetaria"] .card-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+#piramide td.celda-doble-pobreza { background-color: #fff1f2; color: #b91c1c; font-weight: 800; }
+#piramide td.celda-doble-no-pobreza { background-color: #eff6ff; }
+</style>
+```
+
+
+```{ojs}
+//| output: false
+colombiaGeo = FileAttachment("../data/datos/publicacion/dashboard/co_departamentos.geojson").json()
+anios = [2021, 2022, 2023, 2024, 2025]
+formatoMiles = n => n != null ? Math.round(Number(n)).toLocaleString("es-CO") : "0"
+formatoPorcentaje = n => n != null ? Number(n).toFixed(1) + "%" : "0.0%"
+
+// Expresiones SQL estándar para codificar variables de forma completa sin perder población
+getVarExpr = function(v, enc, yr) {
+  if (v === "sexo") {
+    if (enc === "GEIH") {
+      return "CASE WHEN P3271 = 1 THEN 'Hombre' WHEN P3271 = 2 THEN 'Mujer' ELSE 'Sin información' END";
+    } else {
+      return "CASE WHEN P6020 = 1 THEN 'Hombre' ELSE 'Mujer' END";
+    }
+  }
+  if (v === "edad_grupo") {
+    return `CASE 
+      WHEN P6040 < 5 THEN '00-04'
+      WHEN P6040 < 10 THEN '05-09'
+      WHEN P6040 < 15 THEN '10-14'
+      WHEN P6040 < 20 THEN '15-19'
+      WHEN P6040 < 25 THEN '20-24'
+      WHEN P6040 < 30 THEN '25-29'
+      WHEN P6040 < 35 THEN '30-34'
+      WHEN P6040 < 40 THEN '35-39'
+      WHEN P6040 < 45 THEN '40-44'
+      WHEN P6040 < 50 THEN '45-49'
+      WHEN P6040 < 55 THEN '50-54'
+      WHEN P6040 < 60 THEN '55-59'
+      WHEN P6040 < 65 THEN '60-64'
+      WHEN P6040 < 70 THEN '65-69'
+      WHEN P6040 < 75 THEN '70-74'
+      WHEN P6040 < 80 THEN '75-79'
+      ELSE '80+' 
+    END`;
+  }
+  if (v === "area") {
+    return "CASE WHEN CLASE = 1 THEN 'Cabecera (Urbana)' ELSE 'Rural / Centros poblados' END";
+  }
+  if (v === "condicion") {
+    return "CASE WHEN P6920 IS NOT NULL THEN 'Ocupado(a)' WHEN P6040 >= 15 THEN 'Desocupado(a) / Inactivo(a)' ELSE 'Menor de 15 años' END";
+  }
+  if (v === "informalidad") {
+    return "CASE WHEN P6920 = 1 THEN 'Cotizante' WHEN P6920 = 2 THEN 'No cotizante' WHEN P6920 = 3 THEN 'Pensionado ocupado' ELSE 'No aplica (no ocupado / menor)' END";
+  }
+  if (v === "pobreza") {
+    if (enc === "GEIH") {
+      return "CASE WHEN pobre_pm = 1 THEN 'Pobre monetario' WHEN pobre_pm = 0 THEN 'No pobre monetario' ELSE 'Sin información' END";
+    } else {
+      return "CASE WHEN pobre = 1 THEN 'Pobre multidimensional' WHEN pobre = 0 THEN 'No pobre' ELSE 'Sin información' END";
+    }
+  }
+  if (v === "internet") {
+    return "CASE WHEN P1075 = 1 THEN 'Con acceso a internet' WHEN P1075 = 2 THEN 'Sin internet' ELSE 'Sin información' END";
+  }
+  if (v === "escolaridad") {
+    if (enc === "GEIH") {
+      const col = "P3042";
+      return `CASE 
+        WHEN ${col} IN (1, 2) THEN 'Ninguno / Preescolar'
+        WHEN ${col} = 3 THEN 'Primaria'
+        WHEN ${col} IN (4, 5, 6, 7) THEN 'Secundaria y media'
+        WHEN ${col} IN (8, 9) THEN 'Técnica o tecnológica'
+        WHEN ${col} IN (10, 11, 12, 13) THEN 'Superior / Posgrado'
+        ELSE 'Sin información'
+      END`;
+    } else {
+      return `CASE 
+        WHEN P8587 IN (1, 2) THEN 'Ninguno / Preescolar'
+        WHEN P8587 IN (3, 4) THEN 'Primaria'
+        WHEN P8587 IN (5, 6) THEN 'Secundaria'
+        WHEN P8587 IN (7, 8) THEN 'Media / Técnica'
+        WHEN P8587 IN (9, 10, 11, 12, 13) THEN 'Superior / Posgrado'
+        ELSE 'Menores de 5 años / Sin dato'
+      END`;
+    }
+  }
+  if (v === "parentesco") {
+    if (enc === "GEIH") {
+      return `CASE 
+        WHEN P6050 = 1 THEN 'Jefe(a) del hogar'
+        WHEN P6050 = 2 THEN 'Cónyuge / Pareja'
+        WHEN P6050 = 3 THEN 'Hijo(a)'
+        ELSE 'Otros parientes / no parientes'
+      END`;
+    } else {
+      return `CASE 
+        WHEN P6051 = 1 THEN 'Jefe(a) del hogar'
+        WHEN P6051 = 2 THEN 'Cónyuge / Pareja'
+        WHEN P6051 = 3 THEN 'Hijo(a)'
+        ELSE 'Otros parientes / no parientes'
+      END`;
+    }
+  }
+  return "'Desconocido'";
+}
+```
+
+```{ojs}
+//| output: false
+//| echo: false
+// Carga del catálogo multianual unificado (2022-2025)
+catalogoMultianual = FileAttachment("../data/datos/publicacion/dashboard/catalogo_ocupaciones_multianual.json").json()
+
+ordenEdades10 = ["85+", "76-85", "66-75", "56-65", "46-55", "36-45", "26-35", "15-25"]
+
+// Normalización de texto para búsquedas
+normalizarTexto = s => (s || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim()
+
+// Extractor de los MÁXIMO 8 PUNTOS ocupacionales (100% población civil)
+obtener8MacroPuntos = function(cat, anio) {
+  if (!cat) return [];
+  const anioStr = String(anio);
+  const dataAnio = cat.datos_por_anio?.[anioStr] || cat[anioStr] || cat[anio] || {};
+  if (dataAnio.macro_8_familias && dataAnio.macro_8_familias.length > 0) {
+    return dataAnio.macro_8_familias;
+  }
+  const mg = dataAnio.macro_grupos || [];
+  const validos = mg.filter(d => d.id !== 0 && d.ciuo !== 0);
+  const g7 = validos.find(d => d.id === 7);
+  const g8 = validos.find(d => d.id === 8);
+  const sin78 = validos.filter(d => d.id !== 7 && d.id !== 8);
+  if (g7 && g8) {
+    const p7 = g7.poblacion_estimada || 0;
+    const p8 = g8.poblacion_estimada || 0;
+    const pTot = p7 + p8;
+    const wComb = (k) => pTot > 0 ? (((g7[k] || 0) * p7 + (g8[k] || 0) * p8) / pTot) : null;
+    const comb = {
+      id: 7,
+      ciuo: 7,
+      gran_grupo: 7,
+      nombre: "Operarios, oficios y transporte",
+      titulo: "7: Operarios, oficios y transporte",
+      poblacion_estimada: pTot,
+      poblacion_texto: formatoMiles(pTot) + " personas",
+      share_pct: (g7.share_pct || 0) + (g8.share_pct || 0),
+      salario_medio: wComb("salario_medio"),
+      salario_texto: "$" + Math.round(wComb("salario_medio") || 0).toLocaleString("es-CO") + " COP (2026)",
+      tasa_informalidad: wComb("tasa_informalidad"),
+      informalidad_pct: wComb("informalidad_pct"),
+      exp_webb_robot: wComb("exp_webb_robot"),
+      exp_webb_software: wComb("exp_webb_software"),
+      exp_webb_ia: wComb("exp_webb_ia"),
+      exp_gpt4_beta: wComb("exp_gpt4_beta"),
+      exp_gpt4_alpha: wComb("exp_gpt4_alpha"),
+      exp_aioe: wComb("exp_aioe"),
+      exp_humano_beta: wComb("exp_humano_beta"),
+      exp_humano_alpha: wComb("exp_humano_alpha"),
+      exp_webb_robot_pct: wComb("exp_webb_robot_pct"),
+      exp_webb_software_pct: wComb("exp_webb_software_pct"),
+      exp_webb_ia_pct: wComb("exp_webb_ia_pct"),
+      exp_gpt4_beta_pct: wComb("exp_gpt4_beta_pct"),
+      exp_gpt4_alpha_pct: wComb("exp_gpt4_alpha_pct"),
+      exp_gpt4_gamma_pct: wComb("exp_gpt4_gamma_pct"),
+      exp_aioe_pct: wComb("exp_aioe_pct"),
+      exp_humano_beta_pct: wComb("exp_humano_beta_pct"),
+      exp_humano_alpha_pct: wComb("exp_humano_alpha_pct"),
+      exp_humano_gamma_pct: wComb("exp_humano_gamma_pct")
+    };
+    return [...sin78, comb].sort((a, b) => a.id - b.id);
+  }
+  return validos.slice(0, 8);
+}
+
+// Extractor de todas las profesiones a 4 dígitos para el buscador y pin
+obtenerTodasProfesiones = function(cat, anio) {
+  if (!cat) return [];
+  const anioStr = String(anio);
+  const dataAnio = cat.datos_por_anio?.[anioStr] || cat[anioStr] || cat[anio] || {};
+  return dataAnio.profesiones || dataAnio.ocupaciones || [];
+}
+
+// Extractor flexible de métricas numéricas
+getMetrica = function(d, key) {
+  if (!d || !key) return null;
+  if (d[key] !== undefined && d[key] !== null) {
+    const v = Number(d[key]);
+    return isNaN(v) ? null : v;
+  }
+  const alt = key.startsWith("exp_") ? key.replace("exp_", "") : "exp_" + key;
+  if (d[alt] !== undefined && d[alt] !== null) {
+    const v = Number(d[alt]);
+    return isNaN(v) ? null : v;
+  }
+  return null;
+}
+
+// Ejemplos de profesiones específicas dentro de una macro-familia (hasta n, por población)
+obtenerProfesionesEjemplo = function(macroFamilia, todasLasProfesiones, n = 5) {
+  if (!macroFamilia || !todasLasProfesiones || todasLasProfesiones.length === 0) return [];
+  const gg = macroFamilia.gran_grupo ?? macroFamilia.id ?? macroFamilia.ciuo;
+  const grupos = gg === 7 ? [7, 8] : [gg];
+  return todasLasProfesiones
+    .filter(p => grupos.includes(p.gran_grupo))
+    .sort((a, b) => (b.poblacion_estimada || 0) - (a.poblacion_estimada || 0))
+    .slice(0, n);
+}
+
+// Detecta si una clave de indicador es un percentil ponderado (escala 0-100)
+esIndicadorPct = (key) => typeof key === "string" && key.endsWith("_pct");
+
+// Corte "fijo" correcto según la escala del indicador: 50 si es percentil
+// nacional (0-100, equivale al percentil 50 literal); 0.5 si es score crudo
+// (comportamiento histórico, válido en la práctica para GPT-4/Humano/AIOE
+// crudos, pero no para Webb crudo, donde 0.5 no cae en el rango observado).
+umbralFijoPara = (key) => esIndicadorPct(key) ? 50 : 0.5;
+
+// Extractor de tasa de informalidad en porcentaje (0 - 100)
+getInformalidad = function(d) {
+  if (!d) return 0;
+  let inf = d.tasa_informalidad ?? d.informalidad_pct ?? d.pct_informalidad ?? d.informalidad ?? d.tasa_informal ?? 0;
+  if (typeof inf !== "number") inf = parseFloat(inf) || 0;
+  return inf > 1 ? inf : inf * 100;
+}
+
+// Extractor de salario formateado a precios constantes de octubre de 2026
+getSalarioTexto = function(d) {
+  if (!d) return "N/D";
+  if (d.salario_texto && typeof d.salario_texto === "string" && d.salario_texto.includes("COP")) return d.salario_texto;
+  const s = d.salario_medio ?? d.salario_promedio ?? d.salario;
+  if (s == null || isNaN(s)) return "N/D";
+  return "$" + Math.round(Number(s)).toLocaleString("es-CO") + " COP (2026)";
+}
+
+// Cálculo dinámico de métricas de cuadrante sobre las ocupaciones individuales
+// (hasta ~415 a 4 dígitos CIUO-08, según el año).
+// Incorpora cálculo automático de Media Ponderada y Mediana Ponderada Nacional
+calcularMetricasCuadrantes = function(data, keyX, keyY, criterioUmbral = "media", customUmbralX = null, customUmbralY = null) {
+  const validos = (data || []).filter(d => {
+    const x = getMetrica(d, keyX);
+    const y = getMetrica(d, keyY);
+    return x !== null && !isNaN(x) && y !== null && !isNaN(y);
+  });
+  
+  const totalPob = d3.sum(validos, d => d.poblacion_estimada || 0);
+
+  // 1. Cálculo de Media Ponderada Nacional
+  const wMeanX = totalPob > 0 ? d3.sum(validos, d => (getMetrica(d, keyX) || 0) * (d.poblacion_estimada || 0)) / totalPob : 0.5;
+  const wMeanY = totalPob > 0 ? d3.sum(validos, d => (getMetrica(d, keyY) || 0) * (d.poblacion_estimada || 0)) / totalPob : 0.5;
+
+  // 2. Cálculo de Mediana Ponderada Nacional
+  const calcMedianaPond = (key) => {
+    const ordenados = [...validos].sort((a, b) => (getMetrica(a, key) || 0) - (getMetrica(b, key) || 0));
+    let acum = 0;
+    for (const d of ordenados) {
+      acum += (d.poblacion_estimada || 0) / (totalPob || 1);
+      if (acum >= 0.5) return getMetrica(d, key);
+    }
+    return wMeanX;
+  };
+  const wMedianX = calcMedianaPond(keyX);
+  const wMedianY = calcMedianaPond(keyY);
+
+  // 3. Determinación de umbrales según criterio
+  let umbralX = wMeanX;
+  let umbralY = wMeanY;
+  if (criterioUmbral === "mediana") {
+    umbralX = wMedianX;
+    umbralY = wMedianY;
+  } else if (criterioUmbral === "fijo") {
+    umbralX = umbralFijoPara(keyX);
+    umbralY = umbralFijoPara(keyY);
+  } else if (customUmbralX !== null && customUmbralY !== null) {
+    umbralX = customUmbralX;
+    umbralY = customUmbralY;
+  }
+
+  const cuadrantes = {
+    Q1: { id: "Q1", nombre: "Alta Complementariedad / Bajo Riesgo", subtitulo: "Oportunidad y Potenciación", color: "#059669", bg: "#ecfdf5", border: "#a7f3d0", pob: 0, infSum: 0, count: 0 },
+    Q2: { id: "Q2", nombre: "Alta Complementariedad / Alto Riesgo", subtitulo: "Reestructuración Acelerada", color: "#d97706", bg: "#fffbeb", border: "#fde68a", pob: 0, infSum: 0, count: 0 },
+    Q3: { id: "Q3", nombre: "Baja Complementariedad / Bajo Riesgo", subtitulo: "Aislamiento Tecnológico", color: "#475569", bg: "#f8fafc", border: "#cbd5e1", pob: 0, infSum: 0, count: 0 },
+    Q4: { id: "Q4", nombre: "Baja Complementariedad / Alto Riesgo", subtitulo: "Sustitución Directa / Automatización", color: "#dc2626", bg: "#fef2f2", border: "#fecaca", pob: 0, infSum: 0, count: 0 }
+  };
+
+  const procesados = validos.map(d => {
+    const x = getMetrica(d, keyX);
+    const y = getMetrica(d, keyY);
+    const p = d.poblacion_estimada || 0;
+    const inf = getInformalidad(d);
+
+    let q = "Q3";
+    if (x < umbralX && y >= umbralY) q = "Q1";
+    else if (x >= umbralX && y >= umbralY) q = "Q2";
+    else if (x < umbralX && y < umbralY) q = "Q3";
+    else if (x >= umbralX && y < umbralY) q = "Q4";
+
+    cuadrantes[q].pob += p;
+    cuadrantes[q].infSum += (inf * p);
+    cuadrantes[q].count += 1;
+
+    return { ...d, _x: x, _y: y, _q: q };
+  });
+
+  for (const q of Object.keys(cuadrantes)) {
+    const c = cuadrantes[q];
+    c.pctOcupados = totalPob > 0 ? (c.pob / totalPob) * 100 : 0;
+    c.pctInformalidad = c.pob > 0 ? (c.infSum / c.pob) : 0;
+  }
+
+  return { 
+    cuadrantes, 
+    totalPob, 
+    totalOcupaciones: validos.length, 
+    validos: procesados,
+    umbralX,
+    umbralY,
+    wMeanX,
+    wMeanY,
+    wMedianX,
+    wMedianY
+  };
+}
+
+// Generador de tarjetas KPI de cuadrantes
+// Mini-pirámide poblacional (SVG de Observable Plot, resuelto de forma
+// síncrona a string) para el popover de hover de cada tarjeta de cuadrante.
+miniPiramideSVG = function(datos) {
+  if (!datos || datos.length === 0) {
+    return `<div style="font-size:0.7rem;color:#94a3b8;padding:16px;text-align:center;">Sin datos suficientes</div>`;
+  }
+  const totalCuadrante = d3.sum(datos, d => d.poblacion) || 1;
+
+  // Replica el ancho real de trazado (width - marginLeft - marginRight) para
+  // saber cuántos px ocupa cada barra y decidir si el % en blanco cabe adentro.
+  const anchoTrazadoPx = 220 - 42 - 6; // 172
+  const valoresX = datos.map(d => d.sexo === "Hombre" ? -d.poblacion : d.poblacion);
+  const domMin = Math.min(0, ...valoresX);
+  const domMax = Math.max(0, ...valoresX);
+  const pxPorUnidad = anchoTrazadoPx / ((domMax - domMin) || 1);
+  const anchoBarraPx = d => Math.abs(d.poblacion) * pxPorUnidad;
+  const UMBRAL_PX = 18; // ancho mínimo de barra para que el % en blanco quepa/legible
+
+  const plot = Plot.plot({
+    width: 220, height: 190, marginLeft: 42, marginRight: 6, marginTop: 4, marginBottom: 18,
+    x: { axis: null },
+    y: { domain: ordenEdades10, label: null },
+    color: { domain: ["Hombre", "Mujer"], range: ["#2b5c8f", "#d95f02"], legend: true },
+    marks: [
+      Plot.barX(datos, { y: "edad_grupo10", x: d => d.sexo === "Hombre" ? -d.poblacion : d.poblacion, fill: "sexo" }),
+      Plot.ruleX([0], { stroke: "#333", strokeWidth: 1 }),
+      // % sobre el total del cuadrante, centrado dentro de la barra (x = mitad
+      // de camino entre 0 y el extremo; offset horneado en x, no dx/dy).
+      Plot.text(
+        datos.filter(d => anchoBarraPx(d) >= UMBRAL_PX),
+        {
+          y: "edad_grupo10",
+          x: d => (d.sexo === "Hombre" ? -d.poblacion : d.poblacion) / 2,
+          text: d => `${(100 * d.poblacion / totalCuadrante).toFixed(0)}%`,
+          fill: "#ffffff",
+          fontSize: 7,
+          fontWeight: "700",
+          textAnchor: "middle"
+        }
+      )
+    ]
+  });
+  const html = plot.outerHTML;
+  plot.remove();
+  return html;
+}
+
+// Leyenda de las burbujas numeradas del gráfico de cuadrantes: nombre
+// completo, población y salario por macro-familia, en el mismo orden que
+// los números dentro de las burbujas (d.id).
+renderLeyendaBurbujas = function(validos) {
+  const items = [...validos].sort((a, b) => a.id - b.id);
+
+  const itemHtml = (d) => `
+    <div class="leyenda-burbuja-wrap" data-lid="${d.id}" style="display:flex; align-items:center; gap:8px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:6px; padding:6px 10px; flex:1 1 220px; min-width:200px; cursor:help;">
+      <span style="flex:0 0 auto; width:22px; height:22px; border-radius:50%; background:#0f172a; color:#fff; font-size:0.72rem; font-weight:800; display:flex; align-items:center; justify-content:center;">${d.id}</span>
+      <div style="min-width:0;">
+        <div style="font-size:0.74rem; font-weight:700; color:#0f172a; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${d.nombre || d.titulo}</div>
+        <div style="font-size:0.74rem; color:#64748b;">${(d.poblacion_estimada / 1e6).toFixed(1)}M &middot; ${(d.share_pct || 0).toFixed(1)}% del país &middot; ${getSalarioTexto(d)}</div>
+      </div>
+    </div>
+  `;
+
+  const contenedor = document.createElement("div");
+  contenedor.style.cssText = "display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; max-width:1000px; position:relative;";
+  contenedor.innerHTML = items.map(itemHtml).join("");
+
+  // Popover fijo con el detalle de cada valor (reemplaza el title= nativo,
+  // poco confiable). Mismo patrón que el popover de mini-pirámide: div
+  // position:fixed adjuntado a document.body, posicionado con
+  // getBoundingClientRect() en mouseenter y removido en mouseleave.
+  const porId = new Map(items.map(d => [String(d.id), d]));
+  let popEl = null;
+  contenedor.querySelectorAll(".leyenda-burbuja-wrap").forEach(wrap => {
+    wrap.addEventListener("mouseenter", () => {
+      if (popEl) popEl.remove();
+      const d = porId.get(wrap.dataset.lid);
+      popEl = document.createElement("div");
+      popEl.className = "leyenda-burbuja-pop-fixed";
+      popEl.innerHTML = `
+        <div style="font-size:0.72rem; font-weight:700; color:#0f172a; margin-bottom:4px;">${d.nombre || d.titulo}</div>
+        <div style="font-size:0.74rem; color:#334155; line-height:1.5;">
+          <div><strong>${(d.poblacion_estimada / 1e6).toFixed(1)}M</strong> = población ocupada en esta macro-familia</div>
+          <div><strong>${(d.share_pct || 0).toFixed(1)}%</strong> del país = participación sobre el total de ocupados nacional</div>
+          <div><strong>${getSalarioTexto(d)}</strong> = salario promedio mensual (precios 2026)</div>
+        </div>
+      `;
+      document.body.appendChild(popEl);
+      const r = wrap.getBoundingClientRect();
+      let left = r.left;
+      const maxLeft = window.innerWidth - 220 - 8;
+      if (left > maxLeft) left = Math.max(8, maxLeft);
+      popEl.style.left = left + "px";
+      popEl.style.top = (r.bottom + 4) + "px";
+    });
+    wrap.addEventListener("mouseleave", () => {
+      if (popEl) { popEl.remove(); popEl = null; }
+    });
+  });
+
+  return contenedor;
+}
+
+renderCuadrantesCards = function(metricas, piramides = null, desempleo = null) {
+  const q1 = metricas.cuadrantes.Q1;
+  const q2 = metricas.cuadrantes.Q2;
+  const q3 = metricas.cuadrantes.Q3;
+  const q4 = metricas.cuadrantes.Q4;
+
+  const cardHtml = (q) => {
+    const td = desempleo ? desempleo[q.id] : null;
+    const desempleoHtml = td ? `
+        <div style="text-align: right;">
+          <div style="font-size: 0.74rem; color: #64748b; font-weight: 600; white-space: nowrap;">% Desempleo</div>
+          <div style="font-size: 1.20rem; font-weight: 800; color: ${td.tasaDesempleo != null && td.tasaDesempleo > 15 ? '#dc2626' : '#0f172a'};">${td.tasaDesempleo != null ? td.tasaDesempleo.toFixed(1) + '%' : 'N/D'}</div>
+          <div style="font-size: 0.68rem; color: #94a3b8;">cesantes, últ. ocupación</div>
+        </div>` : "";
+    return `
+    <div class="cuadrante-card-wrap" data-qid="${q.id}" style="flex: 1 1 calc(25% - 10px); min-width: 240px; display: flex;">
+    <div style="width: 100%; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between; background-color: ${q.bg}; border: 1px solid ${q.border}; border-left: 5px solid ${q.color}; border-radius: 8px; padding: 10px 14px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+      <div>
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 2px; min-height: 2.1em;">
+          <span style="font-weight: 700; font-size: 0.80rem; text-transform: uppercase; letter-spacing: 0.5px; color: ${q.color}; line-height: 1.25;">${q.id}: ${q.subtitulo}</span>
+          <span style="flex: 0 0 auto; background-color: ${q.color}; color: #ffffff; font-size: 0.74rem; font-weight: 600; padding: 2px 6px; border-radius: 10px; white-space: nowrap;">${q.count} ocupaciones</span>
+        </div>
+        <div style="font-size: 0.72rem; color: #64748b; margin-bottom: 6px; font-weight: 500;">${q.nombre}</div>
+      </div>
+      <div style="display: flex; justify-content: space-between; gap: 6px; border-top: 1px solid ${q.border}; padding-top: 6px;">
+        <div>
+          <div style="font-size: 0.74rem; color: #64748b; font-weight: 600; white-space: nowrap;">% Ocupados</div>
+          <div style="font-size: 1.20rem; font-weight: 800; color: #0f172a;">${q.pctOcupados.toFixed(1)}%</div>
+          <div style="font-size: 0.71rem; color: #94a3b8;">${Math.round(q.pob).toLocaleString("es-CO")} pers.</div>
+        </div>
+        <div>
+          <div style="font-size: 0.74rem; color: #64748b; font-weight: 600; white-space: nowrap;">% No cotización</div>
+          <div style="font-size: 1.20rem; font-weight: 800; color: ${q.pctInformalidad > 50 ? '#dc2626' : '#0f172a'};">${q.pctInformalidad.toFixed(1)}%</div>
+          <div style="font-size: 0.71rem; color: #94a3b8;">tasa ponderada</div>
+        </div>${desempleoHtml}
+      </div>
+    </div>
+    </div>
+  `;
+  };
+
+  const contenedor = document.createElement("div");
+  contenedor.style.cssText = "display: flex; align-items: stretch; flex-wrap: wrap; gap: 10px; margin-bottom: 12px; position: relative;";
+  contenedor.innerHTML = [q1, q2, q3, q4].map(cardHtml).join("");
+
+  // Popover de mini-pirámide: adjuntado a document.body con position:fixed
+  // (no anidado en el DOM del gráfico) para evitar los problemas de
+  // contexto de apilamiento de bslib/Quarto dashboard. Se posiciona con
+  // getBoundingClientRect() en cada mouseenter.
+  if (piramides) {
+    let popEl = null;
+    contenedor.querySelectorAll(".cuadrante-card-wrap").forEach(wrap => {
+      const qid = wrap.dataset.qid;
+      wrap.addEventListener("mouseenter", () => {
+        if (popEl) popEl.remove();
+        popEl = document.createElement("div");
+        popEl.className = "mini-piramide-pop-fixed";
+        popEl.innerHTML = `
+          <div style="font-size:0.74rem; font-weight:700; color:#334155; margin-bottom:4px; text-align:center;">Pirámide poblacional · ${qid}</div>
+          ${miniPiramideSVG(piramides[qid])}
+        `;
+        document.body.appendChild(popEl);
+        const r = wrap.getBoundingClientRect();
+        popEl.style.left = r.left + "px";
+        popEl.style.top = (r.bottom + 4) + "px";
+      });
+      wrap.addEventListener("mouseleave", () => {
+        if (popEl) { popEl.remove(); popEl = null; }
+      });
+    });
+  }
+
+  return contenedor;
+}
+```
+
+
+# Exposición tecnológica y empleo {#ia-impacto icon="robot" scrolling=true}
+
+## {.sidebar width=250px}
+
+### Parámetros
+
+```{ojs}
+viewof anioAnexo = Inputs.select([2025, 2024, 2023, 2022], {label: "Año", format: String, value: 2025})
+```
+
+```{ojs}
+//| output: false
+opcionesDptoExplorador = [
+  { cod: null, nombre: "Todos" },
+  ...colombiaGeo.features
+    .map(f => ({ cod: f.properties.DPTO_CCDGO, nombre: f.properties.DPTO_CNMBR }))
+    .sort((a, b) => a.nombre.localeCompare(b.nombre))
+]
+```
+
+```{ojs}
+viewof dptoExplorador = Inputs.select(opcionesDptoExplorador, {label: "Departamento", format: d => d.nombre, value: opcionesDptoExplorador[0]})
+viewof sexoExplorador = Inputs.select(["Todos", "Hombre", "Mujer"], {label: "Sexo", value: "Todos"})
+```
+
+```{ojs}
+viewof buscarAnexo = {
+ const form=Inputs.text({label:"Buscar ocupación o profesión",placeholder:"Escribe para ver las coincidencias"});
+ const field=form.querySelector('input');
+ const list=document.createElement('datalist');
+ list.id="candidatos-ocupacion-exposicion";
+ field.setAttribute('list',list.id);
+ field.setAttribute('autocomplete','off');
+ // Catálogo completo del año (sin filtrar por universo/departamento/sexo): si se
+ // usara datosExplorador.selected, este buscador se reconstruiría por completo
+ // cada vez que cambia cualquier filtro, pudiendo dejar el gráfico (que depende
+ // de buscarAnexo) en un estado vacío mientras se recrea.
+ const candidates=[...new Map((anioDatosAnexo.ocupaciones_indices??[]).map(d=>[d.ciuo08,d])).values()]
+   .sort((a,b)=>a.ciuo08_desc.localeCompare(b.ciuo08_desc,'es'));
+ for(const d of candidates){
+   const option=document.createElement('option');
+   option.value=d.ciuo08+" "+d.ciuo08_desc;
+   list.appendChild(option);
+ }
+ form.appendChild(list);
+ return form;
+}
+```
+
+Seleccione la combinación de indicadores y la población en los menús desplegables. Se utilizan los percentiles fijos del catálogo del Anexo A, sin recalcularlos por año. Ambos cortes son 0,50.
+
+Los indicadores miden exposición, no probabilidades de sustitución o complementariedad.
+
+## {}
+
+<style>
+#tab-ia-impacto .nav-link-text{font-size:calc(1em - 3pt);line-height:1.2;white-space:normal;display:inline-block;max-width:190px}
+#ia-impacto{font-size:14px;line-height:1.45}
+#ia-impacto .bslib-grid{grid-template-rows:auto!important;grid-auto-rows:auto!important;height:auto!important;min-height:0!important}
+#ia-impacto .card{height:auto!important;min-height:0!important;max-height:none!important;flex:0 0 auto!important}
+#ia-impacto .card-body{height:auto!important;min-height:0!important;max-height:none!important;overflow:visible!important;flex:0 0 auto!important}
+#ia-impacto .card-body{padding:12px!important}
+#ia-impacto p{margin-bottom:8px;line-height:1.45}
+#ia-impacto h4{font-size:16px;margin:6px 0}
+#ia-impacto h5{font-size:13px}
+#ia-impacto .nav-tabs{padding:4px 8px;gap:3px}
+#ia-impacto .nav-tabs .nav-link{font-size:12px;padding:8px 10px}
+#ia-impacto .exposure-card{padding:10px;border-radius:9px;border-top-width:3px;box-shadow:none}
+#ia-impacto .exposure-card{border-top-width:1px;border-left:5px solid var(--tone);padding:10px 14px}
+#ia-impacto .exposure-card strong{font-size:18px;letter-spacing:normal;color:#0f172a}
+#ia-impacto .exposure-card-heading{display:flex;justify-content:space-between;align-items:flex-start;gap:6px;min-height:48px}
+#ia-impacto .exposure-card-heading h5{font-size:12px;font-weight:700;text-transform:uppercase;line-height:1.3}
+#ia-impacto .exposure-badge{background:var(--tone);color:white;border-radius:10px;padding:2px 6px;font-size:10px;white-space:nowrap}
+#ia-impacto .exposure-kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;border-top:1px solid #cbd5e1;padding-top:6px;margin-bottom:6px}
+#ia-impacto .exposure-kpis small{font-size:10px;font-weight:600}
+@media(max-width:1200px){#ia-impacto .exposure-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){#ia-impacto .exposure-grid{grid-template-columns:1fr}}
+#ia-impacto .exposure-card small{font-size:12px;line-height:1.35;margin-top:3px}
+#ia-impacto .exposure-grid{gap:8px;margin:8px 0}
+#ia-impacto .exposure-note{font-size:12px;padding:8px 12px}
+#ia-impacto .cell:has(.exposure-presets)>.card-body{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px 14px;align-items:start}
+#ia-impacto .cell:has(.exposure-presets) .cell-output{min-width:0;margin:0!important}
+#ia-impacto .cell:has(.exposure-presets) form{width:100%!important;max-width:none!important;margin:0!important;font-size:12px!important;display:flex;flex-wrap:wrap;gap:4px}
+#ia-impacto .cell:has(.exposure-presets) form>label{width:100%!important;font-size:12px}
+#ia-impacto .cell:has(.exposure-presets) select,#ia-impacto .cell:has(.exposure-presets) input[type=text]{font-size:13px;min-height:30px;width:100%;max-width:100%}
+@media(max-width:900px){#ia-impacto .cell:has(.exposure-presets)>.card-body{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){#ia-impacto .cell:has(.exposure-presets)>.card-body{grid-template-columns:1fr}#ia-impacto .card-body{padding:9px!important}}
+.exposure-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(205px,1fr));gap:10px;margin:12px 0}
+.exposure-card{background:linear-gradient(145deg,#fff,#f4f8fc);border:1px solid #dce5ee;border-top:4px solid var(--tone,#287c96);border-radius:12px;padding:12px;box-shadow:0 3px 12px #18334d08;min-width:0}
+.exposure-card h5{font-size:.85rem;color:var(--tone,#334155);margin:0 0 7px}.exposure-card strong{display:block;font-size:1.45rem;letter-spacing:-.04em;color:var(--tone,#17364a)}.exposure-card small{display:block;color:#526477;line-height:1.35;margin-top:4px}.exposure-card details{font-size:.75rem;margin-top:8px;line-height:1.4}.exposure-card summary{cursor:pointer;color:var(--tone,#334155)}
+.exposure-card[style*="#059669"]{background:#ecfdf5;border-color:#a7f3d0;border-top-color:#059669}.exposure-card[style*="#d97706"]{background:#fffbeb;border-color:#fde68a;border-top-color:#d97706}.exposure-card[style*="#475569"]{background:#f8fafc;border-color:#cbd5e1;border-top-color:#475569}.exposure-card[style*="#dc2626"]{background:#fef2f2;border-color:#fecaca;border-top-color:#dc2626}
+.exposure-controls{display:flex;flex-wrap:wrap;gap:16px;padding:14px;background:#f3f7fb;border-radius:12px;margin-bottom:14px}.exposure-note{padding:12px 16px;background:#edf5fa;border-left:3px solid #287c96;border-radius:6px;color:#334155}.exposure-chart{overflow-x:auto;max-width:100%;background:white;border:1px solid #e2e8f0;border-radius:14px;padding:8px}
+.exposure-chart-title{font-size:1rem;font-weight:700;color:#1f2a37;margin:10px 0 6px;text-align:center}
+.exposure-presets{max-width:560px!important;margin:8px 0!important}.exposure-presets select{min-height:34px;border-radius:7px}.exposure-card:focus-within{outline:2px solid #287c96}
+@media(max-width:600px){.exposure-grid{grid-template-columns:1fr 1fr;gap:8px}.exposure-card{padding:11px}.exposure-card strong{font-size:1.3rem}.exposure-controls{display:block}}
+@media(max-width:600px){#ia-impacto .nav-tabs{flex-wrap:nowrap;overflow-x:auto}#ia-impacto .nav-tabs .nav-link{white-space:nowrap}.exposure-presets label{font-size:.8rem;padding:8px}.exposure-grid{grid-template-columns:1fr}}
+
+/* Jerarquía legible y consistente para escritorio y móvil. */
+#ia-impacto .nav-tabs .nav-link{font-size:14px;padding:10px 12px}
+#ia-impacto .exposure-card-heading{display:block;min-height:60px}
+#ia-impacto .exposure-card-heading h5{font-size:13px;text-transform:none;letter-spacing:0;margin-bottom:6px}
+#ia-impacto .exposure-badge{font-size:12px;display:inline-block}
+#ia-impacto .exposure-card strong{font-size:22px}
+#ia-impacto .exposure-kpis small{font-size:12px;font-weight:500}
+#ia-impacto .exposure-kpis{gap:10px;padding-top:10px}
+#ia-impacto .exposure-card{padding:14px;line-height:1.5}
+#ia-impacto .exposure-card details{font-size:13px}
+#ia-impacto .exposure-grid{gap:12px}
+#ia-impacto .exposure-note{font-size:13px;padding:10px 14px}
+#ia-impacto .cell:has(.exposure-presets) form,
+#ia-impacto .cell:has(.exposure-presets) form>label{font-size:14px!important}
+#ia-impacto .cell:has(.exposure-presets) select,
+#ia-impacto .cell:has(.exposure-presets) input[type=text]{min-height:40px;font-size:14px;border:1px solid #94a3b8;border-radius:6px;padding:6px 8px;background:#fff}
+#ia-impacto .exposure-chart{display:flex;justify-content:center;border-radius:8px}
+#ia-impacto .card:has(> .card-body:empty){display:none}
+#ia-impacto select:focus-visible,#ia-impacto input:focus-visible{outline:2px solid #2563eb;outline-offset:2px}
+@media(min-width:1500px){#ia-impacto .exposure-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(min-width:601px) and (max-width:1499px){#ia-impacto .exposure-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){#ia-impacto .exposure-grid{grid-template-columns:1fr}#ia-impacto .exposure-card-heading{min-height:0;margin-bottom:10px}}
+
+
+/* Vista compacta: dos selectores, resumen y gráfico. */
+#ia-impacto .cell:has(.exposure-presets)>.card-body{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 16px}
+#ia-impacto .cell:has(.exposure-presets) select{min-height:32px;padding:4px 8px;font-size:13px}
+#ia-impacto .cell:has(.exposure-presets) form>label{font-size:13px!important}
+#ia-impacto .card-body{padding:8px!important}
+#ia-impacto .nav-tabs .nav-link{font-size:13px;padding:7px 9px}
+#ia-impacto .exposure-card{padding:8px 10px}
+#ia-impacto .exposure-card-heading{display:block;min-height:0;margin:0 0 3px}
+#ia-impacto .exposure-card-heading h5{line-height:1.35;overflow-wrap:normal}
+#ia-impacto .exposure-card>.exposure-badge{display:inline-block;margin-bottom:5px}
+#ia-impacto .exposure-grid{align-items:start}
+#ia-impacto .exposure-counts{display:block;margin:4px 0}
+#ia-impacto .exposure-counts small{margin:0}
+#ia-impacto .exposure-counts b{display:inline;font-weight:600}
+#ia-impacto .exposure-card details{margin-top:4px}
+#ia-impacto .exposure-card-heading h5{font-size:12px;margin-bottom:4px}
+#ia-impacto .exposure-badge{font-size:11px;padding:1px 5px}
+#ia-impacto .exposure-card strong{font-size:18px}
+#ia-impacto .exposure-card small,#ia-impacto .exposure-card details{font-size:11px;line-height:1.35}
+#ia-impacto .exposure-kpis{gap:6px;padding-top:6px}
+#ia-impacto .exposure-kpis small{font-size:11px}
+#ia-impacto .exposure-note{font-size:12px;padding:7px 10px}
+#ia-impacto .exposure-grid{gap:9px;margin:7px 0}
+#ia-impacto .exposure-chart{padding:4px;overflow:visible;position:relative;z-index:2}
+#ia-impacto .exposure-chart svg{overflow:visible}
+#ia-impacto .card:has(.exposure-chart),#ia-impacto .cell-output:has(.exposure-chart),#ia-impacto .cell-output-display:has(.exposure-chart),#ia-impacto .observablehq:has(.exposure-chart){overflow:visible!important;position:relative;z-index:3}
+@media(min-width:1100px){#ia-impacto .exposure-grid{grid-template-columns:repeat(4,fit-content(240px));justify-content:center}}
+#ia-impacto .exposure-kpis{display:flex;flex-direction:column;gap:2px;margin:3px 0;padding-top:4px}
+#ia-impacto .exposure-kpis>div{display:grid;grid-template-columns:minmax(0,1fr) max-content;align-items:baseline;column-gap:8px}
+#ia-impacto .exposure-kpis small{min-height:0;display:inline;margin:0;line-height:1.25}
+#ia-impacto .exposure-kpis strong{display:inline;font-size:14px;line-height:1.25;margin:0;text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+#ia-impacto .exposure-card{padding:6px 7px;height:fit-content;align-self:start}
+#ia-impacto .exposure-card-heading{margin-bottom:2px}
+#ia-impacto .exposure-card-heading h5{margin-bottom:2px}
+#ia-impacto .exposure-counts{margin:4px 0;padding-top:4px;border-top:1px solid #cbd5e180}
+#ia-impacto .exposure-population{display:flex!important;justify-content:space-between;gap:6px}
+#ia-impacto .exposure-count-pair{display:flex;justify-content:space-between;gap:8px}
+#ia-impacto .exposure-count-pair small{white-space:nowrap}
+#ia-impacto .exposure-distribution{display:grid!important;grid-template-columns:minmax(0,1fr) max-content;gap:6px;align-items:baseline}
+#ia-impacto .exposure-distribution b{font-variant-numeric:tabular-nums;white-space:nowrap}
+#ia-impacto .exposure-card details{margin-top:3px;margin-bottom:0}
+#ia-impacto details.exposure-card>summary{display:list-item;list-style-position:inside;cursor:pointer;margin:0;color:var(--tone)}
+#ia-impacto details.exposure-card>summary h5{display:inline;font-size:12px;line-height:1.4;margin:0}
+#ia-impacto details.exposure-card>summary:focus-visible{outline:2px solid #2563eb;outline-offset:3px;border-radius:3px}
+#ia-impacto details.exposure-card:not([open]){padding-top:8px;padding-bottom:8px}
+@media(max-width:600px){#ia-impacto .cell:has(.exposure-presets)>.card-body{grid-template-columns:1fr}}
+
+/* Globo y banner interactivo de la línea ideal 1:1 */
+#ia-impacto div:has(> .globo-ideal-container):has(> h5.exposure-chart-title) { display: flex !important; flex-direction: column !important; align-items: stretch; }
+#ia-impacto div:has(> .globo-ideal-container) > h5.exposure-chart-title { order: 1; margin: 2px 0 6px !important; text-align: center; font-size: 1.05rem !important; font-weight: 700 !important; color: #0f172a; letter-spacing: -.005em; line-height: 1.3; }
+#ia-impacto div:has(> .globo-ideal-container) > .globo-ideal-container { order: 2; margin: 0 0 10px !important; display: flex; justify-content: center; }
+#ia-impacto div:has(> .globo-ideal-container) > .exposure-chart { order: 3; }
+#ia-impacto .globo-ideal-container .globo-ideal-trigger { font-size: .78rem; }
+#ia-impacto h5.exposure-chart-title .globo-ideal-trigger { text-decoration: none !important; }
+
+.globo-ideal-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 6px 0 10px 0;
+}
+.globo-ideal-trigger {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+}
+.globo-ideal-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  color: #1e40af;
+  padding: 5px 14px;
+  border-radius: 9999px;
+  font-size: 13px;
+  font-weight: 600;
+  box-shadow: 0 1px 3px rgba(37, 99, 235, 0.1);
+  transition: all 0.2s ease;
+}
+.globo-ideal-trigger:hover .globo-ideal-pill {
+  background: #dbeafe;
+  border-color: #93c5fd;
+  color: #1d4ed8;
+  box-shadow: 0 3px 8px rgba(37, 99, 235, 0.18);
+}
+.pulse-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #2563eb;
+  box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.7);
+  animation: pulse-blue 1.8s infinite;
+}
+@keyframes pulse-blue {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.7); }
+  70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(37, 99, 235, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(37, 99, 235, 0); }
+}
+.globo-hint-text {
+  font-size: 11.5px;
+  font-weight: 500;
+  color: #3b82f6;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.globo-ideal-popover {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 380px;
+  max-width: calc(100vw - 32px);
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  box-shadow: 0 14px 35px rgba(15, 23, 42, 0.22);
+  padding: 14px 16px;
+  z-index: 1050;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+  pointer-events: none;
+  font-size: 12px;
+  line-height: 1.45;
+  color: #1e293b;
+  text-align: left;
+}
+.globo-ideal-popover::before {
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 7px;
+  border-style: solid;
+  border-color: transparent transparent #cbd5e1 transparent;
+}
+.globo-ideal-popover::after {
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 6px;
+  border-style: solid;
+  border-color: transparent transparent #ffffff transparent;
+}
+.globo-ideal-trigger:hover .globo-ideal-popover,
+.globo-ideal-trigger:focus-within .globo-ideal-popover,
+.globo-ideal-popover:hover {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+.globo-ideal-header {
+  font-size: 13px;
+  font-weight: 700;
+  color: #0f172a;
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 6px;
+  margin-bottom: 8px;
+}
+.globo-linea-item {
+  margin-bottom: 8px;
+}
+.globo-linea-item:last-child {
+  margin-bottom: 0;
+}
+.globo-linea-item p {
+  margin: 3px 0 0 0 !important;
+  font-size: 11.5px;
+  line-height: 1.35;
+  color: #475569;
+}
+.globo-tag {
+  display: inline-block;
+  font-size: 10.5px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 5px;
+}
+.tag-blue { background: #dbeafe; color: #1e40af; }
+.tag-red { background: #fee2e2; color: #991b1b; }
+.tag-green { background: #d1fae5; color: #065f46; }
+</style>
+
+<!-- Capa visual de presentación, probada en vivo en el navegador y guardada
+     desde ahí (DevTools no permite escribir al disco), recuperada comparando
+     el HTML descargado contra este .qmd. Solo estética (colores, tipografía,
+     sombras, navbar, tarjetas); no toca ninguna regla estructural de arriba. -->
+<style id="tablero-estilo">
+/* Tablero GEIH - ECV · capa visual (solo presentación) */
+:root{--tb-bg:#f3f5f9;--tb-surface:#fff;--tb-border:#e3e7ee;--tb-ink:#1f2a37;--tb-muted:#5b6676;--tb-brand:#12355b;--tb-brand-2:#1d4f86;--tb-accent:#f2a900;--tb-radius:12px;--tb-shadow:0 1px 2px rgba(16,24,40,.05),0 2px 8px rgba(16,24,40,.06)}
+body.quarto-dashboard{background:var(--tb-bg);color:var(--tb-ink);-webkit-font-smoothing:antialiased;font-feature-settings:'tnum' 1}
+.quarto-dashboard .navbar{background:linear-gradient(90deg,var(--tb-brand) 0%,var(--tb-brand-2) 100%)!important;box-shadow:0 2px 10px rgba(18,53,91,.25);padding-top:0;padding-bottom:0;min-height:58px}
+.quarto-dashboard .navbar .navbar-title-text,.quarto-dashboard .navbar .navbar-title-text a{color:#fff!important;font-weight:700;font-size:1.05rem;letter-spacing:.2px;line-height:1.2;max-width:260px;white-space:normal}
+.quarto-dashboard .navbar .nav-link{color:rgba(255,255,255,.78)!important;font-size:.9rem!important;font-weight:500;line-height:1.2;padding:18px 14px 15px!important;border-bottom:3px solid transparent;background:transparent!important;transition:color .15s,background-color .15s,border-color .15s}
+.quarto-dashboard .navbar .nav-link .nav-link-text{font-size:inherit!important;max-width:170px;white-space:normal;display:inline-block}
+.quarto-dashboard .navbar .nav-link:hover{color:#fff!important;background:rgba(255,255,255,.08)!important}
+.quarto-dashboard .navbar .nav-link.active{color:#fff!important;font-weight:600;border-bottom-color:var(--tb-accent);background:rgba(255,255,255,.12)!important}
+.quarto-dashboard .sidebar{background:var(--tb-surface)!important;border-right:1px solid var(--tb-border)!important;font-size:.9rem}
+.quarto-dashboard .sidebar h1,.quarto-dashboard .sidebar h2,.quarto-dashboard .sidebar h3{color:var(--tb-brand);font-weight:700;font-size:1.15rem;margin:.25rem 0 .75rem;padding-bottom:.5rem;border-bottom:2px solid var(--tb-border)}
+.quarto-dashboard .sidebar label{font-weight:600;font-size:.8rem;color:var(--tb-muted);text-transform:none;margin-bottom:4px}
+.quarto-dashboard select,.quarto-dashboard input[type=text],.quarto-dashboard input[type=search],.quarto-dashboard input[type=number]{border:1px solid #cfd6e1!important;border-radius:8px!important;padding:6px 10px!important;background-color:#fff;font-size:.88rem;transition:border-color .15s,box-shadow .15s}
+.quarto-dashboard select:focus,.quarto-dashboard input:focus{outline:none;border-color:var(--tb-brand-2)!important;box-shadow:0 0 0 3px rgba(29,79,134,.15)}
+.quarto-dashboard .sidebar .callout{border-radius:10px!important;border:1px solid #d6e4f5!important;border-left:4px solid var(--tb-brand-2)!important;background:#f5f9ff!important;box-shadow:none;font-size:.84rem}
+.quarto-dashboard .sidebar .callout .callout-header{background:transparent!important}
+.quarto-dashboard .main{padding:14px!important;gap:14px}
+.quarto-dashboard .bslib-grid{gap:14px!important}
+.quarto-dashboard .card{background:var(--tb-surface);border:1px solid var(--tb-border)!important;border-radius:var(--tb-radius)!important;box-shadow:var(--tb-shadow);overflow:hidden}
+.quarto-dashboard .card-header{display:flex!important;align-items:center;justify-content:flex-start!important;text-align:left!important;background:var(--tb-surface)!important;border-bottom:1px solid var(--tb-border)!important;color:var(--tb-brand);font-weight:600;font-size:.95rem;padding:10px 16px!important}
+.quarto-dashboard .card-header::before{content:'';display:inline-block;width:4px;height:1em;margin-right:8px;vertical-align:-2px;border-radius:2px;background:var(--tb-accent)}
+.quarto-dashboard .card-body{padding:12px 16px}
+.quarto-dashboard .bslib-value-box{border:none!important;border-radius:var(--tb-radius)!important;box-shadow:0 4px 14px rgba(16,24,40,.12);background-image:linear-gradient(135deg,rgba(255,255,255,.14) 0%,rgba(255,255,255,0) 60%)!important;transition:transform .15s ease,box-shadow .15s ease}
+.quarto-dashboard .bslib-value-box:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(16,24,40,.16)}
+.quarto-dashboard .bslib-value-box .value-box-area p:empty{display:none}
+.quarto-dashboard .bslib-value-box .value-box-area{font-size:.92rem;line-height:1.3}
+.quarto-dashboard table{font-size:.85rem;border-collapse:separate;border-spacing:0}
+.quarto-dashboard table thead th{background:#f1f4f9!important;color:var(--tb-brand);font-weight:600;border-bottom:2px solid #d5dce7!important;position:sticky;top:0;z-index:1}
+.quarto-dashboard table tbody tr:nth-child(even) td{background:#fafbfd}
+.quarto-dashboard table tbody tr:hover td{background:#eef4fc}
+.quarto-dashboard table td,.quarto-dashboard table th{padding:6px 10px}
+.quarto-dashboard .main p,.quarto-dashboard .main li{line-height:1.55}
+.quarto-dashboard code:not(pre code){background:#eef2f8;color:#9c2a6b;border-radius:4px;padding:1px 5px}
+.quarto-dashboard a{color:var(--tb-brand-2)}
+.quarto-dashboard ::-webkit-scrollbar{width:10px;height:10px}
+.quarto-dashboard ::-webkit-scrollbar-thumb{background:#c5cdd9;border-radius:10px;border:2px solid transparent;background-clip:content-box}
+.quarto-dashboard ::-webkit-scrollbar-thumb:hover{background-color:#9aa6b8}
+body:not(.dashboard-fill) .bslib-sidebar-layout{align-items:start}
+body:not(.dashboard-fill) .bslib-sidebar-layout>.sidebar{position:sticky;top:0;max-height:100vh;overflow-y:auto}
+#ia-impacto .card,#ia-impacto .card-body{overflow:visible!important}
+#ia-impacto .main{overflow-y:auto!important}
+#ia-impacto .main>*{flex:0 0 auto!important;height:auto!important;max-height:none!important}
+#ia-impacto .exposure-grid{align-items:stretch!important}
+#ia-impacto .exposure-card{height:auto!important;align-self:stretch!important}
+#ia-impacto .exposure-card-heading{min-height:3em!important}
+#ia-impacto .sidebar p{text-align:justify;text-justify:inter-word;hyphens:auto;-webkit-hyphens:auto;line-height:1.5;margin-bottom:.7rem}
+.card:has(.idx-defs):not([data-full-screen="true"]), .card:has(.idx-defs) .card-body { height: auto !important; max-height: none !important; overflow: visible !important; flex: 0 0 auto !important; }
+</style>
+
+<!-- Ajustes del tablero: botón de expandir + globos de las burbujas.
+     Probado en vivo en el navegador (Claude en Chrome) y recuperado desde
+     borrador_chrome/dashboard_borrador.html. -->
+<style>
+  /* Botón de expandir: que no tape el eje X y que la pantalla completa funcione */
+  #ia-impacto .card:has(.exposure-chart):not([data-full-screen="true"]) { padding-bottom: 2.5rem; }
+  #ia-impacto .card:has(.exposure-chart) .bslib-full-screen-enter { bottom: .4rem; right: .5rem; }
+  #ia-impacto .card[data-full-screen="true"] { position: fixed !important; z-index: 1070 !important; overflow: auto !important; }
+  #ia-impacto .card[data-full-screen="true"] .exposure-chart svg { width: 100% !important; height: auto !important; max-height: calc(100vh - 7rem); }
+
+  /* Globos de las burbujas */
+  #ia-impacto .exposure-chart g[aria-label="tip"] { opacity: 0 !important; }
+  .bx-tip { position: fixed; z-index: 2000; pointer-events: none; width: 340px; max-width: calc(100vw - 24px);
+    background: #fff; color: #0f172a; border: 1px solid #e2e8f0; border-radius: 10px;
+    box-shadow: 0 10px 28px rgba(15,23,42,.18); font: 12px/1.35 system-ui, -apple-system, "Segoe UI", sans-serif;
+    overflow: hidden; display: none; }
+  .bx-tip .bx-head { padding: 10px 12px 8px; border-left: 5px solid var(--bx-c, #64748b); }
+  .bx-tip .bx-title { font-weight: 700; font-size: 13px; line-height: 1.25; }
+  .bx-tip .bx-sub { color: #64748b; margin-top: 2px; }
+  .bx-tip .bx-badge { display: inline-block; margin-top: 6px; padding: 2px 8px; border-radius: 999px; font-weight: 600;
+    font-size: 11px; color: var(--bx-c, #64748b); background: color-mix(in srgb, var(--bx-c, #64748b) 12%, white); }
+  .bx-tip .bx-sec { padding: 7px 12px; border-top: 1px solid #f1f5f9; }
+  .bx-tip .bx-sec h6 { margin: 0 0 4px; font-size: 10px; letter-spacing: .05em; text-transform: uppercase; color: #94a3b8; font-weight: 700; }
+  .bx-tip .bx-row { display: flex; justify-content: space-between; gap: 12px; padding: 1px 0; }
+  .bx-tip .bx-row span:first-child { color: #475569; }
+  .bx-tip .bx-row span:last-child { font-weight: 600; font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
+  .bx-tip .bx-bar { display: grid; grid-template-columns: 132px 1fr 34px; align-items: center; gap: 8px; padding: 2px 0; }
+  .bx-tip .bx-bar .tr { height: 6px; background: #f1f5f9; border-radius: 3px; overflow: hidden; }
+  .bx-tip .bx-bar .fl { height: 100%; background: #94a3b8; border-radius: 3px; }
+  .bx-tip .bx-bar.axis .fl { background: var(--bx-c, #64748b); }
+  .bx-tip .bx-bar.axis .nm { font-weight: 700; }
+  .bx-tip .bx-bar .v { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; }
+  .bx-tip .bx-note { padding: 6px 12px 8px; color: #94a3b8; font-size: 10.5px; border-top: 1px solid #f1f5f9; }
+</style>
+<script>
+(function () {
+  const COLORS = { I: "#059669", II: "#d97706", III: "#475569", IV: "#dc2626" };
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const row = (k, v) => `<div class="bx-row"><span>${esc(k)}</span><span>${esc(v)}</span></div>`;
+  let box = null;
+
+  function build(lines) {
+    lines = lines.map(l => l.replace(/\u200b/g, "").trim()).filter(Boolean);
+    const title = lines[0] || "";
+    let code = "", year = "", quad = "", quadTxt = "", note = "";
+    const pop = [], inc = [], idx = [];
+    let inIdx = false;
+    for (const l of lines.slice(1)) {
+      let m;
+      if ((m = l.match(/^Código CIUO-08:\s*(.+)$/))) { code = m[1]; continue; }
+      if ((m = l.match(/^Año:\s*(.+)$/))) { year = m[1]; continue; }
+      if ((m = l.match(/^Cuadrante\s+(IV|III|II|I)\s*·\s*(.+)$/))) { quad = m[1]; quadTxt = m[2]; continue; }
+      if (/^Índices normalizados/.test(l)) { inIdx = true; continue; }
+      if (/no equivale a informalidad/i.test(l)) { note = l; continue; }
+      if (inIdx && (m = l.match(/^(.+?):\s*([\d.,]+)(?:\s*·\s*eje\s+(\w+))?$/))) {
+        idx.push({ name: m[1], v: parseFloat(m[2].replace(",", ".")), axis: m[3] || "" }); continue;
+      }
+      if ((m = l.match(/^Personas expandidas:\s*(.+?)\s*·\s*observaciones:\s*(.+)$/))) {
+        pop.push(["Personas expandidas", m[1]], ["Observaciones", m[2]]); continue;
+      }
+      if ((m = l.match(/^(.+?):\s*(.+)$/))) {
+        let k = m[1], v = m[2];
+        if (/^Participación/.test(k)) { pop.push([k.replace(" clasificables", ""), v]); continue; }
+        if (/^No cotizantes/.test(k)) { const p = v.match(/^([\d.]+)\s+de\s+([\d.]+)/); v = p ? `${p[1]} de ${p[2]}` : v; }
+        if (/^Uso real de IA/.test(k)) { inc.push([k, v]); continue; }
+        k = k.replace("Ingreso laboral promedio ponderado, solo positivos", "Ingreso laboral promedio")
+             .replace("Personas expandidas con ingreso positivo", "Personas con ingreso > 0")
+             .replace("No cotización pensional", "No cotización pensional");
+        inc.push([k, v]); continue;
+      }
+      inc.push(["", l]);
+    }
+    const c = COLORS[quad] || "#64748b";
+    let h = `<div class="bx-head"><div class="bx-title">${esc(title)}</div>`;
+    h += `<div class="bx-sub">${[code && "CIUO-08 " + code, year].filter(Boolean).map(esc).join(" · ")}</div>`;
+    if (quad) h += `<span class="bx-badge">Cuadrante ${quad} · ${esc(quadTxt)}</span>`;
+    h += `</div>`;
+    if (pop.length) h += `<div class="bx-sec"><h6>Población</h6>${pop.map(r => row(...r)).join("")}</div>`;
+    if (inc.length) h += `<div class="bx-sec"><h6>Ingreso y cotización</h6>${inc.map(r => row(...r)).join("")}</div>`;
+    if (idx.length) {
+      h += `<div class="bx-sec"><h6>Índices · percentil 0–1</h6>` + idx.map(d =>
+        `<div class="bx-bar${d.axis ? " axis" : ""}"><span class="nm">${esc(d.name)}${d.axis ? (d.axis === "vertical" ? " ↑" : " →") : ""}</span>` +
+        `<div class="tr"><div class="fl" style="width:${Math.max(0, Math.min(1, d.v)) * 100}%"></div></div>` +
+        `<span class="v">${d.v.toFixed(2).replace(".", ",")}</span></div>`).join("") + `</div>`;
+    }
+    if (note) h += `<div class="bx-note">${esc(note)}</div>`;
+    return { html: h, color: c };
+  }
+
+  function update() {
+    const tip = document.querySelector('#ia-impacto .exposure-chart g[aria-label="tip"]');
+    const tg = tip && tip.querySelector("g[transform]");
+    if (!tg) { if (box) box.style.display = "none"; return; }
+    const lines = [...tip.querySelectorAll("tspan")].map(t => t.textContent);
+    if (!lines.length) { if (box) box.style.display = "none"; return; }
+    if (!box) { box = document.createElement("div"); box.className = "bx-tip"; document.body.appendChild(box); }
+    const key = lines.join("|");
+    if (box.dataset.key !== key) {
+      const b = build(lines);
+      box.innerHTML = b.html; box.style.setProperty("--bx-c", b.color); box.dataset.key = key;
+    }
+    box.style.display = "block";
+    place();
+  }
+
+  // La tarjeta sigue al cursor y se pone al lado contrario si no cabe, para no tapar la burbuja.
+  let mx = 0, my = 0;
+  function place() {
+    if (!box || box.style.display !== "block") return;
+    const w = box.offsetWidth, hgt = box.offsetHeight, pad = 12, off = 32;
+    const rightSpace = innerWidth - mx, leftSpace = mx;
+    let left = (rightSpace >= w + off + pad || rightSpace >= leftSpace) ? mx + off : mx - w - off;
+    let top = my - hgt / 2;
+    left = Math.max(pad, Math.min(innerWidth - w - pad, left));
+    const nav = document.querySelector(".navbar, header");
+    const minTop = Math.max(pad, (nav ? nav.getBoundingClientRect().bottom : 0) + 8);
+    top = Math.max(minTop, Math.min(innerHeight - hgt - pad, top));
+    box.style.left = left + "px"; box.style.top = top + "px";
+  }
+  addEventListener("pointermove", e => { mx = e.clientX; my = e.clientY; place(); }, true);
+
+  let raf = 0;
+  new MutationObserver(() => { cancelAnimationFrame(raf); raf = requestAnimationFrame(update); })
+    .observe(document.body, { subtree: true, childList: true, attributes: true, attributeFilter: ["transform"] });
+  addEventListener("scroll", () => box && (box.style.display = "none"), true);
+})();
+</script>
+
+```{ojs}
+//| output: false
+datosCuadrantesAnexo = FileAttachment("../data/datos/publicacion/dashboard/cuadrantes_anexo.json").json()
+anioDatosAnexo = datosCuadrantesAnexo.anios[String(anioAnexo)]
+formatoAnexo = x => Number(x).toLocaleString("es-CO", {minimumFractionDigits: 2, maximumFractionDigits: 2})
+coloresExposicion = Object.fromEntries([["I","#059669"],["II","#d97706"],["III","#475569"],["IV","#dc2626"]])
+redondeoAnexo = function(key) {
+  const rows = anioDatosAnexo.cuadrantes;
+  const raw = rows.map(r => r[key] * 100);
+  const units = raw.map(Math.floor);
+  const order = raw.map((x,i) => i).sort((i,j) => (raw[j]-units[j])-(raw[i]-units[i]));
+  const remaining = 10000-units.reduce((a,b)=>a+b,0);
+  for(let k=0; k<remaining; k++) units[order[k]]++;
+  return Object.fromEntries(rows.map((r,i)=>[r.cuadrante,units[i]/100]));
+}
+```
+
+
+Elija un indicador para cada eje del catálogo fijo. La combinación conserva únicamente personas con ambas puntuaciones observadas. Cambiar los ejes puede cambiar la cobertura, pero nunca recalcula los percentiles. Alto significa una puntuación igual o superior a 0,50, no una probabilidad ni un efecto laboral.
+
+```{ojs}
+//| output: false
+indicesExplorador = {
+  const base = [
+    ["AIOE", "aioe_pct"],
+    ["IA de Webb", "webb_ia_pct"],
+    ["LLM", "llm_pct"],
+    ["Software de Webb", "software_pct"],
+    ["Robots de Webb", "robots_pct"]
+  ];
+  if (Number(anioAnexo) === 2025) {
+    base.push(["Uso reportado de IA · posición ocupacional", "uso_ia_pct"]);
+  }
+  return new Map(base);
+}
+nombreExplorador = key => {
+  if (key === "uso_ia_pct") return "Uso reportado de IA · posición ocupacional";
+  return [...indicesExplorador].find(([n,k])=>k===key)?.[0] ?? key;
+}
+```
+
+```{ojs}
+viewof ejeXExplorador = {
+ const defVal = [...indicesExplorador.values()].includes("robots_pct") ? "robots_pct" : [...indicesExplorador.values()][0];
+ const input=Inputs.select(indicesExplorador,{label:"Eje horizontal",value:defVal});
+ input.classList.add("exposure-presets");input.setAttribute("data-testid","exposure-presets-x");
+ return input;
+}
+viewof ejeYExplorador = {
+ const defVal = [...indicesExplorador.values()].includes("aioe_pct") ? "aioe_pct" : [...indicesExplorador.values()][0];
+ const input=Inputs.select(indicesExplorador,{label:"Eje vertical",value:defVal});
+ input.classList.add("exposure-presets");input.setAttribute("data-testid","exposure-presets-y");
+ return input;
+}
+viewof universoExplorador = Inputs.select(new Map([["Ocupados","Ocupados"],["Desempleados","Desocupados"],["Total","Total"]]),{label:"Población",value:"Ocupados"})
+// "Total" es un valor propio (no viene de los datos): combina Ocupados y
+// Desocupados en el cálculo de abajo. El valor interno sigue siendo
+// "Desocupados" para la opción "Desempleados" (así coincide con el campo
+// `universo` real de los datos); esta función solo traduce para mostrar.
+etiquetaUniverso = v => v==="Desocupados" ? "Desempleados" : v
+```
+
+```{ojs}
+//| output: false
+// Departamento/sexo son dimensiones adicionales en *_detalle (ver
+// generar_cuadrantes_anexo.py); se colapsan de vuelta a nivel ocupación
+// cuando el filtro correspondiente está en "Todos", reproduciendo
+// exactamente ocupaciones_indices/denominadores_universo originales.
+fuenteExplorador = {
+  const dptoCod=dptoExplorador&&dptoExplorador.cod!==null?parseInt(dptoExplorador.cod,10):null;
+  if(dptoCod===null&&sexoExplorador==="Todos") return anioDatosAnexo.ocupaciones_indices??[];
+  const base=anioDatosAnexo.ocupaciones_indices_detalle??[];
+  const filtrado=base.filter(d=>(dptoCod===null||d.departamento===dptoCod)&&(sexoExplorador==="Todos"||d.sexo===sexoExplorador));
+  const porOcupacion=new Map();
+  for(const d of filtrado){
+    const key=d.universo+"|"+d.ciuo08;
+    const acc=porOcupacion.get(key)??{universo:d.universo,ciuo08:d.ciuo08,ciuo08_desc:d.ciuo08_desc,
+      aioe_pct:d.aioe_pct,webb_ia_pct:d.webb_ia_pct,llm_pct:d.llm_pct,software_pct:d.software_pct,robots_pct:d.robots_pct,
+      poblacion:0,n:0,pension_valida:0,no_cotiza:0,masa_ingreso:0,suma_ingreso:0};
+    acc.poblacion+=d.poblacion||0;acc.n+=d.n||0;acc.pension_valida+=d.pension_valida||0;
+    acc.no_cotiza+=d.no_cotiza||0;acc.masa_ingreso+=d.masa_ingreso||0;acc.suma_ingreso+=d.suma_ingreso||0;
+    porOcupacion.set(key,acc);
+  }
+  return [...porOcupacion.values()];
+}
+denominadoresExplorador = {
+  const dptoCod=dptoExplorador&&dptoExplorador.cod!==null?parseInt(dptoExplorador.cod,10):null;
+  if(dptoCod===null&&sexoExplorador==="Todos") return anioDatosAnexo.denominadores_universo??[];
+  const base=anioDatosAnexo.denominadores_universo_detalle??[];
+  const filtrado=base.filter(d=>(dptoCod===null||d.departamento===dptoCod)&&(sexoExplorador==="Todos"||d.sexo===sexoExplorador));
+  const porUniverso=new Map();
+  for(const d of filtrado){
+    const acc=porUniverso.get(d.universo)??{universo:d.universo,n:0,poblacion:0};
+    acc.n+=d.n||0;acc.poblacion+=d.poblacion||0;
+    porUniverso.set(d.universo,acc);
+  }
+  return [...porUniverso.values()];
+}
+datosExplorador = {
+  const fuente=fuenteExplorador;
+  const validos=fuente.filter(d=>Number.isFinite(d[ejeXExplorador])&&Number.isFinite(d[ejeYExplorador]));
+  const quadrant=d=>d[ejeYExplorador]>=.5?(d[ejeXExplorador]>=.5?"II":"I"):(d[ejeXExplorador]>=.5?"IV":"III");
+  const rows=validos.map(d=>({...d,cuadrante:quadrant(d)}));
+  const sum=(r,k)=>r.reduce((s,d)=>s+(Number(d[k])||0),0);
+  const selected=universoExplorador==="Total"?rows:rows.filter(d=>d.universo===universoExplorador);
+  const population=sum(selected,"poblacion");
+  const employed=rows.filter(d=>d.universo==="Ocupados");
+  const nonContributors=sum(employed,"no_cotiza");
+  const total=universoExplorador==="Total"
+    ?sum(denominadoresExplorador,"poblacion")
+    :denominadoresExplorador.find(d=>d.universo===universoExplorador)?.poblacion;
+  const cards=["I","II","III","IV"].map(q=>{
+    const all=rows.filter(d=>d.cuadrante===q),o=all.filter(d=>d.universo==="Ocupados"),u=all.filter(d=>d.universo==="Desocupados"),s=selected.filter(d=>d.cuadrante===q);
+    const op=sum(o,"poblacion"),up=sum(u,"poblacion"),p=sum(s,"poblacion"),nc=sum(o,"no_cotiza"),pv=sum(o,"pension_valida");
+    return {q,p,share:population?100*p/population:null,n:sum(s,"n"),occupations:s.length,top:[...s].sort((a,b)=>b.poblacion-a.poblacion).slice(0,4),nonShare:nonContributors?100*nc/nonContributors:null,nonRate:pv?100*nc/pv:null,unemployment:op+up?100*up/(op+up):null};
+  });
+  return {selected:selected.map(d=>({...d,participacion:population?100*d.poblacion/population:0})),cards,population,total,coverage:total?100*population/total:null};
+}
+valorExplorador = x => Number.isFinite(x)?formatoAnexo(x)+" %":"Sin dato"
+```
+
+```{ojs}
+html`<div class="exposure-note"><strong>${nombreExplorador(ejeYExplorador)} × ${nombreExplorador(ejeXExplorador)} · ${anioAnexo}</strong><br>${etiquetaUniverso(universoExplorador)} con ambos índices · ${Math.round(datosExplorador.population).toLocaleString("es-CO")} personas expandidas · cobertura ponderada ${valorExplorador(datosExplorador.coverage)}. </div><div class="exposure-grid">${datosExplorador.cards.map(d=>html`<details open class="exposure-card" style=${"--tone:"+coloresExposicion[d.q]} title=${d.top.map(o=>o.ciuo08_desc+" · "+formatoAnexo(100*o.poblacion/d.p)+" % del cuadrante").join("\n")}><summary class="exposure-card-heading" title="Haz clic para desplegar o contraer"><h5>${d.q} · ${nombreExplorador(ejeYExplorador)} ${["I","II"].includes(d.q)?"alto":"bajo"} · ${nombreExplorador(ejeXExplorador)} ${["II","IV"].includes(d.q)?"alto":"bajo"}</h5></summary><div class="exposure-kpis"><div><small>${etiquetaUniverso(universoExplorador)}</small><strong>${valorExplorador(d.share)}</strong></div><div><small>No cotización</small><strong style="color:#dc2626">${valorExplorador(d.nonRate)}</strong></div><div><small>Desempleo</small><strong>${valorExplorador(d.unemployment)}</strong></div></div><div class="exposure-counts"><small class="exposure-population"><span>Personas expandidas</span><b>${Math.round(d.p).toLocaleString("es-CO")}</b></small><div class="exposure-count-pair"><small>${d.n.toLocaleString("es-CO")} observaciones</small><small>${d.occupations} ocupaciones</small></div></div>${(universoExplorador==="Ocupados"||universoExplorador==="Total")?html`<small class="exposure-distribution" style="color:#a12732"><span>Participación entre no cotizantes</span><b>${valorExplorador(d.nonShare)}</b></small>`:""}<details><summary>Cuatro ocupaciones principales</summary>${d.top.map(o=>html`<div>${o.ciuo08_desc} · ${formatoAnexo(100*o.poblacion/d.p)} % del cuadrante</div>`)}</details></details>`)}</div>`
+```
+
+
+```{ojs}
+{
+ const points=datosExplorador.selected;
+ // Diagnóstico: si en algún momento el explorador queda sin puntos, esto deja
+ // rastro en pantalla (no solo en consola, para no depender de que alguien
+ // abra DevTools) con el estado exacto de los filtros, para poder reproducir
+ // el caso si vuelve a pasar. No debería ocurrir nunca con los filtros
+ // normales, ya verificado exhaustivamente contra los datos reales.
+ const diagnostico={
+   anio:anioAnexo,departamentoCod:dptoExplorador?.cod??null,departamentoNombre:dptoExplorador?.nombre??null,
+   sexo:sexoExplorador,universo:universoExplorador,ejeX:ejeXExplorador,ejeY:ejeYExplorador,
+   fuenteLength:fuenteExplorador.length,poblacion:datosExplorador.population,
+   total:datosExplorador.total,cobertura:datosExplorador.coverage,
+   navegador:navigator.userAgent,ventana:window.innerWidth+"x"+window.innerHeight,
+   timestamp:new Date().toISOString()
+ };
+ if(points.length===0) console.warn("[explorador-cuadrantes] 0 puntos.",diagnostico);
+ const query=normalizarTexto(buscarAnexo.trim());
+ const matches=query?points.filter(d=>normalizarTexto(d.ciuo08+" "+d.ciuo08_desc).includes(query)):[];
+ const tieneUsoReal = ejeXExplorador === "uso_ia_pct" || ejeYExplorador === "uso_ia_pct";
+ const marks = [
+   Plot.ruleX([.5],{stroke:"#64748b",strokeDasharray:"5,4"}),
+   Plot.ruleY([.5],{stroke:"#64748b",strokeDasharray:"5,4"})
+ ];
+
+ if (tieneUsoReal) {
+   marks.push(
+     Plot.line([[0,0], [1,1]], {x: d=>d[0], y: d=>d[1], stroke: "#2563eb", strokeWidth: 2, strokeDasharray: "6,4"}),
+     Plot.text([{x: 0.82, y: 0.85, t: "Referencia 1:1"}], {x: "x", y: "y", text: "t", fill: "#1d4ed8", fontSize: 11, fontWeight: "700", stroke: "#ffffff", strokeWidth: 3})
+   );
+   if (ejeXExplorador === "uso_ia_pct") {
+     marks.push(
+       Plot.text([{x: 0.22, y: 0.84, t: "▲ Subadopción (potencial no aprovechado)"}], {x: "x", y: "y", text: "t", fill: "#b91c1c", fontSize: 11, fontWeight: "700", stroke: "#ffffff", strokeWidth: 3}),
+       Plot.text([{x: 0.78, y: 0.16, t: "▼ Apropiación espontánea (uso > teoría)"}], {x: "x", y: "y", text: "t", fill: "#047857", fontSize: 11, fontWeight: "700", stroke: "#ffffff", strokeWidth: 3})
+     );
+   } else {
+     marks.push(
+       Plot.text([{x: 0.22, y: 0.84, t: "▲ Apropiación espontánea (uso > teoría)"}], {x: "x", y: "y", text: "t", fill: "#047857", fontSize: 11, fontWeight: "700", stroke: "#ffffff", strokeWidth: 3}),
+       Plot.text([{x: 0.78, y: 0.16, t: "▼ Subadopción (potencial no aprovechado)"}], {x: "x", y: "y", text: "t", fill: "#b91c1c", fontSize: 11, fontWeight: "700", stroke: "#ffffff", strokeWidth: 3})
+     );
+   }
+ }
+
+ marks.push(
+   Plot.dot(points,{x:ejeXExplorador,y:ejeYExplorador,r:"participacion",fill:"cuadrante",fillOpacity:d=>!query||matches.includes(d)?.6:.1,stroke:d=>query&&matches.includes(d)?"#111827":"none",strokeWidth:2.5,tip:{fontSize:12,lineWidth:60},title:d=>{
+     const count=x=>Math.round(x).toLocaleString("es-CO");
+     const lines=[d.ciuo08_desc,"Código CIUO-08: "+d.ciuo08,"Año: "+anioAnexo+" · "+etiquetaUniverso(universoExplorador),
+       "Cuadrante "+d.cuadrante+" · "+nombreExplorador(ejeYExplorador)+" "+(d[ejeYExplorador]>=.5?"alto":"bajo")+" / "+nombreExplorador(ejeXExplorador)+" "+(d[ejeXExplorador]>=.5?"alto":"bajo"),
+       "Personas expandidas: "+count(d.poblacion)+" · observaciones: "+count(d.n),
+       "Participación en "+etiquetaUniverso(universoExplorador).toLowerCase()+" clasificables: "+valorExplorador(d.participacion),
+       "Participación dentro del cuadrante: "+valorExplorador(100*d.poblacion/datosExplorador.cards.find(q=>q.q===d.cuadrante).p)];
+     if(d.universo==="Ocupados"){
+       lines.push("Ingreso laboral promedio ponderado, solo positivos: "+(d.masa_ingreso>0?new Intl.NumberFormat("es-CO",{style:"currency",currency:"COP",maximumFractionDigits:0}).format(d.suma_ingreso/d.masa_ingreso):"Sin dato"),
+         "Personas expandidas con ingreso positivo: "+count(d.masa_ingreso||0),
+         "No cotización pensional: "+(d.pension_valida>0?valorExplorador(100*d.no_cotiza/d.pension_valida):"Sin dato"),
+         "No cotizantes: "+count(d.no_cotiza)+" de "+count(d.pension_valida)+" con respuesta válida",
+         "No cotización no equivale a informalidad oficial.");
+     }else lines.push("Clasificación por ocupación anterior.", "Ingreso actual y cotización del desocupado: no aplican.");
+     if(Number(anioAnexo)===2025&&Number.isFinite(d.uso_ia_prop)){
+       lines.push("Uso reportado de IA entre ocupados del oficio: "+(100*d.uso_ia_prop).toFixed(1).replace(".",",")+" %");
+     }
+     lines.push("Índices normalizados por percentiles, escala 0 a 1");
+     for(const [name,key] of indicesExplorador) lines.push(name+": "+(Number.isFinite(d[key])?formatoAnexo(d[key]):"Sin dato")+(key===ejeXExplorador?" · eje horizontal":key===ejeYExplorador?" · eje vertical":""));
+     return lines.join("\n");
+   }}),
+   Plot.text([{x:.05,y:.95,t:"I"},{x:.95,y:.95,t:"II"},{x:.05,y:.05,t:"III"},{x:.95,y:.05,t:"IV"}],{x:"x",y:"y",text:"t",fill:"#111111",fontSize:18,fontWeight:"bold",stroke:"white",strokeWidth:4,paintOrder:"stroke"})
+ );
+
+ const graph=Plot.plot({width:Math.max(280,Math.min(1280,width-310)),height:440,marginLeft:64,marginBottom:52,style:{fontSize:"14px"},
+   x:{domain:[0,1],label:nombreExplorador(ejeXExplorador)+" · percentil",labelAnchor:"center",labelArrow:false,ticks:[0,.25,.5,.75,1],tickFormat:d=>Math.round(d*100)+"%",grid:true},
+   y:{domain:[0,1],label:nombreExplorador(ejeYExplorador)+" · percentil",labelAnchor:"center",labelArrow:false,ticks:[0,.25,.5,.75,1],tickFormat:d=>Math.round(d*100)+"%",grid:true},
+   r:{domain:[0,10],range:[0,26]},color:{domain:["I","II","III","IV"],range:Object.values(coloresExposicion)},
+   marks:marks
+ });
+
+ const popoverContenido = () => html`
+   <div class="globo-ideal-popover">
+     <div class="globo-ideal-header">
+       <span>Interpretación de la referencia 1:1</span>
+     </div>
+     <div class="globo-ideal-body">
+       <div class="globo-linea-item">
+         <span class="globo-tag tag-blue">Sobre la diagonal (1:1)</span>
+         <p><strong>Igual posición relativa:</strong> La ocupación ocupa un percentil similar en exposición técnica y en prevalencia de uso reportado de IA. No implica igualdad de niveles ni adopción óptima.</p>
+       </div>
+       <div class="globo-linea-item">
+         <span class="globo-tag tag-red">▲ Por arriba de la diagonal</span>
+         <p><strong>Mayor posición en el eje vertical:</strong> El percentil del indicador vertical supera al horizontal. La diferencia compara ordenamientos y no identifica barreras de adopción ni un efecto causal.</p>
+       </div>
+       <div class="globo-linea-item">
+         <span class="globo-tag tag-green">▼ Por debajo de la diagonal</span>
+         <p><strong>Mayor posición en el eje horizontal:</strong> El percentil del indicador horizontal supera al vertical. El uso de IA proviene del autorreporte por internet y no permite establecer si ocurrió en el trabajo.</p>
+       </div>
+     </div>
+   </div>
+ `;
+
+ return html`<div>
+   ${query?html`<p role="status">${matches.length} ocupaciones encontradas en ${etiquetaUniverso(universoExplorador).toLowerCase()}. La búsqueda resalta coincidencias sin modificar los porcentajes.</p>`:""}
+   
+   ${tieneUsoReal ? html`
+     <div class="globo-ideal-container">
+       <div class="globo-ideal-trigger" tabindex="0">
+         <span class="globo-ideal-pill">
+           <span class="pulse-dot"></span>
+           <span>Referencia 1:1 activa</span>
+           <span class="globo-hint-text">ℹ️ Pasa el cursor aquí para ver la interpretación</span>
+         </span>
+         ${popoverContenido()}
+       </div>
+     </div>
+   ` : ""}
+
+   <h5 class="exposure-chart-title">
+     ${ejeYExplorador === "uso_ia_pct" ? html`<span class="globo-ideal-trigger" style="text-decoration: underline dashed #2563eb; cursor: pointer;">${nombreExplorador(ejeYExplorador)} <span style="font-size:12px">ℹ️</span>${popoverContenido()}</span>` : nombreExplorador(ejeYExplorador)}
+     ×
+     ${ejeXExplorador === "uso_ia_pct" ? html`<span class="globo-ideal-trigger" style="text-decoration: underline dashed #2563eb; cursor: pointer;">${nombreExplorador(ejeXExplorador)} <span style="font-size:12px">ℹ️</span>${popoverContenido()}</span>` : nombreExplorador(ejeXExplorador)}
+     · ${etiquetaUniverso(universoExplorador)} · ${anioAnexo}
+   </h5>
+   ${points.length===0?html`<div role="status" style="padding:10px 14px;background:#fef3c7;border-left:3px solid #d97706;border-radius:6px;color:#78350f;margin:8px 0"><p style="margin:0 0 6px">No hay ocupaciones con datos para esta combinación de filtros. Si acabas de cambiar un filtro y ya esperaste unos segundos, por favor repórtalo con una captura de esta pantalla (el recuadro de abajo ya trae el diagnóstico).</p><pre style="white-space:pre-wrap;word-break:break-word;font-size:11px;background:#fffbeb;border:1px solid #fde68a;border-radius:4px;padding:6px 8px;margin:0">${JSON.stringify(diagnostico,null,1)}</pre></div>`:""}
+   <div class="exposure-chart">${graph}</div>
+ </div>`;
+}
+```
+
+
+```{=html}
+<style>
+  .idx-defs { font-size: .86rem; line-height: 1.45; color: #334155; }
+  .idx-defs .idx-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: .6rem; }
+  .idx-defs .idx-head h4 { margin: 0; font-size: .95rem; font-weight: 700; color: #0f172a; }
+  .idx-defs .idx-head span { font-size: .78rem; color: #64748b; }
+  .idx-defs .idx-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: .7rem; }
+  .idx-defs .idx-card { border: 1px solid #e2e8f0; border-top: 3px solid var(--c); border-radius: 8px; padding: .65rem .8rem; background: #fff; }
+  .idx-defs .idx-name { font-weight: 700; color: #0f172a; font-size: .92rem; }
+  .idx-defs .idx-src { font-size: .76rem; color: #64748b; margin: 1px 0 .45rem; }
+  .idx-defs .idx-src a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+  .idx-defs .idx-card p { margin: 0 0 .4rem; }
+  .idx-defs .idx-read { font-size: .8rem; color: #475569; background: #f8fafc; border-radius: 6px; padding: .35rem .5rem; margin: 0; }
+  .idx-defs .idx-read b { color: #0f172a; }
+  .idx-defs .idx-foot { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: .7rem; margin-top: .7rem; }
+  .idx-defs .idx-note { border-radius: 8px; padding: .5rem .75rem; font-size: .8rem; }
+  .idx-defs .idx-note.ok { background: #f1f5f9; }
+  .idx-defs .idx-note.warn { background: #fef2f2; color: #7f1d1d; }
+  .idx-defs .idx-note b { display: block; font-size: .72rem; letter-spacing: .04em; text-transform: uppercase; margin-bottom: 2px; }
+  .idx-defs .idx-card p, .idx-defs .idx-note { text-align: justify; hyphens: auto; -webkit-hyphens: auto; }
+  .idx-defs .idx-more { margin-top: .55rem; font-size: .78rem; color: #64748b; }
+</style>
+<div class="idx-defs" lang="es">
+  <div class="idx-head">
+    <h4>¿Qué mide cada índice?</h4>
+    <span>Cinco indicadores · escala de percentiles 0–1</span>
+  </div>
+  <div class="idx-grid">
+    <div class="idx-card" style="--c:#2563eb">
+      <div class="idx-name">AIOE</div>
+      <div class="idx-src">Felten, Raj y Seamans (<a href="https://github.com/AIOE-Data/AIOE/blob/main/AIOE_DataAppendix.xlsx" target="_blank" rel="noopener">2021</a>)</div>
+      <p>Relaciona las habilidades que exige cada ocupación con las capacidades tecnológicas de la inteligencia artificial.</p>
+      <p class="idx-read"><b>Más alto</b> = mayor exposición potencial, que puede traducirse en sustitución o en complementación del trabajo.</p>
+    </div>
+    <div class="idx-card" style="--c:#7c3aed">
+      <div class="idx-name">IA, software y robots de Webb</div>
+      <div class="idx-src">Webb (<a href="https://www.michaelwebb.co/" target="_blank" rel="noopener">2020</a>) · tres índices</div>
+      <p>Compara la descripción de las tareas de cada ocupación con el lenguaje de las patentes de inteligencia artificial, de software y de robótica.</p>
+      <p class="idx-read"><b>Más alto</b> = mayor coincidencia, es decir, mayor exposición a esa tecnología concreta.</p>
+    </div>
+    <div class="idx-card" style="--c:#0d9488">
+      <div class="idx-name">LLM</div>
+      <div class="idx-src">Eloundou, Manning, Mishkin y Rock (<a href="https://github.com/openai/GPTs-are-GPTs/blob/main/data/occ_level.csv" target="_blank" rel="noopener">2024</a>)</div>
+      <p>Estima qué proporción de las tareas podría hacerse en menos tiempo con modelos de lenguaje sin perder calidad. Suma el uso directo del modelo y, ponderadas a la mitad, las tareas que requieren software adicional.</p>
+      <p class="idx-read"><b>Más alto</b> = mayor proporción de tareas aceleradas por modelos de lenguaje.</p>
+    </div>
+    <div class="idx-card" style="--c:#e11d48">
+      <div class="idx-name">Uso real de IA (ECV 2025)</div>
+      <div class="idx-src">DANE · Encuesta de Calidad de Vida 2025</div>
+      <p>Mide el uso individual reportado de herramientas de IA, como chatbots y aplicaciones de diseño, escritura o video, entre personas vinculadas al mercado laboral colombiano.</p>
+      <p class="idx-read"><b>Más alto</b> = mayor porcentaje que reporta usar estas herramientas. La ECV no identifica si el uso ocurrió en el trabajo, el hogar u otro lugar.</p>
+    </div>
+  </div>
+  <div class="idx-foot">
+    <div class="idx-note ok"><b>Normalización</b>Los indicadores se expresan en percentiles entre 0 y 1 sobre el catálogo ocupacional CIUO-08.</div>
+    <div class="idx-note warn"><b>Interpretación</b>Los índices internacionales miden exposición técnica potencial; el indicador de 2025 mide uso individual reportado.</div>
+  </div>
+  <div class="idx-more">Definición completa, fuentes de datos y correspondencias ocupacionales: Anexo A, sección de índices de exposición a la inteligencia artificial.</div>
+</div>
+```
+
+```{=html}
+<style>
+  .ia-profile-wrap{margin-top:.8rem;border:1px solid #dbe4ee;border-radius:10px;background:#fff;padding:.8rem .9rem;box-shadow:0 2px 8px rgba(15,23,42,.05)}
+  .ia-profile-head{display:flex;justify-content:space-between;gap:1rem;align-items:flex-start;flex-wrap:wrap;margin-bottom:.55rem}
+  .ia-profile-head h4{font-size:1rem;margin:0;color:#0f172a}.ia-profile-head p{font-size:.78rem;color:#64748b;margin:.18rem 0 0;max-width:760px}
+  .ia-profile-controls{display:grid;grid-template-columns:minmax(170px,.38fr) minmax(420px,1.62fr);gap:.7rem;align-items:start;margin:.55rem 0 .35rem}
+  .ia-profile-groups{margin:.25rem 0 .65rem}.ia-profile-controls form,.ia-profile-groups form{margin:0}.ia-profile-chart{width:100%;overflow-x:auto}
+  .ia-profile-summary{font-size:.8rem;color:#475569;background:#f8fafc;border-left:3px solid #2563eb;border-radius:5px;padding:.45rem .65rem;margin:.3rem 0 .6rem}
+  .ia-drag-builder{border:1px solid #dbe4ee;border-radius:8px;background:#f8fafc;padding:.55rem}.ia-drag-title{font-size:.75rem;font-weight:700;color:#334155;margin:0 0 .35rem}
+  .ia-drag-layout{display:grid;grid-template-columns:1.35fr .65fr;gap:.55rem}.ia-field-bank,.ia-shelves{display:flex;flex-direction:column;gap:.35rem}
+  .ia-field-section{font-size:.68rem;text-transform:uppercase;letter-spacing:.04em;color:#64748b;font-weight:700;margin-top:.1rem}.ia-field-list{display:flex;flex-wrap:wrap;gap:.3rem}
+  .ia-field-pill{border:1px solid #bfdbfe;background:#eff6ff;color:#1e3a8a;border-radius:5px;padding:.27rem .42rem;font-size:.72rem;cursor:grab;line-height:1.15}.ia-field-pill.index{border-color:#bbf7d0;background:#f0fdf4;color:#166534}.ia-field-pill:active{cursor:grabbing}
+  .ia-shelf{min-height:45px;border:1px dashed #94a3b8;border-radius:6px;background:#fff;padding:.32rem .45rem}.ia-shelf.dragover{border-color:#2563eb;background:#eff6ff}.ia-shelf-label{display:block;font-size:.66rem;color:#64748b;margin-bottom:.2rem}.ia-shelf-value{font-size:.78rem;font-weight:700;color:#0f172a}
+  .ia-drag-help{font-size:.68rem;color:#64748b;margin:.35rem 0 0}
+  @media(max-width:760px){.ia-profile-controls{grid-template-columns:1fr}.ia-profile-wrap{padding:.65rem}.ia-profile-chart svg{min-width:620px}}
+</style>
+```
+
+```{ojs}
+//| output: false
+perfilesUsoIA2025 = FileAttachment("../data/datos/publicacion/dashboard/perfiles_uso_ia_2025.json").json()
+controlUniversoPerfilIA = Inputs.select(["Población de 5 años o más","Ocupados","Desempleados","Fuerza laboral"], {label:"Población", value:"Población de 5 años o más"})
+universoPerfilIA = Generators.input(controlUniversoPerfilIA)
+camposCategoriaPerfilIA = ["Sexo","Rango de edad","Educación","Zona","Uso de computador y acceso a internet","Ocupación"]
+configuradorPerfilIA = {
+  const root=document.createElement("div"); root.className="ia-drag-builder";
+  const state={dimension:"Zona",subdimension:"Sexo"}; root.value={...state};
+  root.innerHTML=`<p class="ia-drag-title">Construya la vista arrastrando variables</p><div class="ia-drag-layout"><div class="ia-field-bank"><span class="ia-field-section">Variables disponibles</span><div class="ia-field-list cats"></div></div><div class="ia-shelves"><div class="ia-shelf" data-slot="dimension"><span class="ia-shelf-label">Categoría principal</span><span class="ia-shelf-value dimension"></span></div><div class="ia-shelf" data-slot="subdimension"><span class="ia-shelf-label">Subdividir cada categoría por</span><span class="ia-shelf-value subdimension"></span></div><button type="button" class="ia-field-pill clear-sub">Quitar subdivisión</button></div></div><p class="ia-drag-help">Arrastre una variable a cada bandeja. La segunda crea barras anidadas dentro de la primera.</p>`;
+  const render=()=>{root.querySelector(".ia-shelf-value.dimension").textContent=state.dimension;root.querySelector(".ia-shelf-value.subdimension").textContent=state.subdimension??"Sin subdivisión";root.value={...state};};
+  const emit=()=>{render();root.dispatchEvent(new Event("input",{bubbles:true}));};
+  const pill=(label,value)=>{const b=document.createElement("button");b.type="button";b.className="ia-field-pill";b.textContent=label;b.draggable=true;b.addEventListener("dragstart",e=>e.dataTransfer.setData("text/plain",value));b.addEventListener("click",()=>{state.dimension=value;if(state.subdimension===value)state.subdimension=null;emit();});return b;};
+  camposCategoriaPerfilIA.forEach(v=>root.querySelector(".cats").append(pill(v,v)));
+  root.querySelectorAll(".ia-shelf").forEach(z=>{z.addEventListener("dragover",e=>{e.preventDefault();z.classList.add("dragover")});z.addEventListener("dragleave",()=>z.classList.remove("dragover"));z.addEventListener("drop",e=>{e.preventDefault();z.classList.remove("dragover");const value=e.dataTransfer.getData("text/plain");const slot=z.dataset.slot;if(camposCategoriaPerfilIA.includes(value)){state[slot]=value;if(state.dimension===state.subdimension){if(slot==="dimension")state.subdimension=null;else state.dimension=camposCategoriaPerfilIA.find(v=>v!==value);}emit();}});});
+  root.querySelector(".clear-sub").addEventListener("click",()=>{state.subdimension=null;emit();});
+  render(); return root;
+}
+configuracionPerfilIA = Generators.input(configuradorPerfilIA)
+dimensionPerfilIA = configuracionPerfilIA.dimension
+subdimensionPerfilIA = configuracionPerfilIA.subdimension
+```
+
+```{ojs}
+//| output: false
+baseDimensionPerfilIA = subdimensionPerfilIA
+  ? perfilesUsoIA2025.cruces.filter(d=>d.universo===universoPerfilIA && d.dimension1===dimensionPerfilIA && d.dimension2===subdimensionPerfilIA && Number.isFinite(d.uso_ia)).map(d=>({...d,categoria:d.categoria1,subcategoria:d.categoria2}))
+  : perfilesUsoIA2025.filas.filter(d=>d.universo===universoPerfilIA && d.dimension===dimensionPerfilIA && Number.isFinite(d.uso_ia)).map(d=>({...d,subcategoria:null}))
+opcionesPerfilIA = [...new Set(baseDimensionPerfilIA.map(d=>d.categoria))]
+seleccionInicialPerfilIA = dimensionPerfilIA==="Ocupación" ? opcionesPerfilIA.slice(0,10) : opcionesPerfilIA
+controlCategoriasPerfilIA = Inputs.select(opcionesPerfilIA, {label:dimensionPerfilIA==="Ocupación"?"Ocupaciones visibles · selección múltiple":"Grupos visibles · selección múltiple", multiple:true, value:seleccionInicialPerfilIA, size:Math.min(7,Math.max(2,opcionesPerfilIA.length))})
+categoriasPerfilIA = Generators.input(controlCategoriasPerfilIA)
+datosPerfilIA = {
+  const elegidas = Array.isArray(categoriasPerfilIA) ? categoriasPerfilIA : [categoriasPerfilIA];
+  let rows = dimensionPerfilIA==="Ocupación" ? baseDimensionPerfilIA.filter(d=>elegidas.includes(d.categoria)) : baseDimensionPerfilIA;
+  if(subdimensionPerfilIA==="Ocupación"){
+    const keep=[]; for(const cat of new Set(rows.map(d=>d.categoria))) keep.push(...rows.filter(d=>d.categoria===cat).sort((a,b)=>b.poblacion-a.poblacion).slice(0,6)); rows=keep;
+  }
+  const total = rows.reduce((s,d)=>s+d.poblacion,0);
+  return rows.map(d=>({...d,participacion:total?100*d.poblacion/total:0}));
+}
+```
+
+```{ojs}
+html`<div class="ia-profile-wrap">
+  <div class="ia-profile-head"><div><h4>Uso reportado de herramientas de IA por características de la población, 2025</h4><p>La pregunta de la ECV incluye chatbots y aplicaciones de diseño, escritura o video. Registra uso individual, pero no permite determinar si ocurrió en el trabajo, el hogar u otro lugar.</p></div></div>
+  <div class="ia-profile-controls">${controlUniversoPerfilIA}${configuradorPerfilIA}</div>
+  <div class="ia-profile-groups">${dimensionPerfilIA==="Ocupación"?controlCategoriasPerfilIA:html`<div class="ia-profile-summary">Se muestran todas las categorías de ${dimensionPerfilIA.toLowerCase()}.</div>`}</div>
+</div>`
+```
+
+```{ojs}
+{
+  const rows=datosPerfilIA;
+  const fmtPct=x=>(100*x).toLocaleString("es-CO",{minimumFractionDigits:1,maximumFractionDigits:1})+" %";
+  const fmtN=x=>Math.round(x).toLocaleString("es-CO");
+  const ordenEdad=["5 a 14 años","15 a 24 años","25 a 34 años","35 a 44 años","45 a 54 años","55 a 64 años","65 a 74 años","75 a 84 años","85 años o más"];
+  const ordenSexo=["Hombres","Mujeres"];
+  const ordenHijos=dimensionPerfilIA==="Rango de edad"
+    ? [...rows].sort((a,b)=>(ordenEdad.indexOf(a.categoria)-ordenEdad.indexOf(b.categoria))||(b.poblacion-a.poblacion))
+    : [...rows].sort((a,b)=>a.categoria.localeCompare(b.categoria,"es")||(b.poblacion-a.poblacion));
+  const plotRows = subdimensionPerfilIA ? (()=>{
+    const padres=perfilesUsoIA2025.filas.filter(d=>d.universo===universoPerfilIA&&d.dimension===dimensionPerfilIA&&Number.isFinite(d.uso_ia));
+    const salida=[];
+    const cats=[...new Set(ordenHijos.map(d=>d.categoria))];
+    if(dimensionPerfilIA==="Rango de edad") cats.sort((a,b)=>ordenEdad.indexOf(a)-ordenEdad.indexOf(b)); else cats.sort((a,b)=>a.localeCompare(b,"es"));
+    for(const cat of cats){
+      const p=padres.find(d=>d.categoria===cat);
+      const hijos=ordenHijos.filter(d=>d.categoria===cat).sort((a,b)=>{
+        if(subdimensionPerfilIA==="Sexo") return ordenSexo.indexOf(a.subcategoria)-ordenSexo.indexOf(b.subcategoria);
+        if(subdimensionPerfilIA==="Rango de edad") return ordenEdad.indexOf(a.subcategoria)-ordenEdad.indexOf(b.subcategoria);
+        return b.poblacion-a.poblacion;
+      });
+      const masaIA=hijos.reduce((s,d)=>s+d.poblacion*d.uso_ia,0);
+      if(p) salida.push({...p,nivel:"principal",subcategoria:null,clave:cat,aporte:null});
+      for(const h of hijos) salida.push({...h,nivel:"subcategoria",clave:cat+"||"+h.subcategoria,aporte:masaIA?100*h.poblacion*h.uso_ia/masaIA:null});
+    }
+    return salida;
+  })() : ordenHijos.map(d=>({...d,nivel:"principal",clave:d.categoria,aporte:null}));
+  const alto=Math.max(dimensionPerfilIA==="Rango de edad"?390:300,Math.min(1250,90+plotRows.length*28));
+  const graph=Plot.plot({
+    width:Math.max(650,Math.min(1180,width-90)),height:alto,marginTop:20,marginLeft:(dimensionPerfilIA==="Ocupación"||subdimensionPerfilIA==="Ocupación")?360:240,marginBottom:52,marginRight:82,
+    style:{fontSize:"13px"},
+    x:{domain:[0,Math.max(.15,Math.min(1,Math.max(...plotRows.map(d=>d.uso_ia)) * 1.18))],label:"Porcentaje que reporta usar herramientas de IA",tickFormat:d=>Math.round(100*d)+"%",grid:true},
+    y:{domain:plotRows.map(d=>d.clave),label:subdimensionPerfilIA?dimensionPerfilIA+" subdividido por "+subdimensionPerfilIA:dimensionPerfilIA,tickSize:0,tickFormat:d=>d.includes("||")?"    ↳ "+d.split("||")[1]:d},
+    color:{legend:false},
+    marks:[
+      Plot.ruleY(plotRows.filter(d=>d.nivel==="principal"),{y:"clave",stroke:"#cbd5e1",strokeOpacity:.65}),
+      Plot.barX(plotRows,{x:"uso_ia",y:"clave",fill:d=>d.nivel==="principal"?"#1e3a8a":"#60a5fa",fillOpacity:d=>d.nivel==="principal"?.95:.72,rx:3,
+        tip:true,title:d=>[d.nivel==="principal"?d.categoria:d.categoria+" › "+d.subcategoria,"Uso reportado de IA: "+fmtPct(d.uso_ia),Number.isFinite(d.aporte)?"Participación entre usuarios de IA de "+d.categoria+": "+d.aporte.toLocaleString("es-CO",{maximumFractionDigits:1})+" %":null,"Personas expandidas: "+fmtN(d.poblacion),"Observaciones: "+fmtN(d.n)].filter(Boolean).join("\n")}),
+      Plot.text(plotRows,{x:"uso_ia",y:"clave",text:d=>fmtPct(d.uso_ia)+(Number.isFinite(d.aporte)?"  · aporta "+d.aporte.toLocaleString("es-CO",{maximumFractionDigits:1})+" %":""),dx:5,textAnchor:"start",fontSize:11,fontWeight:d=>d.nivel==="principal"?800:600,fill:d=>d.nivel==="principal"?"#172554":"#1e40af"}),
+      Plot.ruleX([0],{stroke:"#64748b"})
+    ]
+  });
+  return html`<div class="ia-profile-wrap" style="margin-top:.55rem"><div class="ia-profile-summary">Cada categoría principal se divide automáticamente por todas las categorías disponibles de la segunda variable. La barra azul oscura muestra el total y las barras claras indentadas muestran sus subgrupos. El valor “aporta” indica qué proporción de los usuarios de IA de la categoría principal pertenece a cada subgrupo.${(dimensionPerfilIA==="Ocupación"||subdimensionPerfilIA==="Ocupación")?" Las celdas ocupacionales exigen al menos 30 observaciones; como subdivisión se muestran las seis ocupaciones con mayor población dentro de cada grupo.":""}</div>${rows.length?html`<div class="ia-profile-chart">${graph}</div>`:html`<p>No hay categorías seleccionadas con información suficiente.</p>`}</div>`;
+}
+```
+
+
+# Metodología {#metodologia icon="info-circle"}
+
+Esta edición web utiliza agregados de exposición ocupacional y uso reportado de IA. Las puntuaciones, los universos y los factores de expansión corresponden a los documentados en el [Anexo A](../Anexo_a/anexo_a.html). La no cotización no equivale a la informalidad oficial. El inspector de microdatos y los mapas detallados se conservan en el dashboard local y requieren las bases completas, que no se publican automáticamente.

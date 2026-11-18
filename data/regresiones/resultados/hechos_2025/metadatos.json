@@ -1,0 +1,33 @@
+{
+  "anio": 2025,
+  "indicadores": [
+    "aioe_pct",
+    "robots_pct"
+  ],
+  "normalizacion": "Se leen percentiles existentes sin recalcular rangos",
+  "cortes": {
+    "aioe_pct": 0.5,
+    "robots_pct": 0.5
+  },
+  "regla": "Alto si valor >= mediana no ponderada del catálogo común",
+  "ocupaciones_catalogo_comun": 426,
+  "ponderacion": "FEX_C positivo y finito",
+  "ocupacion": "Actual para ocupados; última para desocupados. Ausentes no se rellenan.",
+  "ingresos": "Mediana ponderada de ingreso laboral positivo, COP de octubre 2025",
+  "porcentajes_rojos": "Distribución entre cuadrantes de ocupados clasificables que no cotizan; denominador total de no cotizantes clasificables",
+  "redondeo_figura": "Restos mayores a dos decimales para que cada distribución visible sume 100,00; CSV conserva precisión completa",
+  "equivalencia_minmax": {
+    "cortes_minmax": {
+      "aioe_mm": 0.5830884768557429,
+      "robots_mm": 0.10380465100311226
+    },
+    "ocupaciones": 426,
+    "discrepancias": 0
+  },
+  "validaciones": "Participaciones suman100, masas concilian, top5+otras suman100, equivalencia de clasificación con medianas minmax",
+  "fuentes": {
+    "datos/imputados/ecv_geih_imputada_2025.parquet": "173849d0f1f5aefcc70cf973cf12e0baf8b92245a46a11a5283b922fe5deebe0",
+    "datos/exposicion_ia/indices_normalizados_referencia.csv": "da127af99c8dd357af95f1b75cbd0967dc3031c8a1e407bb0605419285ddd51e",
+    "datos/exposicion_ia/indices_comunes.py": "b6afb308bd66fd3cbd33dd2fcace66cc4c5803d9da04dad466693fee684c08bb"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "coeficientes_finitos": 982,
+  "indices_separados_y_sensibilidades": 12,
+  "estimaciones_replicadas_stata": 54,
+  "muestras_comunes_por_modelo": true,
+  "departamentos": 33,
+  "cohortes": 330,
+  "max_diferencias_stata": {
+    "error_coef": 2.5368041001172514e-12,
+    "error_se": 8.834863285400731e-09,
+    "error_p": 2.944877430799409e-08,
+    "error_nobs": 0.0,
+    "error_clusters": 0.0
+  }
+}
