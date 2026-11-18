@@ -40,3 +40,14 @@ python3 preparar_web.py --render
 Las bases completas, archivos Stata, Parquet y descargas DANE no se incluyen en Git. Deben colocarse en `data/datos/` siguiendo el registro `data/rutas.py` y los procedimientos de preparación. Los agregados públicos y el catálogo ocupacional seleccionado sí están incluidos. La ausencia de microdatos en Git no implica que hayan sido borrados del equipo.
 
 `verificar` comprueba productos existentes y no vuelve a entrenar todos los modelos. Las hipótesis y límites de interpretación se documentan en el anexo. Preparar el sitio con `preparar_web.py` no lo publica automáticamente.
+
+## Lectura en línea
+
+La publicación web utiliza GitHub Pages y ofrece estos accesos:
+
+- [Inicio](https://donzhumber.github.io/AI/).
+- [Artículo principal](https://donzhumber.github.io/AI/Principal/principal.html).
+- [Anexo metodológico](https://donzhumber.github.io/AI/Anexo_a/anexo_a.html).
+- [Dashboard público](https://donzhumber.github.io/AI/Dashboard/dashboard.html).
+
+El flujo `.github/workflows/pages.yml` publica los HTML compilados y los agregados seleccionados cuando se actualizan en `main`. La preparación del sitio no reestima los modelos ni ejecuta Quarto en GitHub. La compilación de los documentos se realiza con los datos locales antes de subir sus versiones actualizadas. El dashboard en línea corresponde a la edición pública basada en agregados.

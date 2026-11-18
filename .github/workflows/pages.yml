@@ -1,0 +1,53 @@
+name: Publicar documentos y dashboard
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'Principal/**'
+      - 'Anexo_a/**'
+      - 'Dashboard/**'
+      - 'data/preparar_web.py'
+      - 'data/verificar_web.py'
+      - 'data/datos/publicacion/dashboard/**'
+      - '.github/workflows/pages.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - name: Preparar Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      - name: Preparar publicación compilada
+        run: python data/preparar_web.py
+      - name: Verificar páginas, recursos y agregados
+        run: python data/verificar_web.py
+      - name: Configurar GitHub Pages
+        uses: actions/configure-pages@v5
+      - name: Subir sitio preparado
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: data/_site
+      - name: Publicar
+        id: deployment
+        uses: actions/deploy-pages@v4
