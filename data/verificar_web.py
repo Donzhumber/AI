@@ -43,6 +43,8 @@ def main():
     for name in PAGES:
         page = SITE / name
         text = page.read_text(encoding='utf-8')
+        if name != 'index.html':
+            assert 'anotaciones.js' in text or 'Donzhumber.AI.anotaciones.v1' in text, f'Falta el espacio de anotaciones en {name}'
         checked.add(name)
         parser = Resources()
         parser.feed(text)

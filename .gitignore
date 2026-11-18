@@ -70,3 +70,7 @@ node_modules/
 /Dashboard/referencia/
 /Dashboard/data
 /Dashboard/datos
+
+# Exportaciones personales de anotaciones
+anotaciones_IA_*.json
+anotaciones_IA_*.md

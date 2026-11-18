@@ -8,6 +8,7 @@ format:
     theme: cosmo
     include-after-body:
       - ajustes_version_web.html
+      - ../data/web/panel-anotaciones.html
       - text: |
           <script src="ocupaciones_cortas.js"></script>
           <link rel="stylesheet" href="cajas_uniformes.css">

@@ -51,3 +51,11 @@ La publicación web utiliza GitHub Pages y ofrece estos accesos:
 - [Dashboard público](https://donzhumber.github.io/AI/Dashboard/dashboard.html).
 
 El flujo `.github/workflows/pages.yml` publica los HTML compilados y los agregados seleccionados cuando se actualizan en `main`. La preparación del sitio no reestima los modelos ni ejecuta Quarto en GitHub. La compilación de los documentos se realiza con los datos locales antes de subir sus versiones actualizadas. El dashboard en línea corresponde a la edición pública basada en agregados.
+
+## Anotaciones durante la lectura
+
+El botón **Anotaciones** permite guardar comentarios generales o sobre un texto seleccionado en el artículo, el anexo y el dashboard. Las notas y los borradores se conservan en el navegador del dispositivo y no se envían al repositorio ni se sincronizan automáticamente.
+
+Para trasladarlas a otro equipo, usar **Exportar JSON** y guardar el archivo en Archivos, iCloud u otro medio personal. En el otro equipo, abrir el mismo sitio y elegir **Importar notas**. Las importaciones se combinan por identificador y conservan las versiones más recientes. **Descargar texto** genera un archivo Markdown con el fragmento, la sección y el comentario para revisar e incorporar las observaciones posteriormente al QMD. Las anotaciones no modifican por sí solas el documento original.
+
+La prueba de las anotaciones se reproduce con `node data/web/verificar_anotaciones.mjs` después de preparar el sitio. Requiere Node 22 o superior y Chrome; `CHROME_BIN` permite indicar su ruta. Utiliza un perfil temporal aislado.

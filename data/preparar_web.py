@@ -52,6 +52,10 @@ def main():
     for name in ['ocupaciones_cortas.js', 'cajas_uniformes.css', 'ajustes_version_web.html']:
         if (DASH / name).exists():
             shutil.copy2(DASH / name, OUT / 'Dashboard' / name)
+    web = OUT / 'data/web'
+    web.mkdir(parents=True, exist_ok=True)
+    for name in ['anotaciones.js', 'anotaciones.css', 'panel-anotaciones.html']:
+        shutil.copy2(DATA_DIR / 'web' / name, web / name)
     public = OUT / 'data/datos/publicacion/dashboard'
     public.mkdir(parents=True, exist_ok=True)
     allow = ['co_departamentos.geojson', 'catalogo_ocupaciones_multianual.json', 'cuadrantes_anexo.json', 'perfiles_uso_ia_2025.json']
@@ -77,7 +81,7 @@ def main():
             shutil.copy2(src, target)
             linked_sources.append(str(rel_out))
     (OUT / '.nojekyll').touch()
-    (OUT / 'index.html').write_text('''<!doctype html><html lang="es"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>IA y mercado laboral en Colombia</title><style>body{font:17px/1.6 system-ui;max-width:760px;margin:8vh auto;padding:0 20px;color:#183c54}a{display:block;padding:16px;margin:14px 0;border:1px solid #cbd5e1;border-radius:10px;color:#164d70;text-decoration:none}a:hover{background:#eef5fa}</style><h1>IA y mercado laboral en Colombia</h1><p>Documentos y exploración de resultados.</p><a href="Principal/principal.html">Artículo principal</a><a href="Anexo_a/anexo_a.html">Anexo A · métodos y validación</a><a href="Dashboard/dashboard.html">Dashboard · exposición y uso de IA</a></html>''')
+    (OUT / 'index.html').write_text('''<!doctype html><html lang="es"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>IA y mercado laboral en Colombia</title><style>body{font:17px/1.6 system-ui;max-width:760px;margin:8vh auto;padding:0 20px;color:#183c54}a{display:block;padding:16px;margin:14px 0;border:1px solid #cbd5e1;border-radius:10px;color:#164d70;text-decoration:none}a:hover{background:#eef5fa}</style><h1>IA y mercado laboral en Colombia</h1><p>Documentos y exploración de resultados.</p><a href="Principal/principal.html">Artículo principal</a><a href="Anexo_a/anexo_a.html">Anexo A · métodos y validación</a><a href="Dashboard/dashboard.html">Dashboard · exposición y uso de IA</a><a href="Principal/principal.html?notas=1">Mis anotaciones · importar y exportar</a></html>''')
     forbidden = [str(f.relative_to(OUT)) for f in OUT.rglob('*') if f.is_file() and (f.suffix.lower() in {'.parquet', '.dta', '.zip', '.dbf', '.sav'} or f.stat().st_size > 100 * 2**20)]
     assert not forbidden, forbidden
     text = (OUT / 'Dashboard/dashboard.html').read_text()

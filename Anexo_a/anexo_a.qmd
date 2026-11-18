@@ -16,6 +16,7 @@ format:
     code-fold: true
     code-tools: true
     format-links: false
+    include-after-body: ../data/web/panel-anotaciones.html
     include-in-header:
       text: |
         <style>
