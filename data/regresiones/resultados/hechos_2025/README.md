@@ -1,9 +1,9 @@
 # Hechos estilizados de exposición ocupacional en 2025
 
-Ejecutar desde la raíz del proyecto
+Ejecutar desde la carpeta `Document`.
 
 ```sh
-MPLCONFIGDIR=/tmp/mpl_hechos_2025 python3 neurona/quarto/Hechos_estilizados_2025/generar_hechos.py
+MPLCONFIGDIR=/tmp/mpl_hechos_2025 python3 data/regresiones/preparacion/hechos_2025/generar_hechos.py
 ```
 
 Requiere Python, pandas, NumPy, PyArrow y Matplotlib. El script sobrescribe únicamente sus resultados en esta carpeta, no las bases de origen.
