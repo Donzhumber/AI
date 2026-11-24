@@ -518,7 +518,7 @@ Como comprobación de escala, la clasificación de las 426 ocupaciones con ambos
 
 En conjunto, la evidencia de 2025 muestra una concentración del empleo en ocupaciones con AIOE relativamente bajo y exposición a robots relativamente alta, junto con diferencias importantes de no cotización e ingreso. Es una caracterización descriptiva útil para contextualizar las regresiones, pero no permite identificar quién será sustituido o complementado por la tecnología. La cobertura incompleta de los desocupados y la incertidumbre de la imputación deben acompañar su interpretación.
 
-El [script de generación](../data/regresiones/preparacion/hechos_2025/generar_hechos.py) calcula las tablas y la figura. La [carpeta de resultados](../data/regresiones/resultados/hechos_2025/) contiene las salidas y las [instrucciones de reproducción](../data/regresiones/resultados/hechos_2025/README.md).
+El [script de generación](../data/regresiones/preparacion/hechos_2025/generar_hechos.py) calcula las tablas y la figura. Las [instrucciones de reproducción](../data/regresiones/resultados/hechos_2025/README.md) identifican los archivos de resultados y explican cómo generarlos.
 
 # Estimaciones econométricas clásicas {#sec-modelos-clasicos}
 
